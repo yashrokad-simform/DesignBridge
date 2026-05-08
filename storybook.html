@@ -1,0 +1,1247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>DS Storybook — Figma Component Docs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DS Storybook — standalone showcase, zero project dependencies
+   ============================================================ */
+
+:root {
+  --ink:        #051325;
+  --ink-2:      #0b1e36;
+  --ink-soft:   #1a2b44;
+  --muted:      #6b7689;
+  --muted-2:    #97a0b1;
+  --line:       #e8eaef;
+  --line-2:     #eef0f4;
+  --line-3:     #f3f4f7;
+  --canvas:     #f3f4f6;
+  --canvas-2:   #ecedf1;
+  --surface:    #ffffff;
+  --surface-2:  #fafbfc;
+  --chip:       #f4f5f8;
+
+  --accent-pos:  #e7f3ec;  --accent-pos-ink:  #1f7a3f;
+  --accent-warn: #fbeed7;  --accent-warn-ink: #8a5a14;
+  --accent-info: #e3edfb;  --accent-info-ink: #1f4ea3;
+  --accent-stop: #fbe6e6;  --accent-stop-ink: #9a2a2a;
+  --accent-mute: #eef0f4;  --accent-mute-ink: #4a5468;
+
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+
+  --shadow-1: 0 1px 0 rgba(5,19,37,.04), 0 1px 2px rgba(5,19,37,.04);
+  --shadow-2: 0 1px 0 rgba(5,19,37,.04), 0 8px 24px rgba(5,19,37,.06);
+  --shadow-3: 0 24px 60px -20px rgba(5,19,37,.18), 0 8px 24px rgba(5,19,37,.06);
+
+  --t-fast: 140ms cubic-bezier(.2,.7,.2,1);
+  --t:      220ms cubic-bezier(.2,.7,.2,1);
+  --t-slow: 380ms cubic-bezier(.2,.7,.2,1);
+
+  --side-w: 252px;
+  --header-h: 64px;
+}
+
+*,*::before,*::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; }
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-feature-settings: 'ss01','ss02','cv11';
+  color: var(--ink);
+  background: var(--canvas);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-size: 14px;
+  line-height: 1.5;
+  letter-spacing: -0.005em;
+}
+button { font-family: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; }
+input, textarea, select { font-family: inherit; color: inherit; }
+a { color: inherit; text-decoration: none; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+svg { display: block; flex: none; }
+p { margin: 0; }
+h1,h2,h3,h4,h5,h6 { margin: 0; }
+
+/* ---------- app shell ---------- */
+.app {
+  display: grid;
+  grid-template-columns: var(--side-w) 1fr;
+  min-height: 100vh;
+}
+
+/* ============================================================
+   SIDEBAR
+   ============================================================ */
+.side {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  height: 100vh;
+  background: #051325;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 18px 16px;
+  flex-shrink: 0;
+}
+.brand-mark {
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #2a6dd9 0%, #1a4fa8 100%);
+  color: #fff;
+  display: grid; place-items: center;
+  font-weight: 700; font-size: 13px;
+  letter-spacing: -0.02em;
+  flex: none;
+}
+.brand-name {
+  font-weight: 600; font-size: 15px;
+  letter-spacing: -0.02em;
+  color: #fff; white-space: nowrap;
+}
+.brand-sub {
+  font-size: 10.5px; color: rgba(255,255,255,.38);
+  letter-spacing: .02em; margin-top: 1px;
+}
+
+.side-search-wrap {
+  padding: 0 12px 12px;
+  flex-shrink: 0;
+}
+.side-search {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 8px;
+  padding: 7px 10px;
+  transition: background var(--t), border-color var(--t);
+}
+.side-search:focus-within {
+  background: rgba(255,255,255,.11);
+  border-color: rgba(255,255,255,.22);
+}
+.side-search input {
+  background: none; border: 0; outline: 0;
+  color: #fff; font-size: 12.5px; flex: 1;
+}
+.side-search input::placeholder { color: rgba(255,255,255,.33); }
+
+.side-body {
+  flex: 1; overflow-y: auto; padding: 0 0 20px;
+}
+.side-body::-webkit-scrollbar { width: 0; }
+
+.side-section { padding: 8px 0 4px; }
+.side-section-label {
+  font-size: 11px; font-weight: 700;
+  color: rgba(255,255,255,.33);
+  letter-spacing: .1em; text-transform: uppercase;
+  padding: 4px 18px 7px;
+}
+
+.nav { display: flex; flex-direction: column; gap: 1px; }
+.nav-item {
+  display: flex; align-items: center;
+  padding: 8px 18px;
+  color: rgba(255,255,255,.58);
+  font-weight: 400; font-size: 13.5px;
+  cursor: pointer; position: relative;
+  transition: background var(--t), color var(--t);
+  white-space: nowrap; user-select: none;
+}
+.nav-item:hover {
+  background: rgba(255,255,255,.07);
+  color: rgba(255,255,255,.9);
+}
+.nav-item[aria-current="page"] {
+  background: rgba(255,255,255,.1);
+  color: #fff; font-weight: 500;
+}
+.nav-item[aria-current="page"]::before {
+  content: '';
+  position: absolute; left: 0; top: 4px; bottom: 4px;
+  width: 3px; border-radius: 0 3px 3px 0;
+  background: #4e8df5;
+}
+
+.side-divider {
+  height: 1px;
+  background: rgba(255,255,255,.08);
+  margin: 8px 0;
+}
+
+.side-foot {
+  flex-shrink: 0;
+  border-top: 1px solid rgba(255,255,255,.08);
+  padding: 14px 18px;
+}
+.profile { display: flex; align-items: center; gap: 10px; color: #fff; }
+.avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: grid; place-items: center;
+  font-weight: 600; font-size: 12px; flex: none;
+}
+.profile-name { font-size: 13px; font-weight: 600; letter-spacing: -.005em; }
+.profile-role { font-size: 11.5px; color: rgba(255,255,255,.42); }
+
+/* ============================================================
+   MAIN
+   ============================================================ */
+.main { padding: 0; }
+.workspace {
+  background: var(--surface);
+  box-shadow: var(--shadow-2);
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+}
+
+/* ---------- topbar ---------- */
+.topbar {
+  height: var(--header-h);
+  display: flex; align-items: center; gap: 14px;
+  padding: 0 28px;
+  border-bottom: 1px solid var(--line-2);
+  flex: none; background: var(--surface);
+  position: sticky; top: 0; z-index: 20;
+}
+.crumbs {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: var(--muted); flex: none;
+}
+.crumbs .sep { color: var(--muted-2); }
+.crumbs strong { color: var(--ink); font-weight: 600; }
+
+.search {
+  margin-left: 8px;
+  display: flex; align-items: center; gap: 8px;
+  background: var(--surface-2);
+  border: 1px solid var(--line-2);
+  border-radius: 10px;
+  padding: 8px 12px;
+  width: 340px; max-width: 38vw;
+  transition: border var(--t), background var(--t);
+}
+.search:focus-within { border-color: #cdd2dc; background: #fff; }
+.search input { border: 0; outline: 0; background: transparent; flex: 1; font-size: 13px; }
+.search input::placeholder { color: var(--muted-2); }
+.kbd {
+  font-size: 11px; color: var(--muted);
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 5px; padding: 2px 6px; font-weight: 500; white-space: nowrap;
+}
+
+/* ============================================================
+   CONTENT
+   ============================================================ */
+.content {
+  padding: 36px 44px 52px;
+  flex: 1; max-width: 940px;
+}
+
+.page-header {
+  margin-bottom: 32px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--line-2);
+}
+.page-eyebrow {
+  font-size: 11.5px; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: #4e8df5; margin-bottom: 10px;
+}
+.page-title {
+  font-size: 30px; font-weight: 700;
+  letter-spacing: -0.03em; color: var(--ink);
+  line-height: 1.1; margin-bottom: 12px;
+}
+.page-desc {
+  font-size: 15px; color: var(--muted);
+  line-height: 1.65; max-width: 640px;
+}
+.page-meta { display: flex; align-items: center; gap: 10px; margin-top: 16px; }
+.meta-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--line-3); color: var(--ink-soft);
+  font-size: 12px; font-weight: 600;
+  padding: 5px 10px; border-radius: 7px;
+}
+.meta-tag.green { background: var(--accent-pos); color: var(--accent-pos-ink); }
+.meta-tag.blue  { background: var(--accent-info); color: var(--accent-info-ink); }
+
+.section-title {
+  font-size: 12px; font-weight: 700;
+  letter-spacing: .07em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 12px; margin-top: 32px;
+}
+.section-title:first-of-type { margin-top: 0; }
+
+/* preview card */
+.preview-card {
+  background: var(--surface);
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius-lg);
+  overflow: hidden; margin-bottom: 24px;
+}
+.preview-toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 11px 16px; background: var(--surface-2);
+  border-bottom: 1px solid var(--line-2); gap: 12px;
+}
+.preview-label {
+  font-size: 11.5px; font-weight: 700;
+  color: var(--muted); letter-spacing: .05em; text-transform: uppercase;
+}
+.preview-actions { display: flex; align-items: center; gap: 4px; }
+.preview-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 10px; border-radius: 7px;
+  font-size: 12px; font-weight: 500; color: var(--muted);
+  background: var(--canvas-2);
+  transition: background var(--t), color var(--t);
+}
+.preview-btn:hover { background: var(--line); color: var(--ink); }
+.preview-btn.active { background: var(--ink); color: #fff; }
+
+.preview-body {
+  padding: 40px 32px;
+  display: flex; align-items: center;
+  justify-content: center; gap: 14px; flex-wrap: wrap;
+  min-height: 148px;
+  background: repeating-linear-gradient(
+    -45deg, transparent, transparent 8px,
+    rgba(0,0,0,.013) 8px, rgba(0,0,0,.013) 9px
+  );
+}
+.preview-body.dark { background: #0e1f35; }
+.preview-body.left { justify-content: flex-start; }
+
+/* code block */
+.code-block {
+  background: #0d1b2a;
+  border-radius: var(--radius-md);
+  overflow: hidden; margin-bottom: 24px;
+}
+.code-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+.code-lang {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: rgba(255,255,255,.32);
+}
+.code-copy {
+  font-size: 11.5px; font-weight: 500; color: rgba(255,255,255,.38);
+  padding: 4px 8px; border-radius: 5px;
+  background: rgba(255,255,255,.06);
+  transition: background var(--t), color var(--t);
+}
+.code-copy:hover { background: rgba(255,255,255,.12); color: rgba(255,255,255,.8); }
+.code-block pre {
+  margin: 0; padding: 18px 20px;
+  overflow-x: auto;
+  font-family: 'DM Mono', 'Fira Code', monospace;
+  font-size: 13px; line-height: 1.72; color: #c9d8f0;
+}
+.code-block pre .kw  { color: #79b8ff; }
+.code-block pre .str { color: #9ecbff; }
+.code-block pre .cm  { color: #586e78; font-style: italic; }
+.code-block pre .tag { color: #85e89d; }
+.code-block pre .attr{ color: #ffab70; }
+
+/* props table */
+.props-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+.props-table thead th {
+  text-align: left; font-weight: 600; font-size: 11.5px;
+  color: var(--muted); letter-spacing: .07em; text-transform: uppercase;
+  padding: 10px 14px; border-bottom: 1px solid var(--line-2);
+  background: var(--surface-2);
+}
+.props-table tbody td {
+  padding: 12px 14px; border-bottom: 1px solid var(--line-3);
+  font-size: 13.5px; vertical-align: top;
+}
+.props-table tbody tr:last-child td { border-bottom: 0; }
+.props-table tbody tr:hover { background: var(--surface-2); }
+.prop-name  { font-family: 'DM Mono', monospace; font-size: 12.5px; color: #4e8df5; }
+.prop-type  { font-family: 'DM Mono', monospace; font-size: 12px; background: var(--chip); color: var(--ink-soft); padding: 2px 7px; border-radius: 5px; white-space: nowrap; display: inline-block; }
+.prop-default { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); }
+.prop-desc  { color: var(--muted); font-size: 13px; line-height: 1.55; }
+
+/* do / dont */
+.do-dont { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 24px; }
+.do-dont-card { border: 1px solid var(--line-2); border-radius: var(--radius-md); overflow: hidden; }
+.do-dont-card.do   { border-top: 3px solid #30a45a; }
+.do-dont-card.dont { border-top: 3px solid #d64343; }
+.do-dont-body {
+  padding: 24px; min-height: 96px;
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px; background: var(--surface-2); flex-wrap: wrap;
+}
+.do-dont-label {
+  padding: 10px 16px; font-size: 12.5px; font-weight: 700;
+  display: flex; align-items: center; gap: 6px;
+}
+.do-dont-card.do .do-dont-label   { color: #30a45a; }
+.do-dont-card.dont .do-dont-label { color: #d64343; }
+.do-dont-desc { padding: 0 16px 12px; font-size: 12.5px; color: var(--muted); line-height: 1.55; }
+
+/* callout */
+.callout {
+  display: flex; gap: 12px; padding: 13px 16px;
+  border-radius: var(--radius-sm); margin-bottom: 20px;
+  font-size: 13.5px; line-height: 1.55;
+}
+.callout.info { background: var(--accent-info); color: var(--accent-info-ink); border-left: 3px solid #4e8df5; }
+.callout.warn { background: var(--accent-warn); color: var(--accent-warn-ink); border-left: 3px solid #e4a230; }
+.callout.tip  { background: var(--accent-pos);  color: var(--accent-pos-ink);  border-left: 3px solid #30a45a; }
+.callout-icon { font-size: 15px; flex: none; margin-top: 1px; }
+
+/* ============================================================
+   SAMPLE COMPONENTS
+   ============================================================ */
+
+/* Button */
+.ds-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 18px; border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px; font-weight: 500; cursor: pointer;
+  border: 1.5px solid transparent;
+  transition: all var(--t-fast); letter-spacing: -.005em; white-space: nowrap;
+}
+.ds-btn-primary   { background: #051325; color: #fff; border-color: #051325; }
+.ds-btn-primary:hover { background: #0c2240; border-color: #0c2240; }
+.ds-btn-secondary { background: #fff; color: #051325; border-color: #e8eaef; }
+.ds-btn-secondary:hover { background: #f3f4f7; }
+.ds-btn-ghost     { background: transparent; color: #051325; border-color: transparent; }
+.ds-btn-ghost:hover { background: #f3f4f7; }
+.ds-btn-danger    { background: #d64343; color: #fff; border-color: #d64343; }
+.ds-btn-danger:hover { background: #bf3232; border-color: #bf3232; }
+.ds-btn-sm { padding: 6px 12px; font-size: 12.5px; border-radius: 8px; }
+.ds-btn-lg { padding: 12px 24px; font-size: 15px; border-radius: 12px; }
+.ds-btn:disabled { opacity: .42; cursor: not-allowed; }
+
+/* Badge */
+.ds-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 10px; border-radius: 999px;
+  font-size: 12px; font-weight: 600; white-space: nowrap;
+}
+.ds-badge::before {
+  content: ''; width: 5px; height: 5px;
+  border-radius: 50%; background: currentColor; opacity: .8;
+}
+.ds-badge-no-dot::before { display: none; }
+.ds-badge-default { background: var(--chip);        color: var(--ink-soft); }
+.ds-badge-success { background: #e7f3ec;             color: #1f7a3f; }
+.ds-badge-warning { background: #fbeed7;             color: #8a5a14; }
+.ds-badge-error   { background: #fbe6e6;             color: #9a2a2a; }
+.ds-badge-info    { background: #e3edfb;             color: #1f4ea3; }
+
+/* Input */
+.ds-input-wrap { display: flex; flex-direction: column; gap: 5px; }
+.ds-label { font-size: 12.5px; font-weight: 600; color: var(--ink); }
+.ds-input {
+  border: 1.5px solid var(--line); border-radius: 10px;
+  padding: 9px 12px; font-family: 'DM Sans', sans-serif;
+  font-size: 14px; color: var(--ink); background: #fff; outline: none;
+  transition: border-color var(--t), box-shadow var(--t); width: 100%;
+}
+.ds-input:focus { border-color: #4e8df5; box-shadow: 0 0 0 3px rgba(78,141,245,.13); }
+.ds-input:disabled { background: var(--surface-2); color: var(--muted); cursor: not-allowed; }
+.ds-input-hint  { font-size: 12px; color: var(--muted); }
+.ds-input-error { border-color: #d64343 !important; }
+.ds-input-error-msg { font-size: 12px; color: #d64343; }
+
+/* Checkbox */
+.ds-checkbox {
+  display: inline-flex; align-items: center; gap: 10px;
+  cursor: pointer; font-size: 14px; color: var(--ink); user-select: none;
+}
+.ds-checkbox input[type=checkbox] { display: none; }
+.ds-checkbox-box {
+  width: 18px; height: 18px; border-radius: 5px;
+  border: 1.5px solid var(--line); background: #fff;
+  display: grid; place-items: center; transition: all 140ms; flex: none;
+}
+.ds-checkbox input:checked ~ .ds-checkbox-box { background: #051325; border-color: #051325; }
+.ds-checkbox input:checked ~ .ds-checkbox-box::after {
+  content: ''; width: 9px; height: 5px;
+  border-left: 1.5px solid #fff; border-bottom: 1.5px solid #fff;
+  transform: rotate(-45deg) translate(1px,-1px);
+}
+
+/* Toggle */
+.ds-toggle {
+  display: inline-flex; align-items: center; gap: 10px;
+  cursor: pointer; font-size: 14px; color: var(--ink); user-select: none;
+}
+.ds-toggle input[type=checkbox] { display: none; }
+.ds-toggle-track {
+  width: 38px; height: 22px; border-radius: 999px;
+  background: var(--line); position: relative; transition: background 180ms; flex: none;
+}
+.ds-toggle-thumb {
+  position: absolute; top: 3px; left: 3px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.14);
+  transition: transform 180ms cubic-bezier(.4,0,.2,1);
+}
+.ds-toggle input:checked ~ .ds-toggle-track { background: #051325; }
+.ds-toggle input:checked ~ .ds-toggle-track .ds-toggle-thumb { transform: translateX(16px); }
+
+/* Radio */
+.ds-radio {
+  display: inline-flex; align-items: center; gap: 10px;
+  cursor: pointer; font-size: 14px; color: var(--ink); user-select: none;
+}
+.ds-radio input[type=radio] { display: none; }
+.ds-radio-circle {
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 1.5px solid var(--line); background: #fff;
+  display: grid; place-items: center; transition: border-color 140ms; flex: none;
+}
+.ds-radio input:checked ~ .ds-radio-circle { border-color: #051325; border-width: 2px; }
+.ds-radio input:checked ~ .ds-radio-circle::after {
+  content: ''; width: 8px; height: 8px; border-radius: 50%; background: #051325;
+}
+
+/* Tooltip */
+.ds-tooltip-wrap { position: relative; display: inline-flex; }
+.ds-tooltip {
+  position: absolute; bottom: calc(100% + 8px); left: 50%;
+  transform: translateX(-50%);
+  background: #0d1b2a; color: #fff;
+  font-size: 12px; font-weight: 500;
+  padding: 6px 10px; border-radius: 7px;
+  white-space: nowrap; pointer-events: none;
+  opacity: 0; transition: opacity 140ms;
+  box-shadow: var(--shadow-2);
+}
+.ds-tooltip::after {
+  content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  border: 5px solid transparent; border-top-color: #0d1b2a;
+}
+.ds-tooltip-wrap:hover .ds-tooltip { opacity: 1; }
+
+/* Toast */
+.ds-toast {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 13px 16px; border-radius: 12px;
+  background: #fff; border: 1px solid var(--line-2);
+  box-shadow: var(--shadow-3);
+  min-width: 270px; max-width: 360px; font-size: 13.5px;
+}
+.ds-toast-icon {
+  width: 22px; height: 22px; border-radius: 50%;
+  display: grid; place-items: center; flex: none; margin-top: 1px;
+}
+.ds-toast-icon.success { background: var(--accent-pos);  color: #1f7a3f; }
+.ds-toast-icon.error   { background: var(--accent-stop); color: #9a2a2a; }
+.ds-toast-icon.warn    { background: var(--accent-warn); color: #8a5a14; }
+.ds-toast-icon.info    { background: var(--accent-info); color: #1f4ea3; }
+.ds-toast-body { flex: 1; min-width: 0; }
+.ds-toast-title { font-weight: 600; color: var(--ink); }
+.ds-toast-msg   { color: var(--muted); font-size: 12.5px; margin-top: 2px; line-height: 1.5; }
+.ds-toast-close { color: var(--muted); padding: 2px; cursor: pointer; }
+
+/* Progress Step */
+.ds-progress-steps { display: flex; align-items: center; }
+.ds-step { display: flex; align-items: center; gap: 10px; flex: 1; }
+.ds-step:last-child { flex: none; }
+.ds-step-circle {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: grid; place-items: center;
+  font-size: 13px; font-weight: 700; flex: none;
+  border: 2px solid var(--line); color: var(--muted);
+  background: #fff; transition: all 200ms;
+}
+.ds-step.done   .ds-step-circle { background: #051325; border-color: #051325; color: #fff; }
+.ds-step.active .ds-step-circle { border-color: #4e8df5; color: #4e8df5; box-shadow: 0 0 0 4px rgba(78,141,245,.14); }
+.ds-step-label { font-size: 12.5px; font-weight: 500; color: var(--muted); white-space: nowrap; }
+.ds-step.done .ds-step-label   { color: var(--ink); }
+.ds-step.active .ds-step-label { color: var(--ink); font-weight: 600; }
+.ds-step-line { flex: 1; height: 2px; background: var(--line); margin: 0 8px; }
+.ds-step-line.done { background: #051325; }
+
+/* Tabs */
+.ds-tabs { display: flex; border-bottom: 2px solid var(--line-2); }
+.ds-tab {
+  padding: 10px 18px; font-size: 13.5px; font-weight: 500;
+  color: var(--muted); cursor: pointer;
+  border-bottom: 2px solid transparent; margin-bottom: -2px;
+  transition: color var(--t), border-color var(--t);
+}
+.ds-tab:hover { color: var(--ink); }
+.ds-tab.active { color: var(--ink); border-bottom-color: #051325; font-weight: 600; }
+
+/* Dropdown */
+.ds-dropdown-trigger {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 14px; border: 1.5px solid var(--line);
+  border-radius: 10px; background: #fff;
+  font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--ink);
+  cursor: pointer; transition: border-color var(--t);
+}
+.ds-dropdown-trigger:hover { border-color: #cdd2dc; }
+.ds-dropdown-menu {
+  background: #fff; border: 1px solid var(--line);
+  border-radius: 12px; box-shadow: var(--shadow-3);
+  padding: 6px; min-width: 180px;
+}
+.ds-dropdown-item {
+  padding: 9px 12px; border-radius: 8px;
+  font-size: 13.5px; cursor: pointer; transition: background var(--t);
+}
+.ds-dropdown-item:hover { background: var(--line-3); }
+.ds-dropdown-item.selected { font-weight: 600; color: var(--ink); }
+
+/* Textarea */
+.ds-textarea {
+  border: 1.5px solid var(--line); border-radius: 10px;
+  padding: 10px 12px; font-family: 'DM Sans', sans-serif;
+  font-size: 14px; color: var(--ink); background: #fff; outline: none;
+  resize: vertical; min-height: 96px; width: 100%;
+  transition: border-color var(--t), box-shadow var(--t); line-height: 1.55;
+}
+.ds-textarea:focus { border-color: #4e8df5; box-shadow: 0 0 0 3px rgba(78,141,245,.13); }
+
+/* Navigation component */
+.ds-nav-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 20px; height: 52px;
+  background: #fff; border-radius: 12px;
+  border: 1px solid var(--line-2); box-shadow: var(--shadow-1); width: 100%;
+}
+.ds-nav-logo { font-weight: 700; font-size: 15px; letter-spacing: -.02em; color: var(--ink); }
+.ds-nav-links { display: flex; align-items: center; gap: 2px; }
+.ds-nav-link {
+  padding: 6px 12px; border-radius: 8px;
+  font-size: 13.5px; font-weight: 500; color: var(--muted);
+  cursor: pointer; transition: background var(--t), color var(--t);
+}
+.ds-nav-link:hover { background: var(--line-3); color: var(--ink); }
+.ds-nav-link.active { background: var(--chip); color: var(--ink); }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.foot {
+  padding: 16px 44px;
+  border-top: 1px solid var(--line-2);
+  display: flex; align-items: center; gap: 18px;
+  font-size: 12px; color: var(--muted);
+}
+.foot .sep { width: 1px; height: 12px; background: var(--line); }
+.foot .right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+.foot .status-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--accent-pos-ink);
+}
+.foot .status-pill::before {
+  content: ''; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent-pos-ink);
+  box-shadow: 0 0 0 3px rgba(31,122,63,.15);
+}
+
+/* scrollbar */
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-thumb { background: #d8dde6; border-radius: 8px; border: 2px solid transparent; background-clip: padding-box; }
+*::-webkit-scrollbar-thumb:hover { background: #c1c7d2; background-clip: padding-box; }
+::selection { background: rgba(5,19,37,.85); color: #fff; }
+
+@media (max-width: 860px) {
+  .app { grid-template-columns: 1fr; }
+  .side { display: none; }
+  .content { padding: 20px; }
+  .do-dont { grid-template-columns: 1fr; }
+  .topbar { padding: 0 16px; }
+  .search { width: 180px; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ========== SIDEBAR ========== -->
+  <aside class="side" aria-label="Documentation navigation">
+
+    <div class="brand">
+      <div class="brand-mark">DS</div>
+      <div>
+        <div class="brand-name">DS Storybook</div>
+        <div class="brand-sub">Figma Component Docs</div>
+      </div>
+    </div>
+
+    <div class="side-search-wrap">
+      <label class="side-search" aria-label="Search">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.38)" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="sideSearch" placeholder="Search components…" />
+      </label>
+    </div>
+
+    <div class="side-body">
+
+      <div class="side-section">
+        <div class="side-section-label">Documentation</div>
+        <ul class="nav" role="menu">
+          <li class="nav-item" role="menuitem" data-page="about" tabindex="0">About this Tool</li>
+          <li class="nav-item" role="menuitem" data-page="figma-mcp" tabindex="0">Figma MCP Basics</li>
+        </ul>
+      </div>
+
+      <div class="side-divider"></div>
+
+      <div class="side-section">
+        <div class="side-section-label">Style Guide</div>
+        <ul class="nav" role="menu">
+          <li class="nav-item" role="menuitem" data-page="colors" tabindex="0">Colors</li>
+          <li class="nav-item" role="menuitem" data-page="typography" tabindex="0">Typography</li>
+          <li class="nav-item" role="menuitem" data-page="spacing" tabindex="0">Spacing &amp; Radius</li>
+        </ul>
+      </div>
+
+      <div class="side-divider"></div>
+
+      <div class="side-section">
+        <div class="side-section-label">Components</div>
+        <ul class="nav" role="menu">
+          <li class="nav-item" aria-current="page" role="menuitem" data-page="badge" tabindex="0">Badge</li>
+          <li class="nav-item" role="menuitem" data-page="button" tabindex="0">Button</li>
+          <li class="nav-item" role="menuitem" data-page="checkbox" tabindex="0">Checkbox</li>
+          <li class="nav-item" role="menuitem" data-page="dropdown" tabindex="0">Dropdown</li>
+          <li class="nav-item" role="menuitem" data-page="input" tabindex="0">Input</li>
+          <li class="nav-item" role="menuitem" data-page="navigation" tabindex="0">Navigation</li>
+          <li class="nav-item" role="menuitem" data-page="progress-step" tabindex="0">Progress Step</li>
+          <li class="nav-item" role="menuitem" data-page="radio-button" tabindex="0">Radio Button</li>
+          <li class="nav-item" role="menuitem" data-page="tabs" tabindex="0">Tabs</li>
+          <li class="nav-item" role="menuitem" data-page="text-area" tabindex="0">Text Area</li>
+          <li class="nav-item" role="menuitem" data-page="toast" tabindex="0">Toast</li>
+          <li class="nav-item" role="menuitem" data-page="toggle" tabindex="0">Toggle</li>
+          <li class="nav-item" role="menuitem" data-page="tooltip" tabindex="0">Tooltip</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="side-foot">
+      <div class="profile">
+        <div class="avatar" style="background:#1a3d6e;color:#fff;">JM</div>
+        <div>
+          <div class="profile-name">Jordan Maes</div>
+          <div class="profile-role">Design System Lead</div>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ========== MAIN ========== -->
+  <main class="main">
+    <div class="workspace">
+
+      <!-- TOPBAR -->
+      <header class="topbar">
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <span>Workspace</span>
+          <span class="sep">/</span>
+          <strong id="crumbLabel">Badge</strong>
+        </nav>
+
+        <label class="search" aria-label="Search">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="searchInput" placeholder="Search components, tokens, specs…" />
+          <span class="kbd">⌘ K</span>
+        </label>
+      </header>
+
+      <!-- PAGE CONTENT -->
+      <div class="content" id="pageContent"></div>
+
+      <!-- FOOTER -->
+      <footer class="foot">
+        <span>© 2026 DS Storybook</span>
+        <span class="sep"></span>
+        <span>Figma-to-Code Docs</span>
+        <div class="right">
+          <span class="status-pill">All components documented</span>
+          <span class="sep"></span>
+          <span>v1.0.0</span>
+        </div>
+      </footer>
+
+    </div>
+  </main>
+</div>
+
+<script>
+(() => {
+  /* ============================================================
+     PAGE DEFINITIONS
+     ============================================================ */
+  const PAGES = {
+    'about': {
+      eyebrow: 'Documentation', title: 'About this Tool',
+      desc: 'DS Storybook is a Storybook-style documentation system built around Figma components and their Markdown specification files. It bridges the gap between design intent and code implementation for both designers and front-end developers.',
+      content: `
+        <div class="callout info"><span class="callout-icon">ℹ️</span><div>This tool is the visual showcase layer of the Figma-to-Code workflow. Each component page maps directly to a <code style="font-family:'DM Mono',monospace;font-size:12.5px;">.md</code> specification file in the project repository.</div></div>
+        <p class="section-title">What this tool provides</p>
+        <div class="preview-card">
+          <div class="preview-body left" style="padding:28px 32px;flex-direction:column;align-items:flex-start;gap:18px;background:#fff;">
+            <div style="display:flex;align-items:center;gap:14px;"><span class="ds-badge ds-badge-info ds-badge-no-dot" style="border-radius:7px;padding:5px 12px;font-size:13px;">Component Specs</span><span style="font-size:13.5px;color:#4a5468;">Props, variants, sizes, and states — all in one place.</span></div>
+            <div style="display:flex;align-items:center;gap:14px;"><span class="ds-badge ds-badge-success ds-badge-no-dot" style="border-radius:7px;padding:5px 12px;font-size:13px;">Live Previews</span><span style="font-size:13.5px;color:#4a5468;">Interactive component previews rendered directly from HTML/CSS.</span></div>
+            <div style="display:flex;align-items:center;gap:14px;"><span class="ds-badge ds-badge-warning ds-badge-no-dot" style="border-radius:7px;padding:5px 12px;font-size:13px;">Figma Guidance</span><span style="font-size:13.5px;color:#4a5468;">Do's and don'ts tied to specific Figma frame annotations.</span></div>
+            <div style="display:flex;align-items:center;gap:14px;"><span class="ds-badge ds-badge-no-dot" style="background:#f3f0ff;color:#5b3fc4;border-radius:7px;padding:5px 12px;font-size:13px;">Code Snippets</span><span style="font-size:13.5px;color:#4a5468;">Ready-to-use HTML with syntax highlighting.</span></div>
+          </div>
+        </div>
+        <p class="section-title">File structure</p>
+        <div class="code-block"><div class="code-header"><span class="code-lang">Directory</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div><pre>ds-storybook/
+├── storybook.html       <span class="cm"># this file — the showcase UI</span>
+├── components/
+│   ├── badge.md
+│   ├── button.md
+│   └── ...
+└── style-guide/
+    ├── colors.md
+    └── typography.md</pre></div>`
+    },
+
+    'figma-mcp': {
+      eyebrow: 'Documentation', title: 'Figma MCP Basics',
+      desc: 'Figma MCP (Model Context Protocol) enables AI assistants to read, write, and inspect Figma files directly. This page explains core concepts for working effectively with this documentation system.',
+      content: `
+        <div class="callout tip"><span class="callout-icon">✅</span><div>Figma MCP is already configured in this workspace. You can use natural language to query component structures, extract tokens, and generate code from Figma frames.</div></div>
+        <p class="section-title">Core concepts</p>
+        <table class="props-table"><thead><tr><th>Concept</th><th>Description</th></tr></thead><tbody>
+          <tr><td><span class="prop-name">nodeId</span></td><td class="prop-desc">Unique identifier for any Figma layer, frame, or component. Session-specific — re-fetch on each new conversation.</td></tr>
+          <tr><td><span class="prop-name">componentSet</span></td><td class="prop-desc">A named group of component variants in Figma. Analogous to a component story in Storybook.</td></tr>
+          <tr><td><span class="prop-name">designToken</span></td><td class="prop-desc">Named value in a Figma variable collection (color, spacing, radius). Maps to CSS custom properties.</td></tr>
+          <tr><td><span class="prop-name">figma_execute</span></td><td class="prop-desc">MCP tool that runs arbitrary JavaScript in Figma's plugin sandbox. Primary way to create or mutate nodes.</td></tr>
+          <tr><td><span class="prop-name">figma_get_variables</span></td><td class="prop-desc">Retrieves all design tokens from a file's variable collections.</td></tr>
+        </tbody></table>
+        <div class="callout warn"><span class="callout-icon">⚠️</span><div><strong>nodeIds are session-specific.</strong> Never reuse a nodeId from a previous conversation. Always call <code style="font-family:'DM Mono',monospace;">figma_search_components</code> at the start of each session before referencing any component by ID.</div></div>`
+    },
+
+    'colors': {
+      eyebrow: 'Style Guide', title: 'Colors',
+      desc: 'The color system is built on semantic tokens. Each token communicates purpose — not just a hex value. Always use semantic tokens in component code; raw values belong only in token definitions.',
+      tags: [{label:'23 tokens', cls:''}, {label:'WCAG AA', cls:'green'}],
+      content: `
+        <p class="section-title">Core palette</p>
+        <div class="preview-card"><div class="preview-body" style="flex-direction:column;align-items:stretch;padding:24px 28px;gap:12px;background:#fff;">
+          ${[['--ink','#051325','#051325','#fff'],['--ink-soft','#1a2b44','#1a2b44','#fff'],['--muted','#6b7689','#6b7689','#fff'],['--muted-2','#97a0b1','#97a0b1','#fff'],['--line','#e8eaef','#e8eaef','#555'],['--canvas','#f3f4f6','#f3f4f6','#555'],['--surface','#ffffff','#fff','#555']].map(([n,h,bg,fg])=>`
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div style="width:38px;height:38px;border-radius:9px;background:${bg};flex:none;${bg==='#fff'?'border:1px solid #e8eaef':''}"></div>
+            <span style="font-family:'DM Mono',monospace;font-size:12px;color:#4a5468;width:110px;">${n}</span>
+            <span style="font-family:'DM Mono',monospace;font-size:12px;color:#97a0b1;">${h}</span>
+          </div>`).join('')}
+        </div></div>
+        <p class="section-title">Semantic / status</p>
+        <div class="preview-card"><div class="preview-body" style="gap:10px;padding:28px;">
+          <span class="ds-badge ds-badge-success">Success</span>
+          <span class="ds-badge ds-badge-warning">Warning</span>
+          <span class="ds-badge ds-badge-error">Error</span>
+          <span class="ds-badge ds-badge-info">Info</span>
+          <span class="ds-badge ds-badge-default">Default</span>
+        </div></div>`
+    },
+
+    'typography': {
+      eyebrow: 'Style Guide', title: 'Typography',
+      desc: 'DM Sans is the sole typeface. Its optical sizing axis (opsz) handles display headings; body copy uses the default axis setting. DM Mono is used exclusively for code and token values.',
+      tags: [{label:'DM Sans', cls:'blue'}, {label:'DM Mono', cls:''}],
+      content: `
+        <p class="section-title">Type scale</p>
+        <div class="preview-card"><div class="preview-body" style="flex-direction:column;align-items:flex-start;gap:18px;padding:28px 32px;background:#fff;">
+          <div><div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#97a0b1;margin-bottom:5px;">Display · 30px · 700</div><div style="font-size:30px;font-weight:700;letter-spacing:-0.03em;color:#051325;">Good afternoon.</div></div>
+          <div><div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#97a0b1;margin-bottom:5px;">Heading · 22px · 600</div><div style="font-size:22px;font-weight:600;letter-spacing:-0.02em;color:#051325;">Component Variants</div></div>
+          <div><div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#97a0b1;margin-bottom:5px;">Subheading · 16px · 600</div><div style="font-size:16px;font-weight:600;color:#051325;">Usage Guidelines</div></div>
+          <div><div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#97a0b1;margin-bottom:5px;">Body · 14px · 400</div><div style="font-size:14px;line-height:1.55;color:#051325;">The quick brown fox jumps over the lazy design system.</div></div>
+          <div><div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#97a0b1;margin-bottom:5px;">Caption · 12px · 500</div><div style="font-size:12px;font-weight:500;color:#6b7689;">Last updated May 2026 · 13 components</div></div>
+          <div><div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#97a0b1;margin-bottom:5px;">Mono · 13px · 400</div><div style="font-family:'DM Mono',monospace;font-size:13px;color:#4e8df5;">variant="primary" size="md"</div></div>
+        </div></div>`
+    },
+
+    'spacing': {
+      eyebrow: 'Style Guide', title: 'Spacing & Radius',
+      desc: 'Spacing follows a 4px base grid. Border radius tokens are named by visual weight, not pixel value, allowing global design feel changes from a single token update.',
+      content: `
+        <p class="section-title">Spacing scale (4px base)</p>
+        <div class="preview-card"><div class="preview-body" style="flex-direction:column;align-items:flex-start;gap:12px;padding:24px 28px;background:#fff;">
+          ${[4,8,12,16,20,24,32,40,56,72].map((v,i)=>`<div style="display:flex;align-items:center;gap:14px;"><span style="font-family:'DM Mono',monospace;font-size:11.5px;color:#97a0b1;width:80px;">--space-${i+1}</span><div style="height:14px;width:${v}px;background:#4e8df5;border-radius:3px;flex:none;"></div><span style="font-family:'DM Mono',monospace;font-size:11.5px;color:#6b7689;">${v}px</span></div>`).join('')}
+        </div></div>
+        <p class="section-title">Radius tokens</p>
+        <div class="preview-card"><div class="preview-body" style="gap:20px;padding:28px;">
+          ${[['xs','6px'],['sm','10px'],['md','14px'],['lg','18px'],['xl','24px']].map(([n,v])=>`<div style="display:flex;flex-direction:column;align-items:center;gap:8px;"><div style="width:60px;height:60px;background:#e3edfb;border-radius:${v};border:1.5px solid #4e8df5;"></div><span style="font-family:'DM Mono',monospace;font-size:11px;color:#6b7689;">--radius-${n}</span><span style="font-family:'DM Mono',monospace;font-size:11px;color:#97a0b1;">${v}</span></div>`).join('')}
+        </div></div>`
+    },
+
+    'badge': {
+      eyebrow: 'Components', title: 'Badge',
+      desc: 'Badges communicate status, category, or count in a compact format. They are purely presentational — not interactive.',
+      tags: [{label:'Stable', cls:'green'}, {label:'Figma: Badge', cls:'blue'}],
+      content: `
+        <p class="section-title">Variants</p>
+        <div class="preview-card">
+          <div class="preview-toolbar"><span class="preview-label">Preview</span><div class="preview-actions"><button class="preview-btn active" data-theme="light">Light</button><button class="preview-btn" data-theme="dark">Dark</button></div></div>
+          <div class="preview-body">
+            <span class="ds-badge ds-badge-default">Default</span>
+            <span class="ds-badge ds-badge-success">Success</span>
+            <span class="ds-badge ds-badge-warning">Warning</span>
+            <span class="ds-badge ds-badge-error">Error</span>
+            <span class="ds-badge ds-badge-info">Info</span>
+          </div>
+        </div>
+        <div class="code-block"><div class="code-header"><span class="code-lang">HTML</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div><pre><span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="str">"ds-badge ds-badge-success"</span><span class="tag">&gt;</span>Success<span class="tag">&lt;/span&gt;</span>
+<span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="str">"ds-badge ds-badge-warning"</span><span class="tag">&gt;</span>Warning<span class="tag">&lt;/span&gt;</span>
+<span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="str">"ds-badge ds-badge-error"</span><span class="tag">&gt;</span>Error<span class="tag">&lt;/span&gt;</span>
+<span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="str">"ds-badge ds-badge-info"</span><span class="tag">&gt;</span>Info<span class="tag">&lt;/span&gt;</span></pre></div>
+        <p class="section-title">Props</p>
+        <table class="props-table"><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+          <tr><td><span class="prop-name">variant</span></td><td><span class="prop-type">string</span></td><td class="prop-default">"default"</td><td class="prop-desc">One of <code style="font-family:'DM Mono',monospace;">default | success | warning | error | info</code></td></tr>
+          <tr><td><span class="prop-name">dot</span></td><td><span class="prop-type">boolean</span></td><td class="prop-default">true</td><td class="prop-desc">Show the status dot prefix. Set false for label-only badges.</td></tr>
+          <tr><td><span class="prop-name">children</span></td><td><span class="prop-type">ReactNode</span></td><td class="prop-default">—</td><td class="prop-desc">Label text content.</td></tr>
+        </tbody></table>
+        <p class="section-title">Do's and Don'ts</p>
+        <div class="do-dont">
+          <div class="do-dont-card do"><div class="do-dont-body"><span class="ds-badge ds-badge-success">In progress</span></div><div class="do-dont-label">✓ Do — single status word</div><div class="do-dont-desc">Keep labels to 1–2 words. Badges are not sentences.</div></div>
+          <div class="do-dont-card dont"><div class="do-dont-body"><span class="ds-badge ds-badge-info" style="max-width:200px;word-break:break-word;white-space:normal;">This task is currently in review</span></div><div class="do-dont-label">✕ Don't — long phrases</div><div class="do-dont-desc">Long text breaks the pill shape and loses legibility.</div></div>
+        </div>`
+    },
+
+    'button': {
+      eyebrow: 'Components', title: 'Button',
+      desc: 'Buttons trigger actions. They are the primary affordance for user intent. Use only one primary button per view — it should represent the single most important action.',
+      tags: [{label:'Stable', cls:'green'}, {label:'Figma: Button', cls:'blue'}],
+      content: `
+        <p class="section-title">Variants</p>
+        <div class="preview-card"><div class="preview-toolbar"><span class="preview-label">Preview</span></div><div class="preview-body" style="gap:12px;">
+          <button class="ds-btn ds-btn-primary">Primary</button>
+          <button class="ds-btn ds-btn-secondary">Secondary</button>
+          <button class="ds-btn ds-btn-ghost">Ghost</button>
+          <button class="ds-btn ds-btn-danger">Danger</button>
+          <button class="ds-btn ds-btn-primary" disabled>Disabled</button>
+        </div></div>
+        <p class="section-title">Sizes</p>
+        <div class="preview-card"><div class="preview-body" style="gap:12px;align-items:center;">
+          <button class="ds-btn ds-btn-primary ds-btn-sm">Small</button>
+          <button class="ds-btn ds-btn-primary">Medium</button>
+          <button class="ds-btn ds-btn-primary ds-btn-lg">Large</button>
+        </div></div>
+        <div class="code-block"><div class="code-header"><span class="code-lang">HTML</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div><pre><span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="str">"ds-btn ds-btn-primary"</span><span class="tag">&gt;</span>Primary<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="str">"ds-btn ds-btn-secondary"</span><span class="tag">&gt;</span>Secondary<span class="tag">&lt;/button&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">class</span>=<span class="str">"ds-btn ds-btn-sm ds-btn-primary"</span><span class="tag">&gt;</span>Small<span class="tag">&lt;/button&gt;</span></pre></div>
+        <p class="section-title">Props</p>
+        <table class="props-table"><thead><tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>
+          <tr><td><span class="prop-name">variant</span></td><td><span class="prop-type">string</span></td><td class="prop-default">"secondary"</td><td class="prop-desc">One of <code style="font-family:'DM Mono',monospace;">primary | secondary | ghost | danger</code></td></tr>
+          <tr><td><span class="prop-name">size</span></td><td><span class="prop-type">string</span></td><td class="prop-default">"md"</td><td class="prop-desc">One of <code style="font-family:'DM Mono',monospace;">sm | md | lg</code></td></tr>
+          <tr><td><span class="prop-name">disabled</span></td><td><span class="prop-type">boolean</span></td><td class="prop-default">false</td><td class="prop-desc">Disables interaction and reduces opacity to 42%.</td></tr>
+        </tbody></table>`
+    },
+
+    'checkbox': {
+      eyebrow: 'Components', title: 'Checkbox',
+      desc: 'Checkboxes allow users to select one or more items from a set. When options are mutually exclusive, use Radio Button instead.',
+      tags: [{label:'Stable', cls:'green'}, {label:'Figma: Checkbox', cls:'blue'}],
+      content: `
+        <p class="section-title">States</p>
+        <div class="preview-card"><div class="preview-body" style="gap:22px;flex-wrap:wrap;">
+          <label class="ds-checkbox"><input type="checkbox"><span class="ds-checkbox-box"></span>Unchecked</label>
+          <label class="ds-checkbox"><input type="checkbox" checked><span class="ds-checkbox-box"></span>Checked</label>
+          <label class="ds-checkbox" style="opacity:.42;pointer-events:none;"><input type="checkbox"><span class="ds-checkbox-box"></span>Disabled</label>
+          <label class="ds-checkbox" style="opacity:.42;pointer-events:none;"><input type="checkbox" checked><span class="ds-checkbox-box"></span>Disabled checked</label>
+        </div></div>
+        <div class="code-block"><div class="code-header"><span class="code-lang">HTML</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div><pre><span class="tag">&lt;label</span> <span class="attr">class</span>=<span class="str">"ds-checkbox"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"checkbox"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="str">"ds-checkbox-box"</span><span class="tag">&gt;&lt;/span&gt;</span>
+  Label text
+<span class="tag">&lt;/label&gt;</span></pre></div>`
+    },
+
+    'dropdown': {
+      eyebrow: 'Components', title: 'Dropdown',
+      desc: 'Dropdowns reveal a list of options on trigger. Prefer dropdowns when there are 5 or more mutually exclusive options; for fewer, consider radio buttons.',
+      tags: [{label:'Stable', cls:'green'}, {label:'Figma: Dropdown', cls:'blue'}],
+      content: `
+        <p class="section-title">Preview</p>
+        <div class="preview-card"><div class="preview-body" style="padding:40px;align-items:flex-start;">
+          <div>
+            <button class="ds-dropdown-trigger">Select option <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg></button>
+            <div class="ds-dropdown-menu" style="margin-top:6px;">
+              <div class="ds-dropdown-item selected">Option one</div>
+              <div class="ds-dropdown-item">Option two</div>
+              <div class="ds-dropdown-item">Option three</div>
+              <div class="ds-dropdown-item">Option four</div>
+            </div>
+          </div>
+        </div></div>
+        <div class="callout info"><span class="callout-icon">ℹ️</span><div>Always provide a placeholder label. Never leave the trigger in an empty state — use "Select…" or a meaningful default.</div></div>`
+    },
+
+    'input': {
+      eyebrow: 'Components', title: 'Input',
+      desc: 'Text inputs collect single-line string values. Always pair with a visible label — never use placeholder text as a label substitute.',
+      tags: [{label:'Stable', cls:'green'}, {label:'Figma: Input', cls:'blue'}],
+      content: `
+        <p class="section-title">States</p>
+        <div class="preview-card"><div class="preview-body" style="flex-direction:column;align-items:stretch;padding:28px 32px;background:#fff;gap:20px;max-width:440px;margin:0 auto;">
+          <div class="ds-input-wrap"><label class="ds-label">Default</label><input class="ds-input" placeholder="Enter value…"></div>
+          <div class="ds-input-wrap"><label class="ds-label">With value</label><input class="ds-input" value="jordan@folio.design"></div>
+          <div class="ds-input-wrap"><label class="ds-label">Error state</label><input class="ds-input ds-input-error" value="not-an-email"><span class="ds-input-error-msg">Please enter a valid email address.</span></div>
+          <div class="ds-input-wrap"><label class="ds-label">Disabled</label><input class="ds-input" disabled value="Read only"></div>
+        </div></div>`
+    },
+
+    'navigation': {
+      eyebrow: 'Components', title: 'Navigation',
+      desc: 'The Navigation component provides the top-level wayfinding bar. It supports a logo, link items, and an optional right-side action slot.',
+      tags: [{label:'Stable', cls:'green'}, {label:'Figma: Navigation', cls:'blue'}],
+      content: `
+        <p class="section-title">Preview</p>
+        <div class="preview-card"><div class="preview-body" style="padding:32px;background:#f3f4f6;">
+          <div class="ds-nav-bar">
+            <span class="ds-nav-logo">Folio</span>
+            <div class="ds-nav-links">
+              <span class="ds-nav-link active">Overview</span>
+              <span class="ds-nav-link">Tasks</span>
+              <span class="ds-nav-link">Docs</span>
+              <span class="ds-nav-link">People</span>
+            </div>
+            <button class="ds-btn ds-btn-primary ds-btn-sm">New task</button>
+          </div>
+        </div></div>
+        <div class="callout tip"><span class="callout-icon">✅</span><div>Keep navigation labels to 1–2 words. Long labels compress other items and break the visual rhythm on smaller viewports.</div></div>`
+    },
+
+    'progress-step': {
+      eyebrow: 'Components', title: 'Progress Step',
+      desc: 'Progress steppers communicate how far along a multi-step flow the user is. Each step is either completed, active, or upcoming.',
+      tags: [{label:'Stable', cls:'green'}, {label:'Figma: Progress Step', cls:'blue'}],
+      content: `
+        <p class="section-title">Preview</p>
+        <div class="preview-card"><div class="preview-body" style="padding:40px 32px;background:#fff;">
+          <div class="ds-progress-steps" style="width:100%;">
+            <div class="ds-step done"><div class="ds-step-circle"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></div><span class="ds-step-label">Account</span></div>
+            <div class="ds-step-line done"></div>
+            <div class="ds-step done"><div class="ds-step-circle"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></div><span class="ds-step-label">Profile</span></div>
+            <div class="ds-step-line done"></div>
+            <div class="ds-step active"><div class="ds-step-circle">3</div><span class="ds-step-label">Review</span></div>
+            <div class="ds-step-line"></div>
+            <div class="ds-step"><div class="ds-step-circle">4</div><span class="ds-step-label">Confirm</span></div>
+          </div>
+        </div></div>
+        <div class="callout info"><span class="callout-icon">ℹ️</span><div>Keep steps between 3 and 5. More than 5 steps overwhelms the component and should instead be split into separate flows.</div></div>`
+    },
+
+    'radio-button': {
+      eyebrow: 'Components', title: 'Radio Button',
+      desc: 'Radio buttons allow exactly one selection from 2–5 mutually exclusive options. For multiple selections, use Checkbox instead.',
+      tags: [{label:'Stable', cls:'green'}, {label:'Figma: Radio', cls:'blue'}],
+      content: `
+        <p class="section-title">States</p>
+        <div class="preview-card"><div class="preview-body" style="gap:22px;flex-wrap:wrap;">
+          <label class="ds-radio"><input type="radio" name="demo"><span class="ds-radio-circle"></span>Option A</label>
+          <label class="ds-radio"><input type="radio" name="demo" checked><span class="ds-radio-circle"></span>Option B</label>
+          <label class="ds-radio"><input type="radio" name="demo"><span class="ds-radio-circle"></span>Option C</label>
+          <label class="ds-radio" style="opacity:.42;pointer-events:none;"><input type="radio" name="demo2"><span class="ds-radio-circle"></span>Disabled</label>
+        </div></div>
+        <div class="code-block"><div class="code-header"><span class="code-lang">HTML</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div><pre><span class="tag">&lt;label</span> <span class="attr">class</span>=<span class="str">"ds-radio"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"radio"</span> <span class="attr">name</span>=<span class="str">"group"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="str">"ds-radio-circle"</span><span class="tag">&gt;&lt;/span&gt;</span>
+  Option label
+<span class="tag">&lt;/label&gt;</span></pre></div>`
+    },
+
+    'tabs': {
+      eyebrow: 'Components', title: 'Tabs',
+      desc: 'Tabs organize parallel content sections within a single page view. Only one tab is active at a time. Never nest tabs inside tabs.',
+      tags: [{label:'Stable', cls:'green'}, {label:'Figma: Tabs', cls:'blue'}],
+      content: `
+        <p class="section-title">Preview</p>
+        <div class="preview-card"><div class="preview-body" style="flex-direction:column;align-items:stretch;padding:0;gap:0;background:#fff;min-height:130px;">
+          <div class="ds-tabs" style="padding:0 24px;margin:0;">
+            <button class="ds-tab active" onclick="setTab(this,'Showing all items across the workspace.')">All</button>
+            <button class="ds-tab" onclick="setTab(this,'Showing only active items.')">Active</button>
+            <button class="ds-tab" onclick="setTab(this,'Showing archived items.')">Archived</button>
+          </div>
+          <div style="padding:20px 24px;color:#6b7689;font-size:13.5px;" id="tab-body">Showing all items across the workspace.</div>
+        </div></div>
+        <div class="callout warn"><span class="callout-icon">⚠️</span><div>Never use tabs for sequential steps. Use Progress Step for flows with a defined order.</div></div>`
+    },
+
+    'text-area': {
+      eyebrow: 'Components', title: 'Text Area',
+      desc: 'Text areas accept multi-line string input. Use when the expected value is longer than one sentence. Always allow vertical resize.',
+      tags: [{label:'Stable', cls:'green'}, {label:'Figma: Text Area', cls:'blue'}],
+      content: `
+        <p class="section-title">Preview</p>
+        <div class="preview-card"><div class="preview-body" style="flex-direction:column;padding:28px 32px;background:#fff;align-items:stretch;max-width:480px;margin:0 auto;gap:16px;">
+          <div class="ds-input-wrap">
+            <label class="ds-label">Description</label>
+            <textarea class="ds-textarea" placeholder="Write a brief description…"></textarea>
+            <span class="ds-input-hint">Max 500 characters.</span>
+          </div>
+        </div></div>
+        <div class="callout info"><span class="callout-icon">ℹ️</span><div>Set a minimum height that accommodates the expected content length. For very short values (1–2 words), use an Input instead.</div></div>`
+    },
+
+    'toast': {
+      eyebrow: 'Components', title: 'Toast',
+      desc: 'Toasts provide brief, non-blocking feedback about an operation. They should auto-dismiss after 4–6 seconds and not require user interaction to close.',
+      tags: [{label:'Stable', cls:'green'}, {label:'Figma: Toast', cls:'blue'}],
+      content: `
+        <p class="section-title">Variants</p>
+        <div class="preview-card"><div class="preview-body" style="flex-direction:column;align-items:stretch;padding:24px 28px;gap:12px;background:#f0f1f4;">
+          <div class="ds-toast"><div class="ds-toast-icon success"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12l5 5L20 7"/></svg></div><div class="ds-toast-body"><div class="ds-toast-title">Changes saved</div><div class="ds-toast-msg">Your profile has been updated successfully.</div></div><button class="ds-toast-close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+          <div class="ds-toast"><div class="ds-toast-icon error"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></div><div class="ds-toast-body"><div class="ds-toast-title">Upload failed</div><div class="ds-toast-msg">File size exceeds the 10 MB limit.</div></div><button class="ds-toast-close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+          <div class="ds-toast"><div class="ds-toast-icon warn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 8v5M12 17h.01"/></svg></div><div class="ds-toast-body"><div class="ds-toast-title">Session expiring</div><div class="ds-toast-msg">You'll be logged out in 5 minutes.</div></div><button class="ds-toast-close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+        </div></div>`
+    },
+
+    'toggle': {
+      eyebrow: 'Components', title: 'Toggle',
+      desc: 'Toggles switch a single boolean setting between on and off. Changes take effect immediately — no confirm step required.',
+      tags: [{label:'Stable', cls:'green'}, {label:'Figma: Toggle', cls:'blue'}],
+      content: `
+        <p class="section-title">States</p>
+        <div class="preview-card"><div class="preview-body" style="gap:24px;flex-wrap:wrap;">
+          <label class="ds-toggle"><input type="checkbox"><div class="ds-toggle-track"><div class="ds-toggle-thumb"></div></div>Off</label>
+          <label class="ds-toggle"><input type="checkbox" checked><div class="ds-toggle-track"><div class="ds-toggle-thumb"></div></div>On</label>
+          <label class="ds-toggle" style="opacity:.42;pointer-events:none;"><input type="checkbox"><div class="ds-toggle-track"><div class="ds-toggle-thumb"></div></div>Disabled</label>
+        </div></div>
+        <div class="code-block"><div class="code-header"><span class="code-lang">HTML</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div><pre><span class="tag">&lt;label</span> <span class="attr">class</span>=<span class="str">"ds-toggle"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="str">"checkbox"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"ds-toggle-track"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="str">"ds-toggle-thumb"</span><span class="tag">&gt;&lt;/div&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+  Enable notifications
+<span class="tag">&lt;/label&gt;</span></pre></div>`
+    },
+
+    'tooltip': {
+      eyebrow: 'Components', title: 'Tooltip',
+      desc: 'Tooltips surface supplementary information on hover. They must not contain interactive elements and must not replace visible labels for critical UI.',
+      tags: [{label:'Stable', cls:'green'}, {label:'Figma: Tooltip', cls:'blue'}],
+      content: `
+        <p class="section-title">Preview</p>
+        <div class="preview-card"><div class="preview-body" style="gap:32px;padding:60px 32px;">
+          <div class="ds-tooltip-wrap"><button class="ds-btn ds-btn-secondary">Hover me</button><div class="ds-tooltip">This is a tooltip</div></div>
+          <div class="ds-tooltip-wrap"><button class="ds-btn ds-btn-primary">With shortcut hint</button><div class="ds-tooltip">Save changes · ⌘S</div></div>
+        </div></div>
+        <div class="callout warn"><span class="callout-icon">⚠️</span><div>Never place interactive elements (links, buttons) inside a tooltip. Use a Popover for interactive overlays.</div></div>`
+    }
+  };
+
+  /* ============================================================
+     RENDERER
+     ============================================================ */
+  function renderPage(key) {
+    const page = PAGES[key];
+    if (!page) return;
+
+    document.getElementById('crumbLabel').textContent = page.title;
+
+    const tagsHtml = (page.tags || []).map(t =>
+      `<span class="meta-tag ${t.cls}">${t.label}</span>`
+    ).join('');
+
+    document.getElementById('pageContent').innerHTML = `
+      <div class="page-header">
+        <div class="page-eyebrow">${page.eyebrow}</div>
+        <h1 class="page-title">${page.title}</h1>
+        <p class="page-desc">${page.desc}</p>
+        ${tagsHtml ? `<div class="page-meta">${tagsHtml}</div>` : ''}
+      </div>
+      ${page.content}
+    `;
+  }
+
+  /* nav interaction */
+  const allNavItems = document.querySelectorAll('.nav-item[data-page]');
+  allNavItems.forEach(item => {
+    item.addEventListener('click', () => {
+      allNavItems.forEach(n => n.removeAttribute('aria-current'));
+      item.setAttribute('aria-current', 'page');
+      renderPage(item.dataset.page);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    item.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); item.click(); }
+    });
+  });
+
+  renderPage('badge');
+
+  /* ============================================================
+     GLOBAL UTILITIES
+     ============================================================ */
+  window.copyCode = function(btn) {
+    const pre = btn.closest('.code-block').querySelector('pre');
+    navigator.clipboard.writeText(pre.innerText).then(() => {
+      btn.textContent = 'Copied!';
+      setTimeout(() => { btn.textContent = 'Copy'; }, 1800);
+    }).catch(() => { btn.textContent = 'Copy'; });
+  };
+
+  window.setTab = function(btn, msg) {
+    const tabs = btn.closest('.ds-tabs');
+    if (!tabs) return;
+    tabs.querySelectorAll('.ds-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    const body = document.getElementById('tab-body');
+    if (body) body.textContent = msg;
+  };
+
+  /* preview light/dark toggle */
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('.preview-btn[data-theme]');
+    if (!btn) return;
+    const toolbar = btn.closest('.preview-toolbar');
+    if (!toolbar) return;
+    toolbar.querySelectorAll('.preview-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const body = toolbar.nextElementSibling;
+    if (body && body.classList.contains('preview-body')) {
+      body.classList.toggle('dark', btn.dataset.theme === 'dark');
+    }
+  });
+
+  /* sidebar search filter */
+  document.getElementById('sideSearch').addEventListener('input', function() {
+    const q = this.value.toLowerCase().trim();
+    allNavItems.forEach(item => {
+      item.style.display = (!q || item.textContent.toLowerCase().includes(q)) ? '' : 'none';
+    });
+  });
+
+  /* Cmd-K */
+  document.addEventListener('keydown', e => {
+    if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
+      e.preventDefault();
+      document.getElementById('searchInput').focus();
+    }
+  });
+
+})();
+</script>
+</body>
+</html>

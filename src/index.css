@@ -1,0 +1,343 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  /* ==========================================================
+   * LAYER 1 — PRIMITIVE COLORS (hex values only, no semantics)
+   * Sourced from tokens.json → primitives.light
+   * ========================================================== */
+
+  /* Primary (blue) — primaryPrimary* */
+  --color-primary-50: #e6eef8;
+  --color-primary-100: #b0cbe9;
+  --color-primary-200: #8ab1de;
+  --color-primary-300: #548ecf;
+  --color-primary-400: #3378c6;
+  --color-primary-500: #0056b8;
+  --color-primary-600: #004ea7;
+  --color-primary-700: #003d83;
+  --color-primary-800: #002f65;
+  --color-primary-900: #00244d;
+
+  /* Secondary (orange) — secondarySecondary* */
+  --color-secondary-50: #f9eee7;
+  --color-secondary-100: #edccb5;
+  --color-secondary-200: #e5b391;
+  --color-secondary-300: #d9905f;
+  --color-secondary-400: #d17a40;
+  --color-secondary-500: #c65910;
+  --color-secondary-600: #b4510f;
+  --color-secondary-700: #8d3f0b;
+  --color-secondary-800: #6d3109;
+  --color-secondary-900: #532507;
+
+  /* Neutrals — neutralsGray* / neutralsWhite / neutralsBlack */
+  --color-gray-50: #f4f5f7;
+  --color-gray-100: #dde3eb;
+  --color-gray-200: #aeb4bc;
+  --color-gray-300: #89919d;
+  --color-gray-400: #727c8a;
+  --color-gray-500: #4f5c6d;
+  --color-gray-600: #485363;
+  --color-gray-700: #29384d;
+  --color-gray-800: #19283c;
+  --color-gray-900: #131e2e;
+  --color-white: #ffffff;
+  --color-black: #051325;
+
+  /* Success — actionSuccessSuccess* */
+  --color-success-50: #e6f1e9;
+  --color-success-100: #b1d3bb;
+  --color-success-200: #8bbe9a;
+  --color-success-300: #78b38a;
+  --color-success-400: #5da573;
+  --color-success-500: #358e50;
+  --color-success-600: #036821;
+  --color-success-700: #02511a;
+  --color-success-800: #023f14;
+  --color-success-900: #01300f;
+
+  /* Critical — actionCriticalCritical* */
+  --color-critical-50: #f8e9ea;
+  --color-critical-100: #e9babc;
+  --color-critical-200: #de989c;
+  --color-critical-300: #cf6a6f;
+  --color-critical-400: #c64d53;
+  --color-critical-500: #b82028;
+  --color-critical-600: #a71d24;
+  --color-critical-700: #83171c;
+  --color-critical-800: #651216;
+  --color-critical-900: #4d0d11;
+
+  /* Warning — actionWarningWarning* */
+  --color-warning-50: #fcf4e6;
+  --color-warning-100: #f4dcb1;
+  --color-warning-200: #efcb8b;
+  --color-warning-300: #e8b356;
+  --color-warning-400: #e4a435;
+  --color-warning-500: #dd8d03;
+  --color-warning-600: #c98003;
+  --color-warning-700: #9d6402;
+  --color-warning-800: #7a4e02;
+  --color-warning-900: #5d3b01;
+
+  /* Status primitives — no group exists in tokens.json primitives, hex only here */
+  --color-cyan-dark: #067699;
+  --color-cyan-light: #ecfdff;
+  --color-indigo-dark: #444ce7;
+  --color-indigo-light: #eef4ff;
+  --color-purple-dark: #7839ee;
+  --color-purple-light: #f5f3ff;
+  --color-fuchsia-dark: #991daf;
+  --color-fuchsia-light: #fdf3ff;
+  --color-rose-dark: #e31b54;
+  --color-rose-light: #fff1f3;
+  --color-teal-dark: #0e9384;
+  --color-teal-light: #f0fdf9;
+
+  /* ==========================================================
+   * LAYER 2 — SEMANTIC COLORS (var() references only, no hex)
+   * Sourced from tokens.json → colorStyle.lightTheme
+   * ========================================================== */
+
+  /* — Text — */
+  --color-text-primary: var(--color-black);                         /* textTextPrimary */
+  --color-text-secondary: var(--color-gray-500);                    /* textTextSecondary */
+  --color-text-success: var(--color-success-500);                   /* textTextSuccess */
+  --color-text-success-light: var(--color-success-100);             /* textTextSuccessLight */
+  --color-text-warning: var(--color-warning-600);                   /* textTextWarning */
+  --color-text-warning-light: var(--color-warning-100);             /* textTextWarningLight */
+  --color-text-critical: var(--color-critical-500);                 /* textTextCritical */
+  --color-text-critical-light: var(--color-critical-100);           /* textTextCriticalLight */
+  --color-text-brand: var(--color-primary-500);                     /* textTextBrand */
+  --color-text-brand-light: var(--color-primary-100);               /* textTextBrandLight */
+  --color-text-brand-secondary: var(--color-secondary-500);         /* textTextBrandSecondary */
+  --color-text-brand-secondary-light: var(--color-secondary-100);   /* textTextBrandSecondaryLight */
+  --color-text-gray-light: var(--color-gray-400);                   /* textTextGrayLight */
+  --color-text-white: var(--color-white);                           /* textTextWhite */
+
+  /* — Background — */
+  --color-bg-primary: var(--color-primary-50);                      /* backgroundBgPrimary */
+  --color-bg-secondary: var(--color-secondary-50);                  /* backgroundBgSecondary */
+  --color-bg-white: var(--color-white);                             /* backgroundBgWhite */
+  --color-bg-black: var(--color-black);                             /* backgroundBgBlack */
+  --color-bg-brand: var(--color-primary-500);                       /* backgroundBgBrand */
+  --color-bg-brand-secondary: var(--color-secondary-500);           /* backgroundBgBrandSecondary */
+  --color-bg-gray-light: var(--color-gray-50);                      /* backgroundBgGrayLight */
+  --color-bg-gray-dark: var(--color-gray-300);                      /* backgroundBgGrayDark */
+  --color-bg-success: var(--color-success-500);                     /* backgroundBgSuccess */
+  --color-bg-success-light: var(--color-success-50);                /* backgroundBgSuccessLight */
+  --color-bg-critical: var(--color-critical-500);                   /* backgroundBgCritical */
+  --color-bg-critical-light: var(--color-critical-50);              /* backgroundBgCriticalLight */
+  --color-bg-warning: var(--color-warning-500);                     /* backgroundBgWarning */
+  --color-bg-warning-light: var(--color-warning-50);                /* backgroundBgWarningLight */
+
+  /* — Border — */
+  --color-border-brand: var(--color-primary-500);                   /* borderBorderBrand */
+  --color-border-brand-light: var(--color-primary-100);             /* borderBorderBrandLight */
+  --color-border-brand-secondary: var(--color-secondary-500);       /* borderBorderSecondary */
+  --color-border-gray-light: var(--color-gray-100);                 /* borderBorderGrayLight */
+  --color-border-gray-dark: var(--color-gray-300);                  /* borderBorderGrayDark */
+  --color-border-success: var(--color-success-500);                 /* borderBorderSuccess */
+  --color-border-warning: var(--color-warning-500);                 /* borderBorderWarning */
+  --color-border-critical: var(--color-critical-500);               /* borderBorderCritical */
+  --color-border-white: var(--color-white);                         /* borderBorderWhite */
+  --color-border-black: var(--color-black);                         /* borderBorderBlack */
+
+  /* — Icon — */
+  --color-icon-primary: var(--color-black);                         /* iconIconPrimary */
+  --color-icon-secondary: var(--color-gray-500);                    /* iconIconSecondary */
+  --color-icon-gray-light: var(--color-gray-400);                   /* iconIconGrayLight */
+  --color-icon-brand: var(--color-primary-500);                     /* iconIconBrand */
+  --color-icon-brand-light: var(--color-primary-100);               /* iconIconBrandLight */
+  --color-icon-brand-secondary: var(--color-secondary-500);         /* iconIconBrandSecondary */
+  --color-icon-brand-secondary-light: var(--color-secondary-100);   /* iconIconBrandSecondaryLight */
+  --color-icon-success: var(--color-success-500);                   /* iconIconSuccess */
+  --color-icon-success-light: var(--color-success-100);             /* iconIconSuccessLight */
+  --color-icon-warning: var(--color-warning-600);                   /* iconIconWarning */
+  --color-icon-warning-light: var(--color-warning-100);             /* iconIconWarningLight */
+  --color-icon-critical: var(--color-critical-500);                 /* iconIconCritical */
+  --color-icon-critical-light: var(--color-critical-100);           /* iconIconCriticalLight */
+  --color-icon-white: var(--color-white);                           /* iconIconWhite */
+
+  /* — Button — */
+  --color-btn-text-primary: var(--color-white);                     /* componentButtonBtnTextPrimary */
+  --color-btn-text-disabled: var(--color-gray-400);                 /* componentButtonBtnTextDisabled */
+  --color-btn-text-bordered: var(--color-black);                    /* componentButtonBtnTextBordered */
+  --color-btn-text-critical: var(--color-critical-500);             /* componentButtonBtnTextCritical */
+  --color-btn-text-secondary: var(--color-secondary-600);           /* componentButtonBtnTextSecondary */
+  --color-btn-text-secondary-focused: var(--color-secondary-700);   /* componentButtonBtnTextSecondaryFocused */
+  --color-btn-text-secondary-disabled: var(--color-secondary-300);  /* componentButtonBtnTextSecondaryDisabled */
+  --color-btn-bg-primary: var(--color-primary-500);                 /* componentButtonBtnBgPrimary */
+  --color-btn-bg-primary-focused: var(--color-primary-700);         /* componentButtonBtnBgPrimaryFocused */
+  --color-btn-bg-primary-disabled: var(--color-primary-50);         /* componentButtonBtnBgPrimaryDisabled */
+  --color-btn-bg-bordered: var(--color-white);                      /* componentButtonBtnBgBordered */
+  --color-btn-bg-critical: var(--color-critical-500);               /* componentButtonBtnBgCritical */
+  --color-btn-border-primary: var(--color-gray-100);                /* componentButtonBtnBorderPrimary */
+  --color-btn-border-focused: var(--color-gray-500);                /* componentButtonBtnBorderFocused */
+  --color-btn-border-disabled: var(--color-gray-100);               /* componentButtonBtnBorderDisabled */
+  --color-btn-border-critical: var(--color-critical-500);           /* componentButtonBtnBorderCritical */
+  --color-btn-icon-primary: var(--color-white);                     /* componentButtonBtnIconPrimary */
+  --color-btn-icon-bordered: var(--color-black);                    /* componentButtonBtnIconBordered */
+  --color-btn-icon-secondary: var(--color-secondary-600);           /* componentButtonBtnIconSecondary */
+  --color-btn-icon-secondary-focused: var(--color-secondary-700);   /* componentButtonBtnIconSecondaryFocused */
+  --color-btn-icon-secondary-disabled: var(--color-secondary-300);  /* componentButtonBtnIconSecondaryDisabled */
+  --color-btn-icon-disabled: var(--color-gray-400);                 /* componentButtonBtnIconDisabled */
+  --color-btn-icon-critical: var(--color-critical-500);             /* componentButtonBtnIconCritical */
+
+  /* — Input Field — */
+  --color-input-text-label: var(--color-black);                     /* componentInputFieldInputTextLabel */
+  --color-input-text-enabled: var(--color-black);                   /* componentInputFieldInputTextEnabled */
+  --color-input-text-placeholder: var(--color-gray-400);            /* componentInputFieldInputTextPlaceholder */
+  --color-input-text-disabled: var(--color-gray-300);               /* componentInputFieldInputTextDisabled */
+  --color-input-text-helper: var(--color-gray-400);                 /* componentInputFieldInputTextHelper */
+  --color-input-text-critical: var(--color-critical-500);           /* componentInputFieldInputTextCritical */
+  --color-input-bg-primary: var(--color-white);                     /* componentInputFieldInputBgPrimary */
+  --color-input-bg-disabled: var(--color-gray-50);                  /* componentInputFieldInputBgDisabled */
+  --color-input-border-enabled: var(--color-gray-100);              /* componentInputFieldInputBorderEnabled */
+  --color-input-border-selected: var(--color-primary-500);          /* componentInputFieldInputBorderSelected */
+  --color-input-border-critical: var(--color-critical-500);         /* componentInputFieldInputBorderCritical */
+  --color-input-border-disabled: var(--color-gray-200);             /* componentInputFieldInputBorderDisabled */
+  --color-input-icon-enabled: var(--color-black);                   /* componentInputFieldInputIconEnabled */
+  --color-input-icon-disabled: var(--color-gray-300);               /* componentInputFieldInputIconDisabled */
+  --color-input-icon-critical: var(--color-critical-500);           /* componentInputFieldInputIconCritical */
+
+  /* — Navigation — */
+  --color-nav-text-primary: var(--color-black);                     /* componentNavigationNvTextPrimary */
+  --color-nav-text-secondary: var(--color-gray-200);                /* componentNavigationNvTextSecondary */
+  --color-nav-text-primary-dark: var(--color-white);                /* componentNavigationNvTextPrimary2 */
+  --color-nav-icon-primary: var(--color-black);                     /* componentNavigationNvIconPrimary */
+  --color-nav-icon-secondary: var(--color-gray-200);                /* componentNavigationNvIconSecondary */
+  --color-nav-bg-primary: var(--color-white);                       /* componentNavigationNvBgPrimary */
+  --color-nav-bg-secondary: var(--color-gray-800);                  /* componentNavigationNvBgSecondary */
+
+  /* — Status — */
+  --color-status-cyan-dark: var(--color-cyan-dark);                 /* statusCyanDark */
+  --color-status-cyan-light: var(--color-cyan-light);               /* statusCyanLight */
+  --color-status-indigo-dark: var(--color-indigo-dark);             /* statusIndigoDark */
+  --color-status-indigo-light: var(--color-indigo-light);           /* statusIndigoLight */
+  --color-status-purple-dark: var(--color-purple-dark);             /* statusPurpleDark */
+  --color-status-purple-light: var(--color-purple-light);           /* statusPurpleLight */
+  --color-status-fuchsia-dark: var(--color-fuchsia-dark);           /* statusFuchsiaDark */
+  --color-status-fuchsia-light: var(--color-fuchsia-light);         /* statusFuchsiaLight */
+  --color-status-rose-dark: var(--color-rose-dark);                 /* statusRoseDark */
+  --color-status-rose-light: var(--color-rose-light);               /* statusRoseLight */
+  --color-status-teal-dark: var(--color-teal-dark);                 /* statusTealDark */
+  --color-status-teal-light: var(--color-teal-light);               /* statusTealLight */
+
+  /* ==========================================================
+   * TYPOGRAPHY
+   * Sourced from tokens.json → typography.mode1 + primitives.light
+   * All sizes in px. Font: Inter (fontFontFamily)
+   * ========================================================== */
+
+  --font-inter: "Inter", sans-serif;
+
+  /* 12px heading — font12px* */
+  --text-12: 12px;
+  --text-12--line-height: 16px;
+  --text-12--letter-spacing: 0px;
+
+  /* 12px paragraph — font12pxFontHeightPara */
+  --text-12-para: 12px;
+  --text-12-para--line-height: 20px;
+  --text-12-para--letter-spacing: 0px;
+
+  /* 14px heading — font14px* */
+  --text-14: 14px;
+  --text-14--line-height: 18px;
+  --text-14--letter-spacing: 0px;
+
+  /* 14px paragraph — font14pxFontHeightPara */
+  --text-14-para: 14px;
+  --text-14-para--line-height: 22px;
+  --text-14-para--letter-spacing: 0px;
+
+  /* 16px — font16px* */
+  --text-16: 16px;
+  --text-16--line-height: 22px;
+  --text-16--letter-spacing: 0px;
+
+  /* 18px — font18px* */
+  --text-18: 18px;
+  --text-18--line-height: 26px;
+  --text-18--letter-spacing: 0px;
+
+  /* 20px — font20px* */
+  --text-20: 20px;
+  --text-20--line-height: 28px;
+  --text-20--letter-spacing: 0px;
+
+  /* 24px — font24px* */
+  --text-24: 24px;
+  --text-24--line-height: 32px;
+  --text-24--letter-spacing: 0px;
+
+  /* 32px — font32px* */
+  --text-32: 32px;
+  --text-32--line-height: 36px;
+  --text-32--letter-spacing: 0px;
+
+  /* 40px — font40px* */
+  --text-40: 40px;
+  --text-40--line-height: 48px;
+  --text-40--letter-spacing: 0px;
+
+  /* ==========================================================
+   * BORDER RADIUS (px)
+   * Sourced from tokens.json → radius.mode1
+   * ========================================================== */
+
+  --radius-none: 0px;
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+  --radius-3xl: 32px;
+  --radius-full: 9999px;
+
+  /* ==========================================================
+   * SPACING (px)
+   * Sourced from tokens.json → spacing.mode1
+   * ========================================================== */
+
+  --spacing-0: 0px;
+  --spacing-2: 2px;
+  --spacing-4: 4px;
+  --spacing-6: 6px;
+  --spacing-8: 8px;
+  --spacing-10: 10px;
+  --spacing-12: 12px;
+  --spacing-14: 14px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+  --spacing-56: 56px;
+  --spacing-64: 64px;
+  --spacing-72: 72px;
+  --spacing-80: 80px;
+  --spacing-88: 88px;
+  --spacing-100: 100px;
+}
+
+@layer base {
+  * {
+    @apply border-border-gray-light;
+  }
+  body {
+    @apply bg-bg-white text-text-primary font-inter;
+  }
+}
+
+@keyframes btn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

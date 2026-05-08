@@ -1,0 +1,301 @@
+import { type NavSection } from './appnavigation';
+
+const NAV_CSS = `
+  .dsn-side {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    height: 100vh;
+    background: #051325;
+    padding: 18px 14px 0px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    color: #fff;
+    font-family: 'DM Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .dsn-side *, .dsn-side *::before, .dsn-side *::after { box-sizing: border-box; }
+
+  .dsn-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 10px 22px;
+    flex-shrink: 0;
+  }
+  .dsn-brand-mark {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: #fff;
+    color: #051325;
+    display: grid; place-items: center;
+    font-weight: 700; font-size: 14px;
+    letter-spacing: -0.02em;
+    flex: none;
+  }
+  .dsn-brand-name {
+    font-weight: 600; font-size: 17px;
+    letter-spacing: -0.01em;
+    color: #fff; white-space: nowrap;
+    line-height: 1.1;
+  }
+  .dsn-brand-sub {
+    font-size: 10.5px;
+    color: #7a8191;
+    letter-spacing: .02em;
+    margin-top: 2px;
+  }
+
+  .dsn-search-wrap {
+    padding: 0 6px 8px;
+    flex-shrink: 0;
+  }
+  .dsn-search {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 10px;
+    padding: 8px 12px;
+    transition: background 220ms cubic-bezier(.2,.7,.2,1),
+                border-color 220ms cubic-bezier(.2,.7,.2,1);
+  }
+  .dsn-search:focus-within {
+    background: rgba(255,255,255,.11);
+    border-color: rgba(255,255,255,.22);
+  }
+  .dsn-search input {
+    background: none; border: 0; outline: 0;
+    color: #fff; font-size: 13px;
+    flex: 1;
+    font-family: inherit;
+    font-weight: 500;
+  }
+  .dsn-search input::placeholder { color: #7a8191; }
+  .dsn-search svg { display: block; flex: none; }
+
+  .dsn-body {
+    flex: 1; overflow-y: auto;
+  }
+  .dsn-body::-webkit-scrollbar { width: 0; }
+
+  .dsn-section { padding: 14px 6px; }
+  .dsn-section-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #7a8191;
+    padding: 6px 10px;
+    letter-spacing: .08em;
+    font-weight: 500;
+  }
+
+  .dsn-list {
+    display: flex; flex-direction: column; gap: 2px;
+    list-style: none; margin: 0; padding: 0;
+  }
+  .dsn-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 8.5px 12px;
+    border-radius: 10px;
+    color: #d0d5dd;
+    cursor: pointer;
+    transition: background 220ms cubic-bezier(.2,.7,.2,1),
+                color 220ms cubic-bezier(.2,.7,.2,1);
+    font-size: 14px; font-weight: 500;
+    white-space: nowrap; user-select: none;
+    outline: none;
+  }
+  .dsn-item:hover {
+    background: rgba(255,255,255,.08);
+    color: #fff;
+  }
+  .dsn-item:focus-visible {
+    background: rgba(255,255,255,.08);
+    color: #fff;
+  }
+  .dsn-item[aria-current="page"] {
+    background: #fff;
+    color: #051325;
+  }
+
+  .dsn-divider {
+    height: 1px;
+    background: rgba(255,255,255,.08);
+    margin: 4px 4px;
+  }
+
+  .dsn-foot {
+    flex-shrink: 0;
+    margin-top: auto;
+    border-top: 1px solid rgba(255,255,255,.1);
+    padding-top: 12px;
+  }
+  .dsn-profile {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px;
+    border-radius: 12px;
+    transition: background 220ms cubic-bezier(.2,.7,.2,1);
+    cursor: pointer;
+  }
+  .dsn-profile:hover {
+    background: rgba(255,255,255,.08);
+  }
+  .dsn-avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    display: grid; place-items: center;
+    font-weight: 600; font-size: 13px;
+    flex: none;
+    background: #0e2440;
+    color: #fff;
+  }
+  .dsn-name {
+    font-size: 13px; font-weight: 600;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .dsn-role {
+    font-size: 11px;
+    color: #8b92a0;
+    margin-top: 1px;
+  }
+
+  @media (max-width: 860px) {
+    .dsn-side { display: none; }
+  }
+`;
+
+interface NavItemProps {
+  id: string;
+  label: string;
+  active: boolean;
+  onClick: (id: string) => void;
+}
+
+function NavItem({ id, label, active, onClick }: NavItemProps) {
+  return (
+    <li
+      className="dsn-item"
+      aria-current={active ? 'page' : undefined}
+      role="menuitem"
+      tabIndex={0}
+      onClick={() => onClick(id)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick(id);
+        }
+      }}
+    >
+      {label}
+    </li>
+  );
+}
+
+interface NavigationProps {
+  navSections: NavSection[];
+  activePage: string;
+  sideSearch: string;
+  onSideSearchChange: (value: string) => void;
+  onNavigate: (id: string) => void;
+}
+
+export function Navigation({
+  navSections,
+  activePage,
+  sideSearch,
+  onSideSearchChange,
+  onNavigate,
+}: NavigationProps) {
+  const allItems = navSections.flatMap((s) => s.items);
+
+  const renderNav = () => {
+    if (sideSearch.trim()) {
+      const q = sideSearch.toLowerCase();
+      const filtered = allItems.filter((item) => item.label.toLowerCase().includes(q));
+      return (
+        <div className="dsn-section">
+          <ul className="dsn-list" role="menu">
+            {filtered.map((item) => (
+              <NavItem
+                key={item.id}
+                id={item.id}
+                label={item.label}
+                active={activePage === item.id}
+                onClick={onNavigate}
+              />
+            ))}
+          </ul>
+        </div>
+      );
+    }
+
+    return navSections.map((section, idx) => (
+      <div key={section.label}>
+        {idx > 0 && <div className="dsn-divider" />}
+        <div className="dsn-section">
+          <div className="dsn-section-label">{section.label}</div>
+          <ul className="dsn-list" role="menu">
+            {section.items.map((item) => (
+              <NavItem
+                key={item.id}
+                id={item.id}
+                label={item.label}
+                active={activePage === item.id}
+                onClick={onNavigate}
+              />
+            ))}
+          </ul>
+        </div>
+      </div>
+    ));
+  };
+
+  return (
+    <>
+      <style dangerouslySetInnerHTML={{ __html: NAV_CSS }} />
+      <aside className="dsn-side" aria-label="Documentation navigation">
+        <div className="dsn-brand">
+          <div className="dsn-brand-mark">DS</div>
+          <div>
+            <div className="dsn-brand-name">DS Storybook</div>
+            <div className="dsn-brand-sub">Figma Component Docs</div>
+          </div>
+        </div>
+
+        <div className="dsn-search-wrap">
+          <label className="dsn-search" aria-label="Search">
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#7a8191"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+            >
+              <circle cx="11" cy="11" r="7" />
+              <path d="m21 21-4.3-4.3" />
+            </svg>
+            <input
+              placeholder="Search components…"
+              value={sideSearch}
+              onChange={(e) => onSideSearchChange(e.target.value)}
+            />
+          </label>
+        </div>
+
+        <div className="dsn-body">{renderNav()}</div>
+
+        <div className="dsn-foot">
+          {/* <div className="dsn-profile">
+            <div className="dsn-avatar">JM</div>
+            <div>
+              <div className="dsn-name">Jordan Maes</div>
+              <div className="dsn-role">Design System Lead</div>
+            </div>
+          </div> */}
+        </div>
+      </aside>
+    </>
+  );
+}
