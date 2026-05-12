@@ -25,7 +25,7 @@ const NAV_CSS = `
     flex-shrink: 0;
   }
   .dsn-brand-mark {
-    width: 28px; height: 28px;
+    width: 36px; height: 36px;
     border-radius: 8px;
     background: #fff;
     color: #051325;
@@ -257,7 +257,7 @@ export function Navigation({
         <div className="dsn-brand">
           <div className="dsn-brand-mark">DS</div>
           <div>
-            <div className="dsn-brand-name">DS Storybook</div>
+            <div className="dsn-brand-name">DesignBridge</div>
             <div className="dsn-brand-sub">Figma Component Docs</div>
           </div>
         </div>

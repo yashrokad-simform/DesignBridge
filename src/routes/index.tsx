@@ -1,9 +1,11 @@
 import { lazy, Suspense, type ComponentType } from "react";
 import type { RouteObject } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { PageLoader, PageNotFound } from "@/components/shared";
 
 const PrivateLayout = lazy(() => import("@/pages/private/privateLayout"));
 const IntroductionPage = lazy(() => import("@/pages/storybook/introduction"));
+const BadgePage = lazy(() => import("@/pages/storybook/badge"));
 
 function lazyLoad(Component: ComponentType) {
   return (
@@ -19,13 +21,13 @@ export const routes: RouteObject[] = [
     path: "/",
     element: lazyLoad(PrivateLayout),
     children: [
-      { index: true, element: lazyLoad(PrivateLayout) },
+      { index: true, element: <Navigate to="/introduction" replace /> },
       { path: "introduction", element: lazyLoad(IntroductionPage) },
       { path: "figma-mcp", element: lazyLoad(IntroductionPage) },
       { path: "colors", element: lazyLoad(IntroductionPage) },
       { path: "typography", element: lazyLoad(IntroductionPage) },
       { path: "spacing", element: lazyLoad(IntroductionPage) },
-      { path: "badge", element: lazyLoad(IntroductionPage) },
+      { path: "badge", element: lazyLoad(BadgePage) },
       { path: "button", element: lazyLoad(IntroductionPage) },
       { path: "checkbox", element: lazyLoad(IntroductionPage) },
       { path: "dropdown", element: lazyLoad(IntroductionPage) },
@@ -40,7 +42,6 @@ export const routes: RouteObject[] = [
       { path: "tooltip", element: lazyLoad(IntroductionPage) },
     ],
   },
-  
 
   // Public routes
   // {
@@ -62,4 +63,4 @@ export const routes: RouteObject[] = [
 
   // 404
   { path: "*", element: <PageNotFound /> },
-];
+]
