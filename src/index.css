@@ -1,8 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
-
 @theme {
   /* ==========================================================
    * LAYER 1 — PRIMITIVE COLORS (hex values only, no semantics)
@@ -233,7 +231,7 @@
     @apply border-border-gray-light;
   }
   body {
-    @apply bg-bg-white text-text-primary font-inter;
+    @apply bg-bg-white text-text-primary;
   }
 }
 

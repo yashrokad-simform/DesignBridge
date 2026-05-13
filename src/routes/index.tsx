@@ -4,8 +4,8 @@ import { Navigate } from "react-router-dom";
 import { PageLoader, PageNotFound } from "@/components/shared";
 
 const PrivateLayout = lazy(() => import("@/pages/private/privateLayout"));
-const IntroductionPage = lazy(() => import("@/pages/storybook/introduction"));
-const BadgePage = lazy(() => import("@/pages/storybook/badge"));
+const IntroductionPage = lazy(() => import("@/pages/storybook/introduction_page"));
+const BadgePage = lazy(() => import("@/pages/storybook/badge_page"));
 
 function lazyLoad(Component: ComponentType) {
   return (

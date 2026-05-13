@@ -13,7 +13,7 @@ export function Header({ eyebrow, title, onDownload }: HeaderProps) {
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '0 32px',
-        borderBottom: '1px solid #EDEFF2',
+        // borderBottom: '1px solid #EDEFF2',
         background: '#ffffff',
         position: 'sticky',
         top: 0,
