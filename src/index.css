@@ -2,6 +2,17 @@
 @import "tw-animate-css";
 
 @theme {
+
+  /* typography */
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-md: 16px;
+  --text-lg: 18px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+  --text-3xl: 32px;
+  --text-4xl: 40px;
+
   /* ==========================================================
    * LAYER 1 — PRIMITIVE COLORS (hex values only, no semantics)
    * Sourced from tokens.json → primitives.light
