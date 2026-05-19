@@ -4,6 +4,7 @@
 @theme {
 
   /* typography */
+  --text-2xs: 10px;
   --text-xs: 12px;
   --text-sm: 14px;
   --text-md: 16px;
@@ -208,19 +209,21 @@
   --color-input-border-enabled: var(--color-gray-100);              /* componentInputFieldInputBorderEnabled */
   --color-input-border-selected: var(--color-primary-500);          /* componentInputFieldInputBorderSelected */
   --color-input-border-critical: var(--color-critical-500);         /* componentInputFieldInputBorderCritical */
-  --color-input-border-disabled: var(--color-gray-200);             /* componentInputFieldInputBorderDisabled */
+  --color-input-border-disabled: var(--color-gray-100);             /* componentInputFieldInputBorderDisabled */
   --color-input-icon-enabled: var(--color-black);                   /* componentInputFieldInputIconEnabled */
   --color-input-icon-disabled: var(--color-gray-300);               /* componentInputFieldInputIconDisabled */
   --color-input-icon-critical: var(--color-critical-500);           /* componentInputFieldInputIconCritical */
 
   /* — Navigation — */
+  --color-nav-bg: var(--color-black);                               /* componentNavigationNvTextPrimaryCollapse */
+  --color-nav-bg-hover: var(--color-gray-800);                      /* componentNavigationNvTextPrimaryHover */
   --color-nav-text-primary: var(--color-black);                     /* componentNavigationNvTextPrimary */
+  --color-nav-text-primary-collapse: var(--color-white);            /* componentNavigationNvTextPrimary2 */
   --color-nav-text-secondary: var(--color-gray-200);                /* componentNavigationNvTextSecondary */
-  --color-nav-text-primary-dark: var(--color-white);                /* componentNavigationNvTextPrimary2 */
   --color-nav-icon-primary: var(--color-black);                     /* componentNavigationNvIconPrimary */
   --color-nav-icon-secondary: var(--color-gray-200);                /* componentNavigationNvIconSecondary */
-  --color-nav-bg-primary: var(--color-white);                       /* componentNavigationNvBgPrimary */
-  --color-nav-bg-secondary: var(--color-gray-800);                  /* componentNavigationNvBgSecondary */
+  --color-nav-tile-bg-primary: var(--color-white);                  /* componentNavigationNvBgPrimary */
+  --color-nav-tile-bg-secondary: var(--color-gray-800);             /* componentNavigationNvBgSecondary */
 
   /* — Status — */
   --color-status-cyan-dark: var(--color-cyan-dark);                 /* statusCyanDark */

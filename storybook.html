@@ -733,6 +733,7 @@ h1,h2,h3,h4,h5,h6 { margin: 0; }
           <li class="nav-item" role="menuitem" data-page="navigation" tabindex="0">Navigation</li>
           <li class="nav-item" role="menuitem" data-page="progress-step" tabindex="0">Progress Step</li>
           <li class="nav-item" role="menuitem" data-page="radio-button" tabindex="0">Radio Button</li>
+          <li class="nav-item" role="menuitem" data-page="rich-text-editor" tabindex="0">Rich Text Editor</li>
           <li class="nav-item" role="menuitem" data-page="tabs" tabindex="0">Tabs</li>
           <li class="nav-item" role="menuitem" data-page="text-area" tabindex="0">Text Area</li>
           <li class="nav-item" role="menuitem" data-page="toast" tabindex="0">Toast</li>
@@ -1069,6 +1070,31 @@ h1,h2,h3,h4,h5,h6 { margin: 0; }
   <span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="str">"ds-radio-circle"</span><span class="tag">&gt;&lt;/span&gt;</span>
   Option label
 <span class="tag">&lt;/label&gt;</span></pre></div>`
+    },
+
+    'rich-text-editor': {
+      eyebrow: 'Components', title: 'Rich Text Editor',
+      desc: 'Rich text editors support formatted, multi-line content with controls for hierarchy, emphasis, lists, links, and block structure.',
+      tags: [{label:'Stable', cls:'green'}, {label:'Figma: Rich Text Editor', cls:'blue'}],
+      content: `
+        <p class="section-title">Preview</p>
+        <div class="preview-card"><div class="preview-body" style="flex-direction:column;align-items:stretch;padding:0;gap:0;background:#fff;min-height:220px;">
+          <div style="display:flex;align-items:center;gap:6px;padding:10px 12px;border-bottom:1px solid var(--line-2);background:#fafbfc;">
+            <button class="ds-btn ds-btn-secondary ds-btn-sm" style="min-width:34px;padding:7px 9px;font-weight:700;">B</button>
+            <button class="ds-btn ds-btn-secondary ds-btn-sm" style="min-width:34px;padding:7px 9px;font-style:italic;">I</button>
+            <button class="ds-btn ds-btn-secondary ds-btn-sm" style="min-width:34px;padding:7px 9px;text-decoration:underline;">U</button>
+            <span style="width:1px;height:24px;background:var(--line-2);margin:0 4px;"></span>
+            <button class="ds-btn ds-btn-secondary ds-btn-sm">Heading</button>
+            <button class="ds-btn ds-btn-secondary ds-btn-sm">List</button>
+            <button class="ds-btn ds-btn-secondary ds-btn-sm">Link</button>
+          </div>
+          <div style="padding:22px 24px;color:#051325;font-size:14px;line-height:1.65;min-height:150px;" contenteditable="true" aria-label="Rich text editor preview">
+            <h3 style="font-size:18px;margin:0 0 10px;">Release notes</h3>
+            <p style="margin:0 0 10px;">Use this field for formatted content that needs clear hierarchy and inline emphasis.</p>
+            <ul style="margin:0;padding-left:20px;color:#4a5468;"><li>Support headings, lists, and links.</li><li>Keep toolbar actions compact and predictable.</li></ul>
+          </div>
+        </div></div>
+        <div class="callout info"><span class="callout-icon">ℹ️</span><div>Use Rich Text Editor when formatting matters. For plain multi-line text, use Text Area instead.</div></div>`
     },
 
     'tabs': {
