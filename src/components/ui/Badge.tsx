@@ -2,7 +2,6 @@ import React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/lib/utils';
-import { CloseIcon } from '@/assets/icons/CloseIcon';
 
 export type BadgeVariant = 'filled' | 'bordered' | 'tertiary';
 export type BadgeColor =
@@ -23,15 +22,15 @@ export type BadgeColor =
 const badgeVariants = cva(
   [
     'inline-flex items-center box-border whitespace-nowrap flex-shrink-0',
-    'rounded-full px-2 gap-1.5',
+    'rounded-full px-2 py-1 gap-1.5',
     'text-xs font-medium leading-4',
   ],
   {
     variants: {
       variant: {
-        filled:   'py-1',
-        bordered: 'py-0.75',
-        tertiary: 'py-1',
+        filled:   '',
+        bordered: '',
+        tertiary: '',
       },
       color: {
         primary:   '',
@@ -136,13 +135,27 @@ export function Badge({
             onClick={onRemove}
             className="inline-flex items-center justify-center bg-transparent border-0 p-0 cursor-pointer hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-current focus-visible:outline-offset-2 focus-visible:rounded-full"
           >
-            <CloseIcon aria-hidden="true" className="size-3" />
+            <CloseIcon />
           </button>
         ) : (
-          <span aria-hidden="true" className="inline-flex items-center size-3 flex-shrink-0">
-            <CloseIcon aria-hidden="true" className="size-3" />
+          <span aria-hidden="true" className="inline-flex items-center w-3 h-3 flex-shrink-0">
+            <CloseIcon />
           </span>
         ))}
     </span>
+  );
+}
+
+function CloseIcon() {
+  return (
+    <svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" fill="none">
+      <path
+        d="M9 3L3 9M3 3l6 6"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }

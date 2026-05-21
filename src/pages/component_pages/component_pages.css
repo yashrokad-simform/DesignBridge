@@ -117,7 +117,6 @@
   flex: 0 0 70%;
   overflow-y: auto;
   overflow-x: hidden;
-  overscroll-behavior: contain;
   padding: 0;
   border-right: 1px solid var(--cp-line-2);
   background: var(--cp-surface);
@@ -125,9 +124,8 @@
 
 .cp-bottom-right {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding: 0;
   background: #fff;
 }
@@ -153,13 +151,9 @@
 }
 
 .cp-bottom-right .cp-input-panel {
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
   border: 0;
   border-radius: 0;
-  overflow: hidden;
+  overflow: visible;
   margin-bottom: 0;
 }
 
@@ -167,16 +161,9 @@
   position: sticky;
   top: 0;
   z-index: 2;
-  flex-shrink: 0;
   padding: 14px 20px;
   background: #ffffff;
   border-bottom: 1px solid var(--cp-line-2);
-}
-
-.cp-bottom-right .cp-ip-footer {
-  position: sticky;
-  bottom: 0;
-  background: var(--cp-surface);
 }
 
 /* ── Generic card ─────────────────────────────────────────── */
@@ -212,28 +199,24 @@
   font-size: 14px; font-weight: 600; color: var(--cp-ink);
 }
 .cp-ip-body {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
   padding: 12px;
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: 16px;
   background: var(--cp-surface);
 }
 .cp-ip-footer {
-  flex-shrink: 0;
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 12px;
-  border-top: 1px solid var(--cp-line-2);
-  background: var(--cp-surface);
+  padding: 12px 12px;
+  /* padding-bottom: 12px; */
+  /* background: var(--cp-surface-2); */
+  border-top: 1px solid var(--cp-line-2); 
 }
 
 /* Field */
-.cp-field { display: flex; flex-direction: column; gap: 5px; width: 100%; }
+.cp-field { display: flex; flex-direction: column; gap: 5px; }
 
 .cp-field-lbl {
   font-size: 12px; font-weight: 500;
@@ -243,8 +226,6 @@
 .cp-field input[type="text"],
 .cp-field input[type="number"],
 .cp-field select {
-  width: 100%;
-  box-sizing: border-box;
   height: 32px;
   padding: 0 10px;
   border: 1px solid var(--cp-line);
@@ -257,7 +238,9 @@
 .cp-field input[type="text"]:focus,
 .cp-field input[type="number"]:focus,
 .cp-field select:focus { border-color: var(--cp-accent); }
-.cp-field select { cursor: pointer; }
+.cp-field input[type="text"] { min-width: 120px; }
+.cp-field input[type="number"] { width: 72px; }
+.cp-field select { min-width: 120px; cursor: pointer; }
 
 .cp-field input[type="color"] {
   width: 32px; height: 32px;
