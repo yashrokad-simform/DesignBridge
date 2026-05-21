@@ -216,8 +216,6 @@ const NAV_CSS = `
   .dsn-foot {
     flex-shrink: 0;
     margin-top: auto;
-    border-top: 1px solid rgba(255,255,255,.1);
-    padding-top: 12px;
   }
 
   .dsn-profile {

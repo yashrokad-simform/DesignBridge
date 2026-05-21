@@ -6,6 +6,7 @@ import { PageLoader, PageNotFound } from "@/components/shared";
 const PrivateLayout = lazy(() => import("@/pages/private/privateLayout"));
 const IntroductionPage = lazy(() => import("@/pages/component_pages/introduction_page"));
 const BadgePage = lazy(() => import("@/pages/component_pages/badge_page"));
+const BreadcrumbPage = lazy(() => import("@/pages/component_pages/breadcrumb_page"));
 
 function lazyLoad(Component: ComponentType) {
   return (
@@ -28,7 +29,7 @@ export const routes: RouteObject[] = [
       { path: "typography", element: lazyLoad(IntroductionPage) },
       { path: "spacing", element: lazyLoad(IntroductionPage) },
       { path: "badge", element: lazyLoad(BadgePage) },
-      { path: "breadcrumb", element: lazyLoad(IntroductionPage) },
+      { path: "breadcrumb", element: lazyLoad(BreadcrumbPage) },
       { path: "button", element: lazyLoad(IntroductionPage) },
       { path: "checkbox", element: lazyLoad(IntroductionPage) },
       { path: "dropdown", element: lazyLoad(IntroductionPage) },

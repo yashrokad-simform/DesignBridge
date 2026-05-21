@@ -8,11 +8,11 @@ export function Header({ eyebrow, title, onDownload }: HeaderProps) {
   return (
     <header
       style={{
-        height: '80px',
+        height: '64px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '0 32px',
+        padding: '0 24px',
         // borderBottom: '1px solid #EDEFF2',
         background: '#ffffff',
         position: 'sticky',
@@ -34,8 +34,8 @@ export function Header({ eyebrow, title, onDownload }: HeaderProps) {
           display: 'inline-flex',
           alignItems: 'center',
           gap: '8px',
-          height: '40px',
-          padding: '0 20px',
+          height: '36px',
+          padding: '0 16px',
           background: '#F4F5F7',
           color: '#00244D',
           border: '1px solid #DDE3EB',

@@ -59,7 +59,7 @@ export const PAGE_INFO: Record<string, PageInfoEntry> = {
   colors:          { eyebrow: 'Style Guide',   title: 'Colors',           desc: '' },
   typography:      { eyebrow: 'Style Guide',   title: 'Typography',       desc: '' },
   spacing:         { eyebrow: 'Style Guide',   title: 'Spacing & Radius', desc: '' },
-  badge:           { eyebrow: 'Components',    title: 'Badge',            desc: '' },
+  badge:           { eyebrow: 'Components',    title: 'Badge',            desc: 'Badges are small, visible elements used to draw attention to important information, such as new notifications, unread messages, or updates.' },
   breadcrumb:      { eyebrow: 'Components',    title: 'Breadcrumb',       desc: '' },
   button:          { eyebrow: 'Components',    title: 'Button',           desc: '' },
   checkbox:        { eyebrow: 'Components',    title: 'Checkbox',         desc: '' },

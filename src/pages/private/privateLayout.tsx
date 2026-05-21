@@ -75,16 +75,24 @@ const LAYOUT_CSS = `
     overflow-y: auto;
     overflow-x: hidden;
     overscroll-behavior: contain;
-    padding: 24px 32px 32px;
+    padding: 16px 24px 24px;
     min-width: 0;
   }
 
   .pl-page-title {
     color: #051325;
-    font-size: 32px;
+    font-size: 28px;
     font-weight: 700;
-    margin: 0 0 24px;
+    margin: 0 0 0px;
     letter-spacing: -0.01em;
+  }
+
+  .pl-page-desc {
+    color: #4f5c6d;
+    font-size: 13px;
+    line-height: leading-4;
+    margin: 0 0 24px;
+    max-width: none;
   }
 
   @media (max-width: 860px) {
@@ -218,6 +226,12 @@ export default function PrivateLayout() {
             <h1 className="pl-page-title">
               {selectedSection}
             </h1>
+
+            {page.eyebrow === "Components" && page.desc && (
+              <p className="pl-page-desc">
+                {page.desc}
+              </p>
+            )}
 
             <Outlet />
           </div>
