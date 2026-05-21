@@ -22,15 +22,15 @@ export type BadgeColor =
 const badgeVariants = cva(
   [
     'inline-flex items-center box-border whitespace-nowrap flex-shrink-0',
-    'rounded-full px-2 gap-1.5',
+    'rounded-full px-2 py-1 gap-1.5',
     'text-xs font-medium leading-4',
   ],
   {
     variants: {
       variant: {
-        filled:   'py-1',
-        bordered: 'py-0.75',
-        tertiary: 'py-1',
+        filled:   '',
+        bordered: '',
+        tertiary: '',
       },
       color: {
         primary:   '',
