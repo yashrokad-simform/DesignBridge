@@ -7,6 +7,9 @@ const PrivateLayout = lazy(() => import("@/pages/private/privateLayout"));
 const IntroductionPage = lazy(() => import("@/pages/component_pages/introduction_page"));
 const BadgePage = lazy(() => import("@/pages/component_pages/badge_page"));
 const BreadcrumbPage = lazy(() => import("@/pages/component_pages/breadcrumb_page"));
+const ButtonPage = lazy(() => import("@/pages/component_pages/button_page"));
+const CheckboxPage = lazy(() => import("@/pages/component_pages/checkbox_page"));
+const DropdownPage = lazy(() => import("@/pages/component_pages/dropdown_page"));
 
 function lazyLoad(Component: ComponentType) {
   return (
@@ -30,9 +33,9 @@ export const routes: RouteObject[] = [
       { path: "spacing", element: lazyLoad(IntroductionPage) },
       { path: "badge", element: lazyLoad(BadgePage) },
       { path: "breadcrumb", element: lazyLoad(BreadcrumbPage) },
-      { path: "button", element: lazyLoad(IntroductionPage) },
-      { path: "checkbox", element: lazyLoad(IntroductionPage) },
-      { path: "dropdown", element: lazyLoad(IntroductionPage) },
+      { path: "button", element: lazyLoad(ButtonPage) },
+      { path: "checkbox", element: lazyLoad(CheckboxPage) },
+      { path: "dropdown", element: lazyLoad(DropdownPage) },
       { path: "input", element: lazyLoad(IntroductionPage) },
       { path: "navigation", element: lazyLoad(IntroductionPage) },
       { path: "progress-step", element: lazyLoad(IntroductionPage) },

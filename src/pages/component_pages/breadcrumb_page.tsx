@@ -6,25 +6,56 @@ import ComponentPageLayout, {
   type VariantGroup,
 } from './ComponentPageLayout';
 
+import breadcrumbMd from './md_files/Breadcrumb-instruction.md?raw';
+
 const INPUT_CONFIG: InputConfig[] = [
-  { key: 'item1', label: 'Item 1', type: 'text' },
-  { key: 'item2', label: 'Item 2', type: 'text' },
-  { key: 'item3', label: 'Item 3', type: 'text' },
-  { key: 'item4', label: 'Item 4', type: 'text' },
+  {
+    key: 'textSize',
+    label: 'Text Size',
+    type: 'select',
+    options: [
+      { value: '12px', label: '12px' },
+      { value: '14px', label: '14px' },
+      { value: '16px', label: '16px' },
+    ],
+  },
+  {
+    key: 'separatorSize',
+    label: 'Separator Icon Size',
+    type: 'select',
+    options: [
+      { value: '12px', label: '12px' },
+      { value: '14px', label: '14px' },
+    ],
+  },
+  {
+    key: 'gap',
+    label: 'Gap Size',
+    type: 'select',
+    options: [
+      { value: '0.5', label: '2px' },
+      { value: '1', label: '4px' },
+      { value: '1.5', label: '6px' },
+      { value: '2', label: '8px' },
+    ],
+  },
 ];
 
 const DEFAULT_VALUES: InputValues = {
-  item1: 'Home',
-  item2: 'Products',
-  item3: 'Category',
-  item4: 'Item',
+  textSize: '14px',
+  separatorSize: '12px',
+  gap: '0.5',
 };
 
 function buildVariants(vals: InputValues): VariantGroup[] {
-  const i1 = vals.item1 as string;
-  const i2 = vals.item2 as string;
-  const i3 = vals.item3 as string;
-  const i4 = vals.item4 as string;
+  const tSize = vals.textSize as '12px' | '14px' | '16px';
+  const sSize = vals.separatorSize as '12px' | '14px';
+  const gapSize = vals.gap as '0.5' | '1' | '1.5' | '2';
+
+  const i1 = 'Home';
+  const i2 = 'Products';
+  const i3 = 'Category';
+  const i4 = 'Item';
 
   return [
     {
@@ -41,9 +72,9 @@ function buildVariants(vals: InputValues): VariantGroup[] {
               cells: [
                 {
                   node: (
-                    <Breadcrumb>
-                      <BreadcrumbItem label={i1} href="/" />
-                      <BreadcrumbItem label={i2} />
+                    <Breadcrumb separatorSize={sSize} gap={gapSize}>
+                      <BreadcrumbItem label={i1} href="/" size={tSize} />
+                      <BreadcrumbItem label={i2} size={tSize} />
                     </Breadcrumb>
                   ),
                 },
@@ -60,10 +91,10 @@ function buildVariants(vals: InputValues): VariantGroup[] {
               cells: [
                 {
                   node: (
-                    <Breadcrumb>
-                      <BreadcrumbItem label={i1} href="/" />
-                      <BreadcrumbItem label={i2} href="/products" />
-                      <BreadcrumbItem label={i3} />
+                    <Breadcrumb separatorSize={sSize} gap={gapSize}>
+                      <BreadcrumbItem label={i1} href="/" size={tSize} />
+                      <BreadcrumbItem label={i2} href="/products" size={tSize} />
+                      <BreadcrumbItem label={i3} size={tSize} />
                     </Breadcrumb>
                   ),
                 },
@@ -80,11 +111,11 @@ function buildVariants(vals: InputValues): VariantGroup[] {
               cells: [
                 {
                   node: (
-                    <Breadcrumb>
-                      <BreadcrumbItem label={i1} href="/" />
-                      <BreadcrumbItem label={i2} href="/products" />
-                      <BreadcrumbItem label={i3} href="/products/category" />
-                      <BreadcrumbItem label={i4} />
+                    <Breadcrumb separatorSize={sSize} gap={gapSize}>
+                      <BreadcrumbItem label={i1} href="/" size={tSize} />
+                      <BreadcrumbItem label={i2} href="/products" size={tSize} />
+                      <BreadcrumbItem label={i3} href="/products/category" size={tSize} />
+                      <BreadcrumbItem label={i4} size={tSize} />
                     </Breadcrumb>
                   ),
                 },
@@ -98,11 +129,42 @@ function buildVariants(vals: InputValues): VariantGroup[] {
 }
 
 function resolveTokens(vals: InputValues): Record<string, string> {
+  const tSize = vals.textSize as string;
+  const sSize = vals.separatorSize as string;
+  
+  let textSizeClass = 'text-sm';
+  let leadingClass = 'leading-4.5';
+  let pxSize = '14px';
+  let pxLeading = '18px';
+  
+  if (tSize === '12px') {
+    textSizeClass = 'text-xs';
+    leadingClass = 'leading-4';
+    pxSize = '12px';
+    pxLeading = '16px';
+  } else if (tSize === '16px') {
+    textSizeClass = 'text-md';
+    leadingClass = 'leading-5.5';
+    pxSize = '16px';
+    pxLeading = '22px';
+  }
+  
+  const separatorClass = sSize === '14px' ? 'size-3.5' : 'size-3';
+  const separatorPx = sSize === '14px' ? '14×14px' : '12×12px';
+
+  const gap = vals.gap as string;
+  const gapClass = `gap-${gap}`;
+  const gapPx = gap === '0.5' ? '2px' : gap === '1' ? '4px' : gap === '1.5' ? '6px' : '8px';
+
   return {
-    item1: vals.item1 as string,
-    item2: vals.item2 as string,
-    item3: vals.item3 as string,
-    item4: vals.item4 as string,
+    textSizeClass,
+    leadingClass,
+    pxSize,
+    pxLeading,
+    separatorClass,
+    separatorPx,
+    gapClass,
+    gapPx,
   };
 }
 
@@ -113,7 +175,7 @@ export default function BreadcrumbPage() {
       defaultInputValues={DEFAULT_VALUES}
       buildVariants={buildVariants}
       variantTitle="Breadcrumb Variants"
-      markdownContent=""
+      markdownContent={breadcrumbMd}
       markdownFileName="breadcrumb"
       resolveTokens={resolveTokens}
     />

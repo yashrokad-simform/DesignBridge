@@ -17,6 +17,7 @@ export interface ComponentPageLayoutProps {
   markdownContent: string;
   markdownFileName: string;
   resolveTokens: (values: InputValues) => Record<string, string>;
+  transformMarkdown?: (raw: string, values: InputValues) => string;
 }
 
 function applyTokens(content: string, tokens: Record<string, string>): string {
@@ -33,6 +34,7 @@ export default function ComponentPageLayout({
   markdownContent,
   markdownFileName,
   resolveTokens,
+  transformMarkdown,
 }: ComponentPageLayoutProps) {
   const [values, setValues] = useState<InputValues>({ ...defaultInputValues });
   const [copyLabel, setCopyLabel] = useState('Copy MD File');
@@ -51,23 +53,31 @@ export default function ComponentPageLayout({
     setValues({ ...defaultInputValues });
   }, [defaultInputValues]);
 
+  const [mdTokens, setMdTokens] = useState<Record<string, string>>(() => resolveTokens(defaultInputValues));
+  const [transformedMd, setTransformedMd] = useState<string | null>(null);
+
+  const getResolvedMd = useCallback((vals: InputValues) => {
+    if (transformMarkdown) return transformMarkdown(markdownContent, vals);
+    return applyTokens(markdownContent, resolveTokens(vals));
+  }, [transformMarkdown, markdownContent, resolveTokens]);
+
   const handleCopy = useCallback(() => {
-    const resolved = applyTokens(markdownContent, resolveTokens(values));
+    const resolved = getResolvedMd(values);
     navigator.clipboard.writeText(resolved).then(() => {
       setCopyLabel('Copied!');
       if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
       copyTimerRef.current = setTimeout(() => setCopyLabel('Copy MD File'), 1800);
     }).catch(() => {});
-  }, [markdownContent, resolveTokens, values]);
+  }, [getResolvedMd, values]);
 
   const handleDrawerCopy = useCallback(() => {
-    const resolved = applyTokens(markdownContent, resolveTokens(values));
+    const resolved = transformedMd ?? applyTokens(markdownContent, resolveTokens(values));
     navigator.clipboard.writeText(resolved).then(() => {
       setDrawerCopyLabel('Copied!');
       if (drawerCopyTimerRef.current) clearTimeout(drawerCopyTimerRef.current);
       drawerCopyTimerRef.current = setTimeout(() => setDrawerCopyLabel('Copy MD File'), 1800);
     }).catch(() => {});
-  }, [markdownContent, resolveTokens, values]);
+  }, [transformedMd, markdownContent, resolveTokens, values]);
 
   useEffect(() => () => {
     if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
@@ -75,14 +85,16 @@ export default function ComponentPageLayout({
     if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
   }, []);
 
-  const [mdTokens, setMdTokens] = useState<Record<string, string>>(() => resolveTokens(defaultInputValues));
-
   const handleUpdateMd = useCallback(() => {
-    setMdTokens(resolveTokens(values));
+    if (transformMarkdown) {
+      setTransformedMd(transformMarkdown(markdownContent, values));
+    } else {
+      setMdTokens(resolveTokens(values));
+    }
     setShowToast(true);
     if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
     toastTimerRef.current = setTimeout(() => setShowToast(false), 2400);
-  }, [resolveTokens, values]);
+  }, [transformMarkdown, markdownContent, resolveTokens, values]);
 
   const variantGroups = buildVariants(values);
 
@@ -165,8 +177,8 @@ export default function ComponentPageLayout({
         <div className="cp-drawer-body">
           <MarkdownViewer
             fileName={markdownFileName}
-            rawContent={markdownContent}
-            tokens={mdTokens}
+            rawContent={transformedMd ?? markdownContent}
+            tokens={transformedMd ? {} : mdTokens}
             isStale={false}
           />
         </div>

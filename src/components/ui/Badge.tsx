@@ -107,6 +107,7 @@ export interface BadgeProps extends VariantProps<typeof badgeVariants> {
   showSuffix?: boolean;
   onRemove?: () => void;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 export function Badge({
@@ -117,9 +118,10 @@ export function Badge({
   showSuffix = false,
   onRemove,
   className,
+  style,
 }: BadgeProps) {
   return (
-    <span className={cn(badgeVariants({ variant, color }), className)}>
+    <span className={cn(badgeVariants({ variant, color }), className)} style={style}>
       {showPrefix && (
         <span
           aria-hidden="true"

@@ -115,11 +115,12 @@
 
 .cp-bottom-left {
   flex: 0 0 70%;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
   padding: 0;
   border-right: 1px solid var(--cp-line-2);
   background: var(--cp-surface);
+  display: flex;
+  flex-direction: column;
 }
 
 .cp-bottom-right {
@@ -133,9 +134,13 @@
 
 /* ── Sticky section headers inside body panels ───────────── */
 .cp-bottom-left .cp-variant-outer {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
   border: 0;
   border-radius: 0;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .cp-bottom-left .cp-variant-hd {
@@ -248,7 +253,8 @@
 .cp-field input[type="number"]:focus,
 .cp-field select:focus { border-color: var(--cp-accent); }
 .cp-field input[type="text"] { min-width: 120px; }
-.cp-field input[type="number"] { width: 72px; }
+.cp-field input[type="number"],
+.cp-field input[type="number"].cp-field-number-full { width: 100%; }
 .cp-field select {
   min-width: 120px;
   cursor: pointer;
@@ -266,6 +272,108 @@
   border-radius: var(--cp-radius-sm);
   padding: 2px; cursor: pointer;
   background: var(--cp-surface);
+}
+
+/* Divider */
+.cp-field-divider {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0 2px;
+}
+.cp-field-divider::before,
+.cp-field-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--cp-line-2);
+}
+.cp-field-divider-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--cp-muted);
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+/* Multicheck */
+.cp-multicheck {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 2px;
+}
+.cp-multicheck-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  color: var(--cp-ink-2);
+  cursor: pointer;
+  user-select: none;
+}
+.cp-multicheck-item input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  accent-color: var(--cp-accent);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* Toggle List (one toggle row per option, full width) */
+.cp-togglelist {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 2px;
+  width: 100%;
+}
+.cp-togglelist-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.cp-togglelist-lbl {
+  font-size: 13px;
+  color: var(--cp-ink-2);
+}
+
+/* Toggle Group */
+.cp-togglegroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 2px;
+}
+.cp-togglegroup-btn {
+  height: 28px;
+  padding: 0 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  border: 1px solid var(--cp-line);
+  background: var(--cp-surface);
+  color: var(--cp-ink-2);
+  transition: background 140ms, border-color 140ms, color 140ms;
+  white-space: nowrap;
+}
+.cp-togglegroup-btn:hover {
+  border-color: var(--cp-accent);
+  color: var(--cp-accent);
+}
+.cp-togglegroup-btn--active {
+  background: var(--cp-accent);
+  border-color: var(--cp-accent);
+  color: #ffffff;
+}
+.cp-togglegroup-btn--active:hover {
+  background: #0047a3;
+  border-color: #0047a3;
+  color: #ffffff;
 }
 
 /* Toggle */
@@ -434,10 +542,15 @@
 .cp-variant-outer {
   border: 1px solid var(--cp-line-2);
   border-radius: var(--cp-radius);
-  overflow: hidden;
   background: #ffffff;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 .cp-variant-hd {
+  position: sticky;
   top: 0;
   z-index: 2;
   padding: 14px 20px;
@@ -446,6 +559,10 @@
   font-size: 14px; font-weight: 600; color: var(--cp-ink);
 }
 .cp-variant-bd {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding: 20px 18px;
   background: var(--cp-surface);
 }
