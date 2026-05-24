@@ -1,52 +1,36 @@
 import React, { useState } from 'react';
 import './component_pages.css';
 import { Dropdown, type DropdownOption } from '../../components/ui/Dropdown';
-import { ArrowRightIcon } from '../../assets/icons/ArrowRightIcon';
 import VariantSection from './VariantSection';
 
 const FRUITS: DropdownOption[] = [
-  { value: 'apple',  label: 'Apple' },
-  { value: 'banana', label: 'Banana' },
-  { value: 'cherry', label: 'Cherry' },
-  { value: 'date',   label: 'Date' },
+  { value: 'apple',      label: 'Apple' },
+  { value: 'banana',     label: 'Banana' },
+  { value: 'cherry',     label: 'Cherry' },
+  { value: 'date',       label: 'Date' },
   { value: 'elderberry', label: 'Elderberry' },
-  { value: 'fig',    label: 'Fig' },
+  { value: 'fig',        label: 'Fig' },
 ];
 
-function SingleDemo({ label, helperText, errorText, disabled, leadingIcon, placeholder }: {
-  label?: string; helperText?: string; errorText?: string;
-  disabled?: boolean; leadingIcon?: React.ReactNode; placeholder?: string;
+const W = 'w-[300px]';
+
+function SingleDemo({ helperText, errorText, disabled, defaultOpen }: {
+  helperText?: string; errorText?: string; disabled?: boolean; defaultOpen?: boolean;
 }) {
   const [value, setValue] = useState<string | string[]>('');
   return (
-    <div className="w-[220px]">
+    <div className={W}>
       <Dropdown
-        label={label}
-        placeholder={placeholder ?? 'Select'}
+        label="Label"
+        required
+        placeholder="Select"
         options={FRUITS}
         value={value as string}
         onChange={setValue}
         helperText={helperText}
         errorText={errorText}
         disabled={disabled}
-        leadingIcon={leadingIcon}
-      />
-    </div>
-  );
-}
-
-function MultiDemo({ label, searchable }: { label?: string; searchable?: boolean }) {
-  const [value, setValue] = useState<string | string[]>([]);
-  return (
-    <div className="w-[220px]">
-      <Dropdown
-        label={label}
-        placeholder="Select options"
-        options={FRUITS}
-        value={value}
-        onChange={setValue}
-        multiple
-        searchable={searchable}
+        defaultOpen={defaultOpen}
       />
     </div>
   );
@@ -55,78 +39,74 @@ function MultiDemo({ label, searchable }: { label?: string; searchable?: boolean
 function SearchableDemo() {
   const [value, setValue] = useState<string | string[]>('');
   return (
-    <div className="w-[220px]">
+    <div className={W}>
       <Dropdown
-        label="Searchable"
+        label="Label"
+        required
         placeholder="Select"
         options={FRUITS}
         value={value as string}
         onChange={setValue}
         searchable
+        helperText="This is a hint text to help user."
+        defaultOpen
       />
     </div>
   );
 }
 
+function MultiDemo() {
+  const [value, setValue] = useState<string | string[]>(['apple']);
+  return (
+    <div className={W}>
+      <Dropdown
+        label="Label"
+        required
+        placeholder="Select"
+        options={FRUITS}
+        value={value}
+        onChange={setValue}
+        multiple
+        helperText="This is a hint text to help user."
+      />
+    </div>
+  );
+}
+
+const HELPER = 'This is a hint text to help user.';
+
 const groups = [
   {
-    id: 'single',
-    label: 'Single Select',
-    dotColor: '#0056b8',
+    id: 'states',
+    label: '',
+    dotColor: '',
+    hideDivider: true,
+    noGroupDivider: true,
     styles: [
       {
-        id: 'states',
-        label: 'States',
-        accentColor: '#0056b8',
-        rows: [{
-          cells: [
-            { label: 'Default',      node: <SingleDemo /> },
-            { label: 'With Label',   node: <SingleDemo label="Fruit" helperText="Pick one" /> },
-            { label: 'Leading Icon', node: <SingleDemo label="Fruit" leadingIcon={<ArrowRightIcon aria-hidden="true" className="size-4" />} /> },
-            { label: 'Error',        node: <SingleDemo label="Fruit" errorText="Required field" /> },
-            { label: 'Disabled',     node: <SingleDemo label="Fruit" disabled /> },
-          ],
-        }],
-      },
-    ],
-  },
-  {
-    id: 'multi',
-    label: 'Multi Select',
-    dotColor: '#7839ee',
-    styles: [
-      {
-        id: 'states',
-        label: 'States',
-        accentColor: '#7839ee',
-        rows: [{
-          cells: [
-            { label: 'Default',    node: <MultiDemo label="Fruits" /> },
-            { label: 'Searchable', node: <MultiDemo label="Fruits" searchable /> },
-            { label: 'Disabled',   node: (
-              <div className="w-[220px]">
-                <Dropdown label="Fruits" placeholder="Select options" options={FRUITS} value={[]} onChange={() => {}} multiple disabled />
-              </div>
-            )},
-          ],
-        }],
-      },
-    ],
-  },
-  {
-    id: 'searchable',
-    label: 'Searchable',
-    dotColor: '#036821',
-    styles: [
-      {
-        id: 'single',
-        label: 'Single',
-        accentColor: '#036821',
-        rows: [{
-          cells: [
-            { label: 'Searchable', node: <SearchableDemo /> },
-          ],
-        }],
+        id: 'all',
+        label: '',
+        accentColor: '',
+        rows: [
+          {
+            cells: [
+              { label: 'Default',  node: <SingleDemo helperText={HELPER} /> },
+              { label: 'Open',     node: <SingleDemo helperText={HELPER} defaultOpen /> },
+            ],
+          },
+          {
+            cells: [
+              { label: 'Error',    node: <SingleDemo errorText={HELPER} /> },
+              { label: 'Multi Select', node: <MultiDemo /> },
+            ],
+          },
+          {
+            cells: [
+              { label: 'Disabled',   node: <SingleDemo helperText={HELPER} disabled /> },
+              { label: 'Searchable', node: <SearchableDemo /> },
+            ],
+          },
+        ],
       },
     ],
   },

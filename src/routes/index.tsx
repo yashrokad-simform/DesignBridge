@@ -10,6 +10,9 @@ const BreadcrumbPage = lazy(() => import("@/pages/component_pages/breadcrumb_pag
 const ButtonPage = lazy(() => import("@/pages/component_pages/button_page"));
 const CheckboxPage = lazy(() => import("@/pages/component_pages/checkbox_page"));
 const DropdownPage = lazy(() => import("@/pages/component_pages/dropdown_page"));
+const ToastPage = lazy(() => import("@/pages/component_pages/toast_page"));
+const FilePickerPage = lazy(() => import("@/pages/component_pages/filePicker_page"));
+const InputPage = lazy(() => import("@/pages/component_pages/input_page"));
 
 function lazyLoad(Component: ComponentType) {
   return (
@@ -36,14 +39,15 @@ export const routes: RouteObject[] = [
       { path: "button", element: lazyLoad(ButtonPage) },
       { path: "checkbox", element: lazyLoad(CheckboxPage) },
       { path: "dropdown", element: lazyLoad(DropdownPage) },
-      { path: "input", element: lazyLoad(IntroductionPage) },
+      { path: "file-picker", element: lazyLoad(FilePickerPage) },
+      { path: "input", element: lazyLoad(InputPage) },
       { path: "navigation", element: lazyLoad(IntroductionPage) },
       { path: "progress-step", element: lazyLoad(IntroductionPage) },
       { path: "radio-button", element: lazyLoad(IntroductionPage) },
       { path: "rich-text-editor", element: lazyLoad(IntroductionPage) },
       { path: "tabs", element: lazyLoad(IntroductionPage) },
       { path: "text-area", element: lazyLoad(IntroductionPage) },
-      { path: "toast", element: lazyLoad(IntroductionPage) },
+      { path: "toast", element: lazyLoad(ToastPage) },
       { path: "toggle", element: lazyLoad(IntroductionPage) },
       { path: "tooltip", element: lazyLoad(IntroductionPage) },
     ],

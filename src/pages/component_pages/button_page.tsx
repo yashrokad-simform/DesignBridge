@@ -1,6 +1,12 @@
 import React from 'react';
 import { Button } from '../../components/ui/Button';
-import { ArrowRightIcon } from '../../assets/icons/ArrowRightIcon';
+function CircleIcon({ className }: { className?: string }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <circle cx="12" cy="12" r="10" />
+    </svg>
+  );
+}
 import ComponentPageLayout, {
   type InputConfig,
   type InputValues,
@@ -19,26 +25,28 @@ const ALL_VARIANTS: BtnVariant[] = [
 ];
 
 const INPUT_CONFIG: InputConfig[] = [
+  { key: 'sizes', label: 'Sizes', type: 'divider' },
   {
-    key: 'variants', label: 'Variants', type: 'togglegroup',
+    key: 'sizes', label: '', type: 'togglelist',
+    options: [
+      { value: 'lg', label: 'Large (lg)' },
+      { value: 'sm', label: 'Small (sm)' },
+    ],
+  },
+  { key: 'variants', label: 'Variants', type: 'divider' },
+  {
+    key: 'variants', label: '', type: 'togglelist',
     options: [
       { value: 'primary',           label: 'Primary' },
       { value: 'bordered',          label: 'Bordered' },
       { value: 'text',              label: 'Text' },
       { value: 'link',              label: 'Link' },
       { value: 'critical',          label: 'Critical' },
-      { value: 'critical-bordered', label: 'Crit. Bordered' },
-      { value: 'critical-text',     label: 'Crit. Text' },
+      { value: 'critical-bordered', label: 'Critical Bordered' },
+      { value: 'critical-text',     label: 'Critical Text' },
       { value: 'icon-filled',       label: 'Icon Filled' },
       { value: 'icon-secondary',    label: 'Icon Secondary' },
       { value: 'icon-only',         label: 'Icon Only' },
-    ],
-  },
-  {
-    key: 'sizes', label: 'Sizes', type: 'togglegroup',
-    options: [
-      { value: 'lg', label: 'Large (lg)' },
-      { value: 'sm', label: 'Small (sm)' },
     ],
   },
   { key: 'div1', label: 'Dimensions', type: 'divider' },
@@ -120,44 +128,78 @@ const TEXT_MAP: Record<string, { cls: string; leading: string }> = {
 
 /* ── buildVariants ──────────────────────────────────────── */
 
+const STATES = [
+  { id: 'default',  label: 'Default',  disabled: false, loading: false },
+  { id: 'disabled', label: 'Disabled', disabled: true,  loading: false },
+  { id: 'loading',  label: 'Loading',  disabled: false, loading: true  },
+] as const;
+
 function buildVariants(vals: InputValues): VariantGroup[] {
-  const enabled     = (vals.variants as string).split(',').filter(Boolean) as BtnVariant[];
-  const sizes       = (vals.sizes    as string).split(',').filter(Boolean) as ('lg' | 'sm')[];
-  const previewSize = (sizes.includes('lg') ? 'lg' : sizes[0]) as 'lg' | 'sm' ?? 'lg';
-  const iconCls     = previewSize === 'lg' ? 'size-5 flex-shrink-0' : 'size-4 flex-shrink-0';
+  const enabled      = (vals.variants as string).split(',').filter(Boolean) as BtnVariant[];
+  const sizes        = (vals.sizes    as string).split(',').filter(Boolean) as ('lg' | 'sm')[];
+  const cornerRadius = vals.cornerRadius as string;
+  const cr           = cornerRadius === 'full' ? '9999px' : cornerRadius;
+  const showLoading  = vals.loading as boolean;
 
   const stdEnabled  = enabled.filter(v => !v.startsWith('icon-'));
   const iconEnabled = enabled.filter(v =>  v.startsWith('icon-'));
+  const activeStates = showLoading ? STATES : STATES.slice(0, 2);
 
   const groups: VariantGroup[] = [];
 
-  if (stdEnabled.length > 0) {
-    groups.push({
-      id: 'standard', label: 'Standard', dotColor: '#0056b8',
-      styles: [{
-        id: 'all', label: 'All Variants', accentColor: '#0056b8',
-        rows: [{ cells: stdEnabled.map(v => ({
-          label: cap(v),
-          node: <Button key={v} variant={v} size={previewSize}>Button</Button>,
-        }))}],
-      }],
-    });
-  }
+  for (const size of sizes) {
+    const h  = size === 'lg' ? (vals.heightLg  as number) : (vals.heightSm  as number);
+    const px = size === 'lg' ? (vals.paddingXLg as number) : (vals.paddingXSm as number);
+    const fs = size === 'lg' ? (vals.textSizeLg as string) : (vals.textSizeSm as string);
+    const iconCls = size === 'lg' ? 'size-5 flex-shrink-0' : 'size-4 flex-shrink-0';
 
-  if (iconEnabled.length > 0) {
-    groups.push({
-      id: 'icon', label: 'Icon Buttons', dotColor: '#7839ee',
-      styles: [{
-        id: 'all', label: 'All Variants', accentColor: '#7839ee',
-        rows: [{ cells: iconEnabled.map(v => ({
-          label: cap(v),
+    const stdStyle: React.CSSProperties  = { height: `${h}px`, paddingLeft: `${px}px`, paddingRight: `${px}px`, borderRadius: cr, fontSize: fs };
+    const flatStyle: React.CSSProperties = { borderRadius: cr, fontSize: fs };
+    const iconStyle: React.CSSProperties = { width: `${h}px`, height: `${h}px`, borderRadius: cr, padding: 0 };
+
+    const FLAT_VARIANTS = new Set<BtnVariant>(['text', 'link', 'critical-text']);
+
+    const colHeaders = activeStates.map(s => s.label);
+
+    const rows = [
+      ...stdEnabled.map(v => ({
+        rowLabel: cap(v),
+        cells: activeStates.map(state => ({
           node: (
-            <Button key={v} variant={v} size={previewSize} aria-label={cap(v)}>
-              <ArrowRightIcon aria-hidden="true" className={iconCls} />
+            <Button
+              key={`${v}-${state.id}`}
+              variant={v}
+              size={size}
+              disabled={state.disabled}
+              loading={state.loading}
+              style={FLAT_VARIANTS.has(v) ? flatStyle : stdStyle}
+              leftIcon={<CircleIcon className={iconCls} />}
+              rightIcon={<CircleIcon className={iconCls} />}
+            >
+              {cap(v)}
             </Button>
           ),
-        }))}],
-      }],
+        })),
+      })),
+      ...iconEnabled.map(v => ({
+        rowLabel: cap(v),
+        cells: activeStates.map(state => ({
+          node: (
+            <Button key={`${v}-${state.id}`} variant={v} size={size} disabled={state.disabled} loading={state.loading} aria-label={cap(v)} style={iconStyle}>
+              <CircleIcon className={iconCls} />
+            </Button>
+          ),
+        })),
+      })),
+    ];
+
+    groups.push({
+      id:    `size-${size}`,
+      label: `Size — ${size.toUpperCase()}`,
+      dotColor:      '',
+      hideDivider:   true,
+      noGroupDivider: false,
+      styles: [{ id: 'states', label: '', accentColor: '', colHeaders, grid: true, rows }],
     });
   }
 

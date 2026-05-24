@@ -7,6 +7,7 @@ import { CheckIcon } from '@/assets/icons/CheckIcon';
 import { ChevronDownIcon } from '@/assets/icons/ChevronDownIcon';
 import { ChevronUpIcon } from '@/assets/icons/ChevronUpIcon';
 import { SearchIcon } from '@/assets/icons/SearchIcon';
+import { Input } from './Input';
 
 export interface DropdownOption {
   label: string;
@@ -44,6 +45,7 @@ export interface DropdownProps {
   errorText?: string;
   disabled?: boolean;
   leadingIcon?: React.ReactNode;
+  defaultOpen?: boolean;
 }
 
 export function Dropdown({
@@ -59,12 +61,12 @@ export function Dropdown({
   errorText,
   disabled = false,
   leadingIcon,
+  defaultOpen = false,
 }: DropdownProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(defaultOpen);
   const [search, setSearch] = useState('');
   const [flipUp, setFlipUp] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const searchRef = useRef<HTMLInputElement>(null);
 
   const selectedValues = multiple
     ? (Array.isArray(value) ? value : [])
@@ -107,12 +109,6 @@ export function Dropdown({
   }, []);
 
   const toggle = () => (isOpen ? close() : open());
-
-  useEffect(() => {
-    if (isOpen && searchable) {
-      setTimeout(() => searchRef.current?.focus(), 0);
-    }
-  }, [isOpen, searchable]);
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -164,7 +160,12 @@ export function Dropdown({
           </span>
         )}
 
-        <span className={cn('flex-1 text-sm font-medium leading-snug truncate', displayValue ? 'text-input-text-enabled' : 'text-input-text-placeholder')}>
+        <span className={cn(
+          'flex-1 text-sm font-medium leading-snug truncate',
+          disabled
+            ? 'text-input-text-disabled'
+            : displayValue ? 'text-input-text-enabled' : 'text-input-text-placeholder',
+        )}>
           {displayValue ?? (multiple && selectedValues.length > 0 ? `${selectedValues.length} selected` : placeholder)}
         </span>
 
@@ -207,17 +208,13 @@ export function Dropdown({
         )}>
           {searchable && (
             <div className="p-3 border-b border-input-border-enabled">
-              <div className="flex items-center gap-2 h-9 px-3 rounded-xl border border-input-border-enabled bg-input-bg-primary">
-                <SearchIcon aria-hidden="true" className="size-4 flex-shrink-0 text-input-icon-enabled" />
-                <input
-                  ref={searchRef}
-                  type="text"
-                  value={search}
-                  onChange={e => setSearch(e.target.value)}
-                  placeholder="Search"
-                  className="flex-1 text-sm font-medium leading-snug text-input-text-enabled bg-transparent outline-none placeholder:text-input-text-placeholder"
-                />
-              </div>
+              <Input
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                placeholder="Search"
+                leadingIcon={<SearchIcon />}
+                autoFocus
+              />
             </div>
           )}
 

@@ -8,20 +8,17 @@ import ComponentPageLayout, {
 import badgeMd from './md_files/Badge-instruction.md?raw';
 
 const INPUT_CONFIG: InputConfig[] = [
-  {
-    key: 'filled', label: 'Filled', type: 'toggle',
-  },
-  {
-    key: 'bordered', label: 'Bordered', type: 'toggle',
-  },
-  {
-    key: 'tertiary', label: 'Tertiary', type: 'toggle',
-  },
+  { key: 'div0', label: 'Variants', type: 'divider' },
+  { key: 'filled',    label: 'Filled',     type: 'toggle' },
+  { key: 'bordered',  label: 'Bordered',   type: 'toggle' },
+  { key: 'tertiary',  label: 'Tertiary',   type: 'toggle' },
   { key: 'dotPrefix', label: 'Dot Prefix', type: 'toggle' },
+  { key: 'div1', label: 'Dimensions', type: 'divider' },
   {
     key: 'height', label: 'Height', type: 'number',
     min: 0, max: 64, step: 2,
   },
+  { key: 'div2', label: 'Appearance', type: 'divider' },
   {
     key: 'textSize', label: 'Text Size', type: 'select',
     options: [
@@ -116,10 +113,11 @@ function buildVariants(vals: InputValues): VariantGroup[] {
   const allGroups: VariantGroup[] = (['filled', 'bordered', 'tertiary'] as BadgeVariant[]).map(v => ({
     id: v,
     label: cap(v),
-    dotColor: v === 'filled' ? '#0056b8' : v === 'bordered' ? '#89919d' : '#051325',
+    dotColor: '',
+    hideDivider: true,
     styles: [
-      makeStyle(v, SEMANTIC, 'Semantic', '#0056b8'),
-      makeStyle(v, EXTENDED, 'Extended', '#7839ee'),
+      makeStyle(v, SEMANTIC, '', '#0056b8'),
+      makeStyle(v, EXTENDED, '', '#7839ee'),
     ],
   }));
 

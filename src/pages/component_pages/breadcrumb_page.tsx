@@ -9,22 +9,24 @@ import ComponentPageLayout, {
 import breadcrumbMd from './md_files/Breadcrumb-instruction.md?raw';
 
 const INPUT_CONFIG: InputConfig[] = [
+  { key: 'div0', label: 'Typography', type: 'divider' },
   {
     key: 'textSize',
     label: 'Text Size',
     type: 'select',
     options: [
       { value: '12px', label: '12px' },
-      { value: '14px', label: '14px' },
+      { value: '14px', label: '14px (default)' },
       { value: '16px', label: '16px' },
     ],
   },
+  { key: 'div1', label: 'Spacing', type: 'divider' },
   {
     key: 'separatorSize',
     label: 'Separator Icon Size',
     type: 'select',
     options: [
-      { value: '12px', label: '12px' },
+      { value: '12px', label: '12px (default)' },
       { value: '14px', label: '14px' },
     ],
   },
@@ -34,7 +36,7 @@ const INPUT_CONFIG: InputConfig[] = [
     type: 'select',
     options: [
       { value: '0.5', label: '2px' },
-      { value: '1', label: '4px' },
+      { value: '1', label: '4px (default)' },
       { value: '1.5', label: '6px' },
       { value: '2', label: '8px' },
     ],
@@ -44,7 +46,7 @@ const INPUT_CONFIG: InputConfig[] = [
 const DEFAULT_VALUES: InputValues = {
   textSize: '14px',
   separatorSize: '12px',
-  gap: '0.5',
+  gap: '1',
 };
 
 function buildVariants(vals: InputValues): VariantGroup[] {
@@ -59,14 +61,46 @@ function buildVariants(vals: InputValues): VariantGroup[] {
 
   return [
     {
+      id: 'item-states',
+      label: 'Item States',
+      dotColor: '',
+      hideDivider: true,
+      styles: [
+        {
+          id: 'states',
+          label: '',
+          accentColor: '',
+          rows: [
+            {
+              cells: [
+                {
+                  label: 'Default',
+                  node: <BreadcrumbItem label="Products" href="/products" size={tSize} state="default" />,
+                },
+                {
+                  label: 'Hover',
+                  node: <BreadcrumbItem label="Products" href="/products" size={tSize} state="hover" />,
+                },
+                {
+                  label: 'Current',
+                  node: <BreadcrumbItem label="Products" size={tSize} state="current" />,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    {
       id: 'breadcrumb',
-      label: 'Breadcrumb',
-      dotColor: '#0056b8',
+      label: 'Example Breadcrumbs',
+      dotColor: '',
+      hideDivider: true,
       styles: [
         {
           id: '2-items',
           label: '2 Items',
-          accentColor: '#0056b8',
+          accentColor: '',
           rows: [
             {
               cells: [
@@ -85,7 +119,7 @@ function buildVariants(vals: InputValues): VariantGroup[] {
         {
           id: '3-items',
           label: '3 Items',
-          accentColor: '#0056b8',
+          accentColor: '',
           rows: [
             {
               cells: [
@@ -105,7 +139,7 @@ function buildVariants(vals: InputValues): VariantGroup[] {
         {
           id: '4-items',
           label: '4 Items',
-          accentColor: '#0056b8',
+          accentColor: '',
           rows: [
             {
               cells: [
@@ -174,7 +208,7 @@ export default function BreadcrumbPage() {
       inputConfig={INPUT_CONFIG}
       defaultInputValues={DEFAULT_VALUES}
       buildVariants={buildVariants}
-      variantTitle="Breadcrumb Variants"
+      variantTitle="Variants"
       markdownContent={breadcrumbMd}
       markdownFileName="breadcrumb"
       resolveTokens={resolveTokens}

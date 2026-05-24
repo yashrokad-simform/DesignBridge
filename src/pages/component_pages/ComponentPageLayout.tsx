@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import './component_pages.css';
 import InputPanel, { type InputConfig, type InputValues } from './InputPanel';
 import VariantSection, { type VariantGroup } from './VariantSection';
@@ -53,31 +53,28 @@ export default function ComponentPageLayout({
     setValues({ ...defaultInputValues });
   }, [defaultInputValues]);
 
-  const [mdTokens, setMdTokens] = useState<Record<string, string>>(() => resolveTokens(defaultInputValues));
-  const [transformedMd, setTransformedMd] = useState<string | null>(null);
-
   const getResolvedMd = useCallback((vals: InputValues) => {
     if (transformMarkdown) return transformMarkdown(markdownContent, vals);
     return applyTokens(markdownContent, resolveTokens(vals));
   }, [transformMarkdown, markdownContent, resolveTokens]);
 
+  const liveMd = useMemo(() => getResolvedMd(values), [getResolvedMd, values]);
+
   const handleCopy = useCallback(() => {
-    const resolved = getResolvedMd(values);
-    navigator.clipboard.writeText(resolved).then(() => {
+    navigator.clipboard.writeText(liveMd).then(() => {
       setCopyLabel('Copied!');
       if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
       copyTimerRef.current = setTimeout(() => setCopyLabel('Copy MD File'), 1800);
     }).catch(() => {});
-  }, [getResolvedMd, values]);
+  }, [liveMd]);
 
   const handleDrawerCopy = useCallback(() => {
-    const resolved = transformedMd ?? applyTokens(markdownContent, resolveTokens(values));
-    navigator.clipboard.writeText(resolved).then(() => {
+    navigator.clipboard.writeText(liveMd).then(() => {
       setDrawerCopyLabel('Copied!');
       if (drawerCopyTimerRef.current) clearTimeout(drawerCopyTimerRef.current);
       drawerCopyTimerRef.current = setTimeout(() => setDrawerCopyLabel('Copy MD File'), 1800);
     }).catch(() => {});
-  }, [transformedMd, markdownContent, resolveTokens, values]);
+  }, [liveMd]);
 
   useEffect(() => () => {
     if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
@@ -86,15 +83,10 @@ export default function ComponentPageLayout({
   }, []);
 
   const handleUpdateMd = useCallback(() => {
-    if (transformMarkdown) {
-      setTransformedMd(transformMarkdown(markdownContent, values));
-    } else {
-      setMdTokens(resolveTokens(values));
-    }
     setShowToast(true);
     if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
     toastTimerRef.current = setTimeout(() => setShowToast(false), 2400);
-  }, [transformMarkdown, markdownContent, resolveTokens, values]);
+  }, []);
 
   const variantGroups = buildVariants(values);
 
@@ -177,8 +169,8 @@ export default function ComponentPageLayout({
         <div className="cp-drawer-body">
           <MarkdownViewer
             fileName={markdownFileName}
-            rawContent={transformedMd ?? markdownContent}
-            tokens={transformedMd ? {} : mdTokens}
+            rawContent={liveMd}
+            tokens={{}}
             isStale={false}
           />
         </div>

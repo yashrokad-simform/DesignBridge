@@ -357,12 +357,13 @@
 .cp-togglelist-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 12px;
   width: 100%;
 }
 .cp-togglelist-lbl {
-  font-size: 13px;
-  color: var(--cp-ink-2);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--cp-foreground);
 }
 
 /* Toggle Group */
@@ -597,19 +598,26 @@
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: auto;
   padding: 20px 18px;
   background: var(--cp-surface);
 }
 
-.cp-vg { margin-bottom: 28px; }
+.cp-vg { margin-bottom: 24px; }
 .cp-vg:last-child { margin-bottom: 0; }
+.cp-vg + .cp-vg { border-top: 1px solid var(--cp-line-2); padding-top: 24px; }
+.cp-vg--no-divider.cp-vg + .cp-vg,
+.cp-vg + .cp-vg.cp-vg--no-divider { border-top: 0; }
 
 .cp-vg-header {
   display: flex; align-items: center; gap: 8px;
   margin-bottom: 14px;
   padding-bottom: 10px;
   border-bottom: 1px solid var(--cp-line-2);
+}
+.cp-vg-header--no-border {
+  border-bottom: 0;
+  padding-bottom: 4px;
 }
 .cp-vg-dot {
   width: 10px; height: 10px;
@@ -619,7 +627,7 @@
   font-size: 13px; font-weight: 600; color: var(--cp-ink);
 }
 
-.cp-vs { margin-bottom: 18px; }
+.cp-vs { margin-bottom: 16px; }
 .cp-vs:last-child { margin-bottom: 0; }
 
 .cp-vs-header {
@@ -657,8 +665,9 @@
 }
 
 .cp-vcells {
-  display: flex; gap: 8px;
+  display: flex; gap: 32px;
   flex-wrap: wrap; align-items: flex-end;
+  /* padding-bottom: 10px; */
 }
 
 .cp-vcell {
@@ -668,6 +677,46 @@
 .cp-vcell-lbl {
   font-size: 10px; color: var(--cp-muted);
 }
+.cp-vcell-lbl--spacer {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Grid layout for state rows */
+.cp-vgrid {
+  display: grid;
+  gap: 32px;
+  align-items: center;
+  width: max-content;
+  min-width: 100%;
+}
+.cp-vgrid-row-lbl {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--cp-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  align-self: center;
+}
+.cp-vgrid-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+.cp-vgrid-col-hdr {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--cp-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  padding-bottom: 4px;
+}
+.cp-vgrid-corner { display: block; }
 
 /* ═══════════════════════════════════════════════════════════
    MARKDOWN VIEWER

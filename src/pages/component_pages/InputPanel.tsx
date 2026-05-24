@@ -146,24 +146,22 @@ function Field({
             const active = selected.includes(opt.value);
             return (
               <div key={opt.value} className="cp-togglelist-row">
+                <label className="cp-toggle">
+                  <input
+                    type="checkbox"
+                    checked={active}
+                    onChange={e => {
+                      const allValues = field.options?.map(o => o.value) ?? [];
+                      const next = e.target.checked
+                        ? allValues.filter(v => selected.includes(v) || v === opt.value)
+                        : selected.filter(v => v !== opt.value);
+                      onChange(next.join(','));
+                    }}
+                  />
+                  <span className="cp-toggle-track" />
+                  <span className="cp-toggle-thumb" />
+                </label>
                 <span className="cp-togglelist-lbl">{opt.label}</span>
-                <div className="cp-toggle-wrap">
-                  <label className="cp-toggle">
-                    <input
-                      type="checkbox"
-                      checked={active}
-                      onChange={e => {
-                        const next = e.target.checked
-                          ? [...selected, opt.value]
-                          : selected.filter(v => v !== opt.value);
-                        onChange(next.join(','));
-                      }}
-                    />
-                    <span className="cp-toggle-track" />
-                    <span className="cp-toggle-thumb" />
-                  </label>
-                  <span className="cp-toggle-lbl">{active ? 'On' : 'Off'}</span>
-                </div>
               </div>
             );
           })}
