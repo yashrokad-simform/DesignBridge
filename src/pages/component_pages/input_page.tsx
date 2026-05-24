@@ -41,7 +41,7 @@ const INPUT_CONFIG: InputConfig[] = [
       { value: '20px', label: '20px' },
     ],
   },
-  { key: 'height', label: 'Height (px)', type: 'number', min: 28, max: 80 },
+  { key: 'height', label: 'Height (px)', type: 'number', min: 28, max: 80, step: 1 },
 ];
 
 const DEFAULT_VALUES: InputValues = {
