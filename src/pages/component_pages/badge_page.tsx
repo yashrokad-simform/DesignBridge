@@ -9,12 +9,13 @@ import badgeMd from './md_files/Badge-instruction.md?raw';
 
 const INPUT_CONFIG: InputConfig[] = [
   {
-    key: 'variants', label: 'Variants', type: 'togglelist',
-    options: [
-      { value: 'filled',   label: 'Filled' },
-      { value: 'bordered', label: 'Bordered' },
-      { value: 'tertiary', label: 'Tertiary' },
-    ],
+    key: 'filled', label: 'Filled', type: 'toggle',
+  },
+  {
+    key: 'bordered', label: 'Bordered', type: 'toggle',
+  },
+  {
+    key: 'tertiary', label: 'Tertiary', type: 'toggle',
   },
   { key: 'dotPrefix', label: 'Dot Prefix', type: 'toggle' },
   {
@@ -37,7 +38,7 @@ const INPUT_CONFIG: InputConfig[] = [
     ],
   },
   {
-    key: 'padding', label: 'Padding', type: 'select',
+    key: 'paddingX', label: 'Padding', type: 'select',
     options: [
       { value: 'px-2', label: '8px (default)' },
       { value: 'px-3', label: '12px' },
@@ -46,7 +47,9 @@ const INPUT_CONFIG: InputConfig[] = [
 ];
 
 const DEFAULT_VALUES: InputValues = {
-  variants:     'filled,bordered,tertiary',
+  filled:       true,
+  bordered:     true,
+  tertiary:     true,
   dotPrefix:    true,
   height:       24,
   textSize:     '12px',
@@ -70,7 +73,11 @@ const SEMANTIC: BadgeColor[] = ['primary','secondary','success','warning','criti
 const EXTENDED: BadgeColor[] = ['cyan','indigo','purple','fuchsia','rose','teal'];
 
 function buildVariants(vals: InputValues): VariantGroup[] {
-  const selectedVariants = (vals.variants as string).split(',').filter(Boolean) as BadgeVariant[];
+  const selectedVariants: BadgeVariant[] = [];
+  if (vals.filled) selectedVariants.push('filled');
+  if (vals.bordered) selectedVariants.push('bordered');
+  if (vals.tertiary) selectedVariants.push('tertiary');
+  
   const showPrefix   = vals.dotPrefix    as boolean;
   const height       = vals.height       as number;
   const textSize     = vals.textSize     as string;
@@ -128,7 +135,10 @@ function resolveTokens(_vals: InputValues): Record<string, string> {
 function transformBadgeMd(raw: string, vals: InputValues): string {
   let md = raw;
 
-  const selectedVariants = (vals.variants as string).split(',').filter(Boolean);
+  const selectedVariants: string[] = [];
+  if (vals.filled)   selectedVariants.push('filled');
+  if (vals.bordered) selectedVariants.push('bordered');
+  if (vals.tertiary) selectedVariants.push('tertiary');
   if (selectedVariants.length === 0) return md;
 
   const dotPrefix    = vals.dotPrefix    as boolean;
@@ -166,11 +176,13 @@ function transformBadgeMd(raw: string, vals: InputValues): string {
   const pxNote: Record<string, string> = {
     'px-2': '8px', 'px-3': '12px', 'px-4': '16px', 'px-5': '20px',
   };
-  md = md.replace(
-    /(rounded-[a-z0-9-]+) px-\d+ (py-[0-9.]+ gap-[0-9.]+)/,
-    `$1 ${paddingX} $2`,
-  );
-  md = md.replace(/`px-\d+` = \d+px/, `\`${paddingX}\` = ${pxNote[paddingX] ?? '8px'}`);
+  if (paddingX !== 'px-2') {
+    md = md.replace(
+      /(rounded-[a-z0-9-]+) px-\d+ (py-[0-9.]+ gap-[0-9.]+)/,
+      `$1 ${paddingX} $2`,
+    );
+    md = md.replace(/`px-\d+` = \d+px/, `\`${paddingX}\` = ${pxNote[paddingX] ?? '8px'}`);
+  }
 
   // ── 5. Typography ───────────────────────────────────────
   const tsMap: Record<string, { cls: string; ldr: string; sizePx: string; ldrPx: string }> = {

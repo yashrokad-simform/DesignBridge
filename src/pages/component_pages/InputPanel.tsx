@@ -135,7 +135,6 @@ function Field({
             <span className="cp-toggle-track" />
             <span className="cp-toggle-thumb" />
           </label>
-          <span className="cp-toggle-lbl">{value ? 'On' : 'Off'}</span>
         </div>
       );
 

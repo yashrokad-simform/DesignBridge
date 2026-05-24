@@ -187,8 +187,9 @@ export default function ComponentPageLayout({
       {/* ── Toast ──────────────────────────────────────────────── */}
       <div className={`cp-toast${showToast ? ' cp-toast--visible' : ''}`}>
         <span className="cp-toast-icon" aria-hidden="true">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#ffffff" viewBox="0 0 256 256">
-            <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm45.66,85.66-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35a8,8,0,0,1,11.32,11.32Z" />
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" focusable="false">
+            <circle cx="10" cy="10" r="10" />
+            <path d="M5.8 10.3 8.4 12.9 14.4 7" />
           </svg>
         </span>
         MD file updated successfully.
