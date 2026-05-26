@@ -11,6 +11,21 @@ Use shared instructions:
 
 ---
 
+### Typography Rule
+
+**Do NOT use `leading-snug`.** Use explicit line-height classes matched to font size:
+- `text-2xs` → `leading-3`
+- `text-xs` → `leading-4`
+- `text-sm` → `leading-4.5`
+- `text-md` → `leading-5.5`
+- `text-lg` → `leading-6.5`
+- `text-xl` → `leading-7`
+- `text-2xl` → `leading-8`
+- `text-3xl` → `leading-9`
+- `text-4xl` → `leading-12`
+
+---
+
 # Part A — Checkbox
 
 ## Overview
@@ -50,8 +65,8 @@ box-border relative overflow-hidden transition-colors
 | `hover` | `bg-bg-white border border-border-warning` |
 | `selected` | `bg-bg-brand-secondary border-0` |
 | `indeterminate` | `border-0` |
-| `disabled` | `bg-input-bg-disabled border-0 opacity-100` |
-| `disabled-selected` | `bg-input-bg-disabled border-0 opacity-100` |
+| `disabled` | `bg-input-bg-disabled border border-input-border-disabled` |
+| `disabled-selected` | `bg-input-bg-disabled border border-input-border-disabled` |
 
 > Hover is driven by the wrapper's `group` class — use `group-hover:` on the control box when state is `enabled`. Do not manage hover state in JS.
 
@@ -80,7 +95,7 @@ Disabled wrapper: add `cursor-not-allowed pointer-events-none`.
 Label classes:
 
 ```
-text-sm font-medium leading-snug whitespace-nowrap
+text-sm font-medium leading-4.5 whitespace-nowrap
 ```
 
 | State | Text Class |
@@ -88,7 +103,7 @@ text-sm font-medium leading-snug whitespace-nowrap
 | Enabled / Hover / Selected / Indeterminate | `text-text-primary` |
 | Disabled / Disabled Selected | `text-input-text-disabled` |
 
-> `text-sm` = 14px · `leading-snug` ≈ 18px · `font-medium` = 500
+> `text-sm` = 14px · `leading-4.5` = 18px · `font-medium` = 500
 
 Remove label from DOM entirely when not provided — never render an empty element.
 
@@ -115,8 +130,8 @@ Import directly from `@/assets/icons/`. Never inline SVG markup inside the Check
 | Hover | `bg-bg-white` | `border-border-warning` | — | `text-text-primary` |
 | Selected | `bg-bg-brand-secondary` | none | `CheckIcon` (`text-text-white`) | `text-text-primary` |
 | Indeterminate | — | none | `IndeterminateIcon` (self-contained) | `text-text-primary` |
-| Disabled | `bg-input-bg-disabled` | none | `CheckIcon` if checked (muted) | `text-input-text-disabled` |
-| Disabled Selected | `bg-input-bg-disabled` | none | `CheckIcon` (`text-bg-gray-dark`) | `text-input-text-disabled` |
+| Disabled | `bg-input-bg-disabled` | `border-input-border-disabled` | `CheckIcon` if checked (muted) | `text-input-text-disabled` |
+| Disabled Selected | `bg-input-bg-disabled` | `border-input-border-disabled` | `CheckIcon` (`text-bg-gray-dark`) | `text-input-text-disabled` |
 
 > **Disabled + Selected:** Render `CheckIcon` with `text-text-white opacity-60` over the disabled background. Do not swap to a separate asset.
 > **Disabled Selected variant:** Use `state='disabled-selected'` when `disabled={true}` and `checked={true}`. Same background as disabled (`bg-input-bg-disabled`). Renders `CheckIcon` with `text-bg-gray-dark` instead of white. Pointer events and cursor match the standard disabled state.
@@ -217,7 +232,7 @@ flex flex-col gap-1 flex-1 min-w-0
 ### Title
 
 ```
-text-sm font-medium leading-snug text-text-primary w-full
+text-sm font-medium leading-4.5 text-text-primary w-full
 ```
 
 Disabled: `text-input-text-disabled`
@@ -267,7 +282,7 @@ Disabled: `text-input-text-disabled`
 | `--color-border-gray-dark` | `border-border-gray-dark` | Control box border (enabled) |
 | `--color-border-warning` | `border-border-warning` | Control box + tile border (hover + selected) |
 | `--color-input-border-enabled` | `border-input-border-enabled` | Tile border (enabled) |
-| `--color-input-border-disabled` | `border-input-border-disabled` | Tile border (disabled + disabled-selected) |
+| `--color-input-border-disabled` | `border-input-border-disabled` | Control box border (disabled + disabled-selected) · Tile border (disabled + disabled-selected) |
 | `--color-text-primary` | `text-text-primary` | Title (all active states) |
 | `--color-text-secondary` | `text-text-secondary` | Caption (all active states) |
 | `--color-input-text-disabled` | `text-input-text-disabled` | Label (disabled + disabled-selected) · Title + Caption (disabled + disabled-selected) |

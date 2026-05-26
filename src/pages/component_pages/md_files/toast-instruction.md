@@ -11,6 +11,21 @@ Use shared instructions:
 
 ---
 
+### Typography Rule
+
+**Do NOT use `leading-snug`.** Use explicit line-height classes matched to font size:
+- `text-2xs` → `leading-3`
+- `text-xs` → `leading-4`
+- `text-sm` → `leading-4.5`
+- `text-md` → `leading-5.5`
+- `text-lg` → `leading-6.5`
+- `text-xl` → `leading-7`
+- `text-2xl` → `leading-8`
+- `text-3xl` → `leading-9`
+- `text-4xl` → `leading-12`
+
+---
+
 ## Overview
 
 Transient notification component displayed as a floating overlay. Supports four semantic variants: `success`, `warning`, `critical`, `info`. All four share the same dark container — the visual difference per variant is the status icon.

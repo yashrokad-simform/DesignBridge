@@ -11,17 +11,24 @@ Use shared instructions:
 
 ---
 
+### Typography Rule
+
+**Do NOT use `leading-snug`.** Use explicit line-height classes matched to font size:
+- `text-2xs` → `leading-3`
+- `text-xs` → `leading-4`
+- `text-sm` → `leading-4.5`
+- `text-md` → `leading-5.5`
+- `text-lg` → `leading-6.5`
+- `text-xl` → `leading-7`
+- `text-2xl` → `leading-8`
+- `text-3xl` → `leading-9`
+- `text-4xl` → `leading-12`
+
+---
+
 ## Overview
 
 A three-component system: `FilePicker` (drag-drop upload zone), `DocumentTile` (uploaded file display row), and `FileTypeIcon` (file type thumbnail). All three work independently and compose together in an upload workflow.
-
-### Typography Rule
-
-**Do NOT use `leading-snug`.** Use explicit line-height classes only:
-- `text-sm` (14px) → `leading-4.5`
-- `text-xs` (12px) → `leading-4` (16px)
-
----
 
 ---
 

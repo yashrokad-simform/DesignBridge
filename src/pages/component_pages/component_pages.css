@@ -277,7 +277,7 @@
 .cp-field input[type="text"]:focus,
 .cp-field input[type="number"]:focus,
 .cp-field select:focus { border-color: var(--cp-accent); }
-.cp-field input[type="text"] { min-width: 120px; }
+.cp-field input[type="text"] { min-width: 120px; width: 100%; }
 .cp-field input[type="number"],
 .cp-field input[type="number"].cp-field-number-full { width: 100%; }
 .cp-field select {
@@ -345,6 +345,28 @@
   cursor: pointer;
   flex-shrink: 0;
 }
+
+/* Color Swatches */
+.cp-colorswatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 2px;
+}
+.cp-colorswatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  cursor: pointer;
+  transition: outline-color 140ms, transform 140ms;
+  flex-shrink: 0;
+  padding: 0;
+}
+.cp-colorswatch:hover { transform: scale(1.15); }
+.cp-colorswatch--active { outline-color: var(--cp-ink); }
 
 /* Toggle List (one toggle row per option, full width) */
 .cp-togglelist {
@@ -666,7 +688,7 @@
 
 .cp-vcells {
   display: flex; gap: 32px;
-  flex-wrap: wrap; align-items: flex-end;
+  flex-wrap: wrap; align-items: flex-start;
   /* padding-bottom: 10px; */
 }
 

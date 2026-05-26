@@ -1,6 +1,6 @@
 import React from 'react';
 
-export type InputType = 'text' | 'number' | 'color' | 'select' | 'toggle' | 'multicheck' | 'togglegroup' | 'togglelist' | 'divider';
+export type InputType = 'text' | 'number' | 'color' | 'select' | 'toggle' | 'multicheck' | 'togglegroup' | 'togglelist' | 'divider' | 'colorswatches';
 
 export interface SelectOption {
   value: string;
@@ -15,6 +15,7 @@ export interface InputConfig {
   min?: number;
   max?: number;
   step?: number;
+  colors?: string[];
 }
 
 export type InputValues = Record<string, string | boolean | number>;
@@ -84,7 +85,7 @@ function Field({
       return (
         <input
           type="text"
-          value={value as string}
+          value={(value as string) ?? ''}
           onChange={e => onChange(e.target.value)}
         />
       );
@@ -214,6 +215,24 @@ function Field({
               </button>
             );
           })}
+        </div>
+      );
+    }
+
+    case 'colorswatches': {
+      const selected = value as string;
+      return (
+        <div className="cp-colorswatches">
+          {field.colors?.map(color => (
+            <button
+              key={color}
+              type="button"
+              className={`cp-colorswatch${selected === color ? ' cp-colorswatch--active' : ''}`}
+              style={{ backgroundColor: color }}
+              onClick={() => onChange(color)}
+              aria-label={color}
+            />
+          ))}
         </div>
       );
     }

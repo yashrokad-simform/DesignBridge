@@ -11,6 +11,21 @@ Use shared instructions:
 
 ---
 
+### Typography Rule
+
+**Do NOT use `leading-snug`.** Use explicit line-height classes matched to font size:
+- `text-2xs` → `leading-3`
+- `text-xs` → `leading-4`
+- `text-sm` → `leading-4.5`
+- `text-md` → `leading-5.5`
+- `text-lg` → `leading-6.5`
+- `text-xl` → `leading-7`
+- `text-2xl` → `leading-8`
+- `text-3xl` → `leading-9`
+- `text-4xl` → `leading-12`
+
+---
+
 ## Overview
 
 Standard text-entry field with optional label, leading/trailing icon slots, and helper/error text. Use `cva` for container state composition.
@@ -78,12 +93,12 @@ state: 'default'
 | Element | Classes |
 |---|---|
 | Label | `text-xs font-medium leading-4 text-input-text-label` |
-| Value | `text-sm font-medium leading-snug text-input-text-enabled` |
-| Placeholder | `text-sm font-medium leading-snug text-input-text-placeholder` |
+| Value | `text-sm font-medium leading-4.5 text-input-text-enabled` |
+| Placeholder | `text-sm font-medium leading-4.5 text-input-text-placeholder` |
 | Helper text | `text-xs font-medium leading-4 text-input-text-helper` |
 | Error text | `text-xs font-medium leading-4 text-input-text-critical` |
 
-> `text-xs` = 12px · `text-sm` = 14px · `leading-4` = 16px · `leading-snug` ≈ 18px
+> `text-xs` = 12px · `text-sm` = 14px · `leading-4` = 16px · `leading-4.5` ≈ 18px
 
 ---
 
@@ -117,7 +132,7 @@ Inside the content area (flex-1) within the container:
 
 ```
 w-full bg-transparent border-none outline-none
-text-sm font-medium leading-snug
+text-sm font-medium leading-4.5
 text-input-text-enabled placeholder:text-input-text-placeholder
 disabled:text-input-text-disabled disabled:cursor-not-allowed
 ```
