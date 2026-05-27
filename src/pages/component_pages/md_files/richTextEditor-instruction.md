@@ -172,7 +172,7 @@ border-b border-input-border-enabled
 
   > `size-6` = 24×24px · `rounded-[4.5px]` = Figma-confirmed value
 
-- **Active state** (formatting is active at cursor): `bg-bg-primary`
+- **Active state** (formatting is active at cursor): `bg-bg-brand-light`
 - **Inactive state**: no background
 - **Disabled** (`disabled={true}`): `opacity-50 pointer-events-none`
 
@@ -328,4 +328,4 @@ While `isDragging`, add `ring-1 ring-input-border-selected` to the editor contai
 | `--color-input-border-selected` | `border-input-border-selected` | Border (focused) |
 | `--color-input-border-critical` | `border-input-border-critical` | Border (error) |
 | `--color-input-border-disabled` | `border-input-border-disabled` | Border (disabled) |
-| `--color-bg-primary` | `bg-bg-primary` | Toolbar button active background |
+| `--color-bg-brand-light` | `bg-bg-brand-light` | Toolbar button active background |

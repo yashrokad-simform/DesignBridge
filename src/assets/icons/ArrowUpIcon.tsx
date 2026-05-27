@@ -10,17 +10,16 @@ export function ArrowUpIcon({ className, 'aria-hidden': ariaHidden }: ArrowUpIco
     <svg
       aria-hidden={ariaHidden}
       className={className}
-      viewBox="0 0 12 12"
-      fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
-      <path
-        d="M2 8L6 4L10 8"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      <path d="m5 12 7-7 7 7" />
+      <path d="M12 19V5" />
     </svg>
   );
 }

@@ -68,7 +68,7 @@ Wrapper for standard tab items.
 ### Layout Classes
 
 ```
-flex items-start border-b border-border-gray-light
+flex items-start border-b border-border-primary
 ```
 
 No padding on the list itself — spacing is handled per tab item.
@@ -196,7 +196,7 @@ Wrapper for capsule tab items. The container itself is a styled pill track.
 ### Container Classes
 
 ```
-flex items-start p-1 rounded-xl bg-bg-gray-light
+flex items-start p-1 rounded-xl bg-bg-secondary
 ```
 
 > `p-1` = 4px · `rounded-xl` = 12px
@@ -231,7 +231,7 @@ cursor-pointer select-none transition-all whitespace-nowrap
 | State | Classes |
 |---|---|
 | `inactive` | `rounded-xl` |
-| `active` | `bg-bg-white rounded-lg shadow-[0px_1px_12px_rgba(194,194,194,0.22)]` |
+| `active` | `bg-bg-primary rounded-lg shadow-[0px_1px_12px_rgba(194,194,194,0.22)]` |
 
 > `rounded-xl` = 12px (inactive) · `rounded-lg` = 8px (active) · Shadow is exact Figma value — no token equivalent exists.
 
@@ -258,7 +258,7 @@ text-sm font-medium leading-4.5 text-text-primary text-center whitespace-nowrap
 | State | Container bg | Radius | Shadow | Label |
 |---|---|---|---|---|
 | Inactive | none (transparent) | `rounded-xl` | none | `text-text-primary` |
-| Active | `bg-bg-white` | `rounded-lg` | `shadow-[0px_1px_12px_rgba(194,194,194,0.22)]` | `text-text-primary` |
+| Active | `bg-bg-primary` | `rounded-lg` | `shadow-[0px_1px_12px_rgba(194,194,194,0.22)]` | `text-text-primary` |
 
 ---
 
@@ -295,7 +295,7 @@ Render children only when `activeTab === value` from context. Use `role="tabpane
 | `--color-text-brand-secondary` | `text-text-brand-secondary` | Standard active label |
 | `--color-text-white` | `text-text-white` | Count badge number |
 | `--color-border-brand-secondary` | `bg-border-brand-secondary` | Standard active indicator bar |
-| `--color-border-gray-light` | `border-border-gray-light` | Standard tab list bottom border |
+| `--color-border-primary` | `border-border-primary` | Standard tab list bottom border |
 | `--color-bg-critical` | `bg-bg-critical` | Count badge background |
-| `--color-bg-white` | `bg-bg-white` | Capsule active tab background |
-| `--color-bg-gray-light` | `bg-bg-gray-light` | Capsule container background |
+| `--color-bg-primary` | `bg-bg-primary` | Capsule active tab background |
+| `--color-bg-secondary` | `bg-bg-secondary` | Capsule container background |

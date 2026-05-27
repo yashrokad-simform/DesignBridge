@@ -86,7 +86,7 @@ export function TabList({ children, className }: TabListProps) {
         ref={listRef}
         role="tablist"
         onKeyDown={handleKeyDown}
-        className={cn('flex items-start p-1 rounded-xl bg-bg-gray-light font-inter', className)}
+        className={cn('flex items-start p-1 rounded-xl bg-bg-secondary font-inter', className)}
       >
         {children}
       </div>
@@ -98,7 +98,7 @@ export function TabList({ children, className }: TabListProps) {
       ref={listRef}
       role="tablist"
       onKeyDown={handleKeyDown}
-      className={cn('flex items-start border-b border-border-gray-light font-inter', className)}
+      className={cn('flex items-start border-b border-border-primary font-inter', className)}
     >
       {children}
     </div>
@@ -170,7 +170,7 @@ const capsuleItemVariants = cva(
     variants: {
       state: {
         inactive: 'rounded-xl',
-        active:   'bg-bg-white rounded-lg shadow-[0px_1px_12px_rgba(194,194,194,0.22)]',
+        active:   'bg-bg-primary rounded-lg shadow-[0px_1px_12px_rgba(194,194,194,0.22)]',
       },
     },
     defaultVariants: { state: 'inactive' },

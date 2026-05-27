@@ -137,7 +137,7 @@ text-sm font-medium leading-[22px] text-text-white w-full
 ### Description
 
 ```
-text-xs font-normal leading-4 text-text-gray-light w-full
+text-xs font-normal leading-4 text-text-secondary w-full
 ```
 
 > `text-xs` = 12px · `leading-4` = 16px · `text-text-brand-light` = `--color-text-brand-light` = `#b0cbe9` (light blue — readable on dark background)
@@ -213,5 +213,5 @@ Use `tw-animate-css` utilities already available in the project for enter/exit t
 |---|---|---|
 | `--color-bg-black` | `bg-bg-black` | Toast container background |
 | `--color-text-white` | `text-text-white` | Title text |
-| `--color-text-gray-light` | `text-text-gray-light` | Description text |
+| `--color-text-secondary` | `text-text-secondary` | Description text |
 | `--color-icon-gray-light` | `text-icon-gray-light` | Close icon |

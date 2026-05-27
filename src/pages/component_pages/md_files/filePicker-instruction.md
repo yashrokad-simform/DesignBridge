@@ -57,21 +57,20 @@ Apply CVA to the **outer container**.
 ### Base Classes
 
 ```
-flex flex-col items-center p-3 rounded-xl
-bg-bg-white w-full
+flex flex-col items-center p-3 rounded-xl w-full
 ```
 
 > `p-3` = 12px · `rounded-xl` = 12px
 
 ### `state` Variant
 
-| State | Border classes |
+| State | Background + Border classes |
 |---|---|
-| `enabled` | `border border-border-gray-light` |
-| `drag-file` | `border-2 border-border-brand` |
-| `disabled` | `border border-btn-border-disabled pointer-events-none` |
+| `enabled` | `bg-input-bg-primary border border-input-border-enabled` |
+| `drag-file` | `bg-input-bg-primary border-2 border-input-border-selected` |
+| `disabled` | `bg-input-bg-disabled border border-input-border-disabled pointer-events-none` |
 
-> `border-btn-border-disabled` = `--color-btn-border-disabled` = `#dde3eb` · `border-border-brand` = `--color-border-brand` = `#0056b8` (2px on drag-file) · No opacity for disabled — token-driven only.
+> `border-input-border-disabled` = `--color-input-border-disabled` = `#dde3eb` · `border-input-border-selected` = `--color-input-border-selected` = `#0056b8` (2px on drag-file) · `bg-input-bg-disabled` = `--color-input-bg-disabled` = `#f4f5f7` · No opacity for disabled — token-driven only.
 
 ---
 
@@ -95,8 +94,8 @@ flex items-center justify-center size-6 rounded-full border flex-shrink-0
 
 | State | Background + Border |
 |---|---|
-| `enabled` / `drag-file` | `bg-bg-primary border-border-brand` |
-| `disabled` | `bg-bg-gray-light border-border-gray-light` |
+| `enabled` / `drag-file` | `bg-bg-brand-light border-border-brand` |
+| `disabled` | `bg-bg-secondary border-border-primary` |
 
 **Icon inside:**
 - Import `DocumentUploadIcon` from `src/assets/icons/`. Do not inline SVG.
@@ -142,7 +141,7 @@ text-xs font-normal leading-4 whitespace-nowrap
 | State | Color |
 |---|---|
 | `enabled` / `drag-file` | `text-text-secondary` |
-| `disabled` | `text-text-gray-light` |
+| `disabled` | `text-text-secondary` |
 
 ### Format hint line
 
@@ -153,7 +152,7 @@ text-xs font-normal leading-4 text-center w-full
 | State | Color |
 |---|---|
 | `enabled` / `drag-file` | `text-text-secondary` |
-| `disabled` | `text-text-gray-light` |
+| `disabled` | `text-text-secondary` |
 
 Content: `"{acceptedTypes} (max. {maxSize})"` — dynamic from props.
 
@@ -251,17 +250,20 @@ toast.error('Upload failed', {
 
 | Token | Tailwind Class | Used For |
 |---|---|---|
-| `--color-bg-white` | `bg-bg-white` | Container background |
-| `--color-bg-primary` | `bg-bg-primary` | Featured icon bg (active states) |
-| `--color-bg-gray-light` | `bg-bg-gray-light` | Featured icon bg (disabled) |
-| `--color-border-brand` | `border-border-brand` | Container + icon border (enabled/drag) |
-| `--color-border-gray-light` | `border-border-gray-light` | Container + icon border (disabled) |
-| `--color-btn-border-disabled` | `border-btn-border-disabled` | Outer container border (disabled) |
+| `--color-input-bg-primary` | `bg-input-bg-primary` | Container background (enabled/drag) |
+| `--color-input-bg-disabled` | `bg-input-bg-disabled` | Container background (disabled) |
+| `--color-bg-brand-light` | `bg-bg-brand-light` | Featured icon bg (active states) |
+| `--color-bg-secondary` | `bg-bg-secondary` | Featured icon bg (disabled) |
+| `--color-input-border-enabled` | `border-input-border-enabled` | Container border (enabled) |
+| `--color-input-border-selected` | `border-input-border-selected` | Container border (drag-file) |
+| `--color-input-border-disabled` | `border-input-border-disabled` | Container border (disabled) |
+| `--color-border-brand` | `border-border-brand` | Featured icon border (enabled/drag) |
+| `--color-border-primary` | `border-border-primary` | Featured icon border (disabled) |
 | `--color-btn-text-secondary` | `text-btn-text-secondary` | "Click to upload" (enabled) |
 | `--color-btn-text-secondary-focused` | `text-btn-text-secondary-focused` | "Click to upload" (drag-file) |
 | `--color-btn-text-secondary-disabled` | `text-btn-text-secondary-disabled` | "Click to upload" (disabled) |
 | `--color-text-secondary` | `text-text-secondary` | Supporting text (active states) |
-| `--color-text-gray-light` | `text-text-gray-light` | Supporting text (disabled) |
+| `--color-text-secondary` | `text-text-secondary` | Supporting text (disabled) |
 
 ---
 
@@ -295,7 +297,7 @@ A single reusable file row component used within the upload flow. Supports three
 
 ```
 flex gap-3 p-3 rounded-xl w-full
-bg-bg-white border border-border-gray-light
+bg-bg-primary border border-border-primary
 ```
 
 > `gap-3` = 12px · `p-3` = 12px · `rounded-xl` = 12px
@@ -380,7 +382,7 @@ text-xs font-medium leading-4 text-btn-text-bordered
 **Download button** — Bordered Small icon-only (from `button.md`):
 ```
 h-9 p-2.5 rounded-xl
-bg-btn-bg-bordered border border-border-gray-light
+bg-btn-bg-bordered border border-border-primary
 ```
 Icon: `DocumentDownloadIcon` from `src/assets/icons/` · `size-4` (16×16px).
 
@@ -431,9 +433,9 @@ flex-1 min-w-0 h-2 relative rounded-full
 
 **Track background:**
 ```
-absolute inset-0 rounded-full bg-bg-primary
+absolute inset-0 rounded-full bg-bg-brand-light
 ```
-> `bg-bg-primary` = light blue track (`#e6eef8`)
+> `bg-bg-brand-light` = light blue track (`#e6eef8`)
 
 **Progress fill:**
 ```
@@ -453,14 +455,14 @@ text-xs font-medium leading-4 text-text-primary whitespace-nowrap flex-shrink-0
 
 | Token | Tailwind Class | Used For |
 |---|---|---|
-| `--color-bg-white` | `bg-bg-white` | Tile background |
-| `--color-border-gray-light` | `border-border-gray-light` | Tile border |
+| `--color-bg-primary` | `bg-bg-primary` | Tile background |
+| `--color-border-primary` | `border-border-primary` | Tile border |
 | `--color-text-primary` | `text-text-primary` | File name, progress % |
 | `--color-text-secondary` | `text-text-secondary` | File size, date |
 | `--color-btn-bg-bordered` | `bg-btn-bg-bordered` | Button background |
 | `--color-btn-border-primary` | `border-btn-border-primary` | View button border |
 | `--color-btn-text-bordered` | `text-btn-text-bordered` | View button text |
-| `--color-bg-primary` | `bg-bg-primary` | Progress track |
+| `--color-bg-brand-light` | `bg-bg-brand-light` | Progress track |
 | `--color-bg-brand` | `bg-bg-brand` | Progress fill |
 
 ---
@@ -494,7 +496,7 @@ relative size-10 flex-shrink-0
 
 `image-preview` only — add:
 ```
-border border-border-gray-light rounded-lg overflow-hidden
+border border-border-primary rounded-lg overflow-hidden
 ```
 
 ---

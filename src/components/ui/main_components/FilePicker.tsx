@@ -7,13 +7,13 @@ import { DocumentUploadDisabledIcon } from '@/assets/icons/DocumentUploadDisable
 export type FilePickerState = 'enabled' | 'drag-file' | 'disabled';
 
 const filePickerVariants = cva(
-  'flex flex-col items-center p-3 rounded-xl bg-bg-white w-full',
+  'flex flex-col items-center p-3 rounded-xl w-full',
   {
     variants: {
       state: {
-        'enabled':   'border border-border-gray-light',
-        'drag-file': 'border-2 border-border-brand',
-        'disabled':  'border border-btn-border-disabled pointer-events-none',
+        'enabled':   'bg-input-bg-primary border border-input-border-enabled',
+        'drag-file': 'bg-input-bg-primary border-2 border-input-border-selected',
+        'disabled':  'bg-input-bg-disabled border border-input-border-disabled pointer-events-none',
       },
     },
     defaultVariants: { state: 'enabled' },
@@ -62,15 +62,15 @@ export function FilePicker({
   };
 
   const iconBgBorder = isDisabled
-    ? 'bg-bg-gray-light border-border-gray-light'
-    : 'bg-bg-primary border-border-brand';
+    ? 'bg-bg-secondary border-border-primary'
+    : 'bg-bg-brand-light border-border-brand';
 
   const linkColor =
     activeState === 'enabled'   ? 'text-btn-text-secondary' :
     activeState === 'drag-file' ? 'text-btn-text-secondary-focused' :
                                   'text-btn-text-secondary-disabled';
 
-  const supportColor = isDisabled ? 'text-text-gray-light' : 'text-text-secondary';
+  const supportColor = isDisabled ? 'text-text-secondary' : 'text-text-secondary';
 
   return (
     <div

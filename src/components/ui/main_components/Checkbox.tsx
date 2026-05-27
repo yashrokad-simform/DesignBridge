@@ -17,8 +17,8 @@ const controlBox = cva(
   {
     variants: {
       state: {
-        'enabled':           'bg-bg-white border border-border-gray-dark group-hover:border-border-warning',
-        'hover':             'bg-bg-white border border-border-warning',
+        'enabled':           'bg-bg-primary border border-border-gray-dark group-hover:border-border-warning',
+        'hover':             'bg-bg-primary border border-border-warning',
         'selected':          'bg-bg-brand-secondary border-0',
         'indeterminate':     'border-0',
         'disabled':          'bg-input-bg-disabled border border-input-border-disabled opacity-100',
@@ -99,7 +99,7 @@ export function Checkbox({
   return (
     <label
       className={cn(
-        'inline-flex flex-row items-start gap-1 cursor-pointer group font-inter',
+        'relative inline-flex flex-row items-start gap-1 cursor-pointer group font-inter',
         disabled && 'cursor-not-allowed pointer-events-none',
         className,
       )}
@@ -126,7 +126,7 @@ export function Checkbox({
         {(state === 'selected') && (
           <CheckIcon
             aria-hidden="true"
-            className="absolute inset-[2.25px] text-text-white"
+            className="absolute inset-[2.25px] text-icon-white"
           />
         )}
         {(state === 'disabled-selected') && (
@@ -138,7 +138,7 @@ export function Checkbox({
         {(state === 'disabled' && checked) && (
           <CheckIcon
             aria-hidden="true"
-            className="absolute inset-[2.25px] text-text-white opacity-60"
+            className="absolute inset-[2.25px] text-icon-white opacity-60"
           />
         )}
         {state === 'indeterminate' && (
@@ -167,8 +167,8 @@ const tileCva = cva(
   {
     variants: {
       state: {
-        'enabled':           'bg-bg-white border-input-border-enabled hover:border-border-warning',
-        'selected':          'bg-bg-secondary border-border-warning',
+        'enabled':           'bg-bg-primary border-input-border-enabled hover:border-border-warning',
+        'selected':          'bg-bg-brand-secondary-light border-border-warning',
         'disabled':          'bg-input-bg-disabled border-input-border-disabled cursor-not-allowed pointer-events-none',
         'disabled-selected': 'bg-input-bg-disabled border-input-border-disabled cursor-not-allowed pointer-events-none',
       },

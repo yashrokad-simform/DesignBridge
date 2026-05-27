@@ -6,10 +6,11 @@ import { ToggleButton } from '@/components/ui/main_components/ToggleButton';
 import { Tooltip } from '@/components/ui/main_components/Tooltip';
 import { Button } from '@/components/ui/main_components/Button';
 import { Input } from '@/components/ui/main_components/Input';
+import { Dropdown } from '@/components/ui/main_components/Dropdown';
 import { ArrowUpIcon } from '@/assets/icons/ArrowUpIcon';
 import { ArrowDownIcon } from '@/assets/icons/ArrowDownIcon';
-import { ArrowLeftIcon } from '@/assets/icons/ArrowLeftIcon';
-import { ArrowRightIcon } from '@/assets/icons/ArrowRightIcon';
+import { ChevronLeftIcon } from '@/assets/icons/ChevronLeftIcon';
+import { ChevronRightIcon } from '@/assets/icons/ChevronRightIcon';
 import { EditIcon } from '@/assets/icons/EditIcon';
 import { TrashIcon } from '@/assets/icons/TrashIcon';
 import { DotsVerticalIcon } from '@/assets/icons/DotsVerticalIcon';
@@ -57,7 +58,7 @@ export function TableHeaderCell({
       className={cn(
         'flex items-center gap-3 px-5',
         height ? '' : 'py-2.5',
-        'bg-bg-gray-light border-b border-border-gray-light font-inter',
+        'bg-bg-secondary border-b border-border-primary font-inter',
         className,
       )}
       style={height ? { height: `${height}px` } : undefined}
@@ -84,18 +85,10 @@ export function TableHeaderCell({
             className="flex items-center p-0 bg-transparent border-0 cursor-pointer"
             aria-label={`Sort by ${label}`}
           >
-            {sortDirection === null && (
-              <div className="flex flex-col items-center gap-[1px] opacity-50">
-                <ArrowUpIcon aria-hidden="true" className="size-2.5 text-text-secondary" />
-                <ArrowDownIcon aria-hidden="true" className="size-2.5 text-text-secondary" />
-              </div>
-            )}
-            {sortDirection === 'asc' && (
-              <ArrowUpIcon aria-hidden="true" className="size-3.5 text-text-brand" />
-            )}
-            {sortDirection === 'desc' && (
-              <ArrowDownIcon aria-hidden="true" className="size-3.5 text-text-brand" />
-            )}
+            {sortDirection === 'asc'
+              ? <ArrowUpIcon   aria-hidden="true" className="size-3.5 text-text-brand" />
+              : <ArrowDownIcon aria-hidden="true" className={cn('size-3.5', sortDirection === 'desc' ? 'text-text-brand' : 'text-text-secondary opacity-60')} />
+            }
           </button>
         )}
       </div>
@@ -121,6 +114,8 @@ export interface TableCellProps {
   avatar?: boolean;
   avatarSrc?: string;
   checkbox?: boolean;
+  checkboxChecked?: boolean;
+  onCheckboxChange?: (checked: boolean) => void;
   /* action */
   edit?: boolean;
   button1?: boolean;
@@ -138,7 +133,7 @@ export interface TableCellProps {
   className?: string;
 }
 
-const BASE_CELL = 'flex px-5 py-0 bg-bg-white border-b border-border-gray-light font-inter';
+const BASE_CELL = 'flex px-5 py-0 bg-bg-primary border-b border-border-primary font-inter';
 const DEFAULT_ROW_HEIGHT = 60;
 
 export function TableCell({
@@ -146,6 +141,8 @@ export function TableCell({
   avatar = true,
   avatarSrc,
   checkbox = true,
+  checkboxChecked,
+  onCheckboxChange,
   edit = true,
   button1 = true,
   button2 = true,
@@ -172,9 +169,9 @@ export function TableCell({
   if (type === 'default') {
     return (
       <div className={cn(BASE_CELL, 'items-center gap-3', className)} style={{ height: `${cellHeight}px` }}>
-        {checkbox && <div className="flex-shrink-0"><Checkbox /></div>}
+        {checkbox && <div className="flex-shrink-0 flex items-center justify-center"><Checkbox checked={checkboxChecked} onChange={onCheckboxChange} /></div>}
         {avatar && (
-          <div className="size-9 rounded-full overflow-hidden flex-shrink-0 bg-bg-gray-light flex items-center justify-center">
+          <div className="size-9 rounded-full overflow-hidden flex-shrink-0 bg-bg-secondary flex items-center justify-center">
             {avatarSrc
               ? <img src={avatarSrc} alt="" className="size-9 object-cover" />
               : <span className="text-xs font-medium text-text-secondary">AV</span>
@@ -190,19 +187,19 @@ export function TableCell({
     return (
       <div className={cn(BASE_CELL, 'items-center gap-3', className)} style={{ height: `${cellHeight}px` }}>
         {edit && (
-          <Button variant="bordered" size="sm" aria-label="Edit">
+          <Button variant="icon-secondary" size="sm" aria-label="Edit">
             <EditIcon aria-hidden="true" className="size-4" />
           </Button>
         )}
         {button1 && <Button variant="bordered" size="sm">Button</Button>}
         {button2 && <Button variant="bordered" size="sm">Button</Button>}
         {showDelete && (
-          <Button variant="bordered" size="sm" aria-label="Delete">
+          <Button variant="icon-secondary" size="sm" aria-label="Delete">
             <TrashIcon aria-hidden="true" className="size-4" />
           </Button>
         )}
         {more && (
-          <Button variant="bordered" size="sm" aria-label="More options">
+          <Button variant="icon-secondary" size="sm" aria-label="More options">
             <DotsVerticalIcon aria-hidden="true" className="size-4" />
           </Button>
         )}
@@ -282,11 +279,11 @@ function PaginationButton({ variant = 'page', label, onClick, disabled }: Pagina
   const base = 'size-8.5 rounded-full overflow-hidden flex-shrink-0 flex items-center justify-center';
 
   const variantCls = {
-    page:     'bg-bg-white',
+    page:     'bg-bg-primary',
     active:   'bg-bg-brand',
-    ellipsis: 'bg-bg-white',
-    prev:     'bg-bg-white border border-border-gray-light',
-    next:     'bg-bg-white border border-border-gray-light',
+    ellipsis: 'bg-bg-primary',
+    prev:     'bg-bg-primary border border-border-primary',
+    next:     'bg-bg-primary border border-border-primary',
   }[variant];
 
   const isDisabled = disabled || variant === 'ellipsis';
@@ -303,11 +300,11 @@ function PaginationButton({ variant = 'page', label, onClick, disabled }: Pagina
         base,
         variantCls,
         isDisabled && variant !== 'active' && 'opacity-40 pointer-events-none',
-        !isDisabled && variant !== 'active' && 'cursor-pointer hover:bg-bg-gray-light',
+        !isDisabled && variant !== 'active' && 'cursor-pointer hover:bg-bg-secondary',
       )}
     >
-      {variant === 'prev' && <ArrowLeftIcon aria-hidden="true" className="size-5" />}
-      {variant === 'next' && <ArrowRightIcon aria-hidden="true" className="size-5" />}
+      {variant === 'prev' && <ChevronLeftIcon aria-hidden="true" className="size-4" />}
+      {variant === 'next' && <ChevronRightIcon aria-hidden="true" className="size-4" />}
       {variant === 'ellipsis' && <DotsHorizontalIcon aria-hidden="true" className="size-4 text-text-secondary" />}
       {(variant === 'page' || variant === 'active') && (
         <span className={cn('text-sm font-medium leading-4.5 text-center whitespace-nowrap', variant === 'active' ? 'text-text-white' : 'text-text-primary')}>
@@ -363,7 +360,7 @@ export function Pagination({
   let ellipsisCount = 0;
 
   return (
-    <div className={cn('flex items-center justify-center gap-6 px-5 py-3 bg-bg-white border-t border-border-gray-light w-full font-inter', className)}>
+    <div className={cn('flex items-center justify-center gap-6 px-5 py-3 bg-bg-primary border-t border-border-primary w-full font-inter', className)}>
       <div className="flex flex-1 items-center gap-1 min-w-0 whitespace-nowrap text-sm leading-4.5">
         <span className="font-medium text-text-primary">Total Rows:</span>
         <span className="font-semibold text-text-primary">{total}</span>
@@ -372,17 +369,15 @@ export function Pagination({
       {showRowsPerPage && (
         <div className="flex items-center gap-2 flex-shrink-0">
           <span className="text-sm font-medium leading-4.5 text-text-primary whitespace-nowrap">Rows per page</span>
-          <div className="flex items-center gap-2 px-3 py-2 w-20 bg-bg-white border border-border-gray-light rounded-lg overflow-hidden shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)]">
-            <select
-              value={pageSize}
-              onChange={e => onPageSizeChange?.(Number(e.target.value))}
-              className="flex-1 text-sm font-medium leading-4.5 text-text-primary min-w-0 bg-transparent border-0 outline-none appearance-none cursor-pointer"
-            >
-              {PAGE_SIZE_OPTIONS.map(s => (
-                <option key={s} value={s}>{s}</option>
-              ))}
-            </select>
-            <ArrowDownIcon aria-hidden="true" className="size-5 flex-shrink-0 text-text-secondary pointer-events-none" />
+          <div className="w-20">
+            <Dropdown
+              options={PAGE_SIZE_OPTIONS.map(s => ({ label: String(s), value: String(s) }))}
+              value={String(pageSize)}
+              onChange={v => onPageSizeChange?.(Number(v))}
+              cornerRadius="8px"
+              padding="12px"
+              height={36}
+            />
           </div>
         </div>
       )}

@@ -66,7 +66,7 @@ const PX_PREVIEW: Record<string, string> = {
 };
 
 /* ── buildVariants ──────────────────────────────────────── */
-const SEMANTIC: BadgeColor[] = ['primary','secondary','success','warning','critical','gray','black'];
+const SEMANTIC: BadgeColor[] = ['primary','secondary','success','warning','critical','gray'];
 const EXTENDED: BadgeColor[] = ['cyan','indigo','purple','fuchsia','rose','teal'];
 
 function buildVariants(vals: InputValues): VariantGroup[] {

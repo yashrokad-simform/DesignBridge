@@ -34,10 +34,10 @@ Two components sharing a single `ToggleSwitch` sub-component. `ToggleButton` pai
 
 | State | Switch position | Track bg | Thumb asset |
 |---|---|---|---|
-| `enabled` | Off (left) | `bg-bg-primary` | White circle |
+| `enabled` | Off (left) | `bg-bg-brand-light` | White circle |
 | `active` | On (right) | `bg-bg-brand-secondary` | White circle |
-| `disabled` | Off (left) | `bg-bg-gray-light` | Gray circle |
-| `active-disabled` | On (right) | `bg-bg-gray-light` | Gray circle |
+| `disabled` | Off (left) | `bg-bg-secondary` | Gray circle |
+| `active-disabled` | On (right) | `bg-bg-secondary` | Gray circle |
 
 > **Disabled text rule:** All text in disabled states uses `text-input-text-disabled`. Do NOT use opacity to create the disabled appearance.
 
@@ -71,10 +71,10 @@ relative w-10 h-[22px] rounded-full flex-shrink-0 transition-colors
 
 | State | Track bg |
 |---|---|
-| `enabled` | `bg-bg-primary` |
+| `enabled` | `bg-bg-brand-light` |
 | `active` | `bg-bg-brand-secondary` |
-| `disabled` | `bg-bg-gray-light` |
-| `active-disabled` | `bg-bg-gray-light` |
+| `disabled` | `bg-bg-secondary` |
+| `active-disabled` | `bg-bg-secondary` |
 
 ---
 
@@ -243,9 +243,9 @@ text-xs font-medium leading-4 w-full
 
 | Token | Tailwind Class | Used For |
 |---|---|---|
-| `--color-bg-primary` | `bg-bg-primary` | Track bg (enabled) |
+| `--color-bg-brand-light` | `bg-bg-brand-light` | Track bg (enabled) |
 | `--color-bg-brand-secondary` | `bg-bg-brand-secondary` | Track bg (active) |
-| `--color-bg-gray-light` | `bg-bg-gray-light` | Track bg (disabled + active-disabled) |
+| `--color-bg-secondary` | `bg-bg-secondary` | Track bg (disabled + active-disabled) |
 | `--color-text-primary` | `text-text-primary` | Label / title (enabled + active) |
 | `--color-text-secondary` | `text-text-secondary` | Caption (enabled + active) |
 | `--color-input-text-disabled` | `text-input-text-disabled` | All text (disabled + active-disabled) |

@@ -8,7 +8,7 @@ import { TrashIcon } from '@/assets/icons/TrashIcon';
 export type DocumentTileState = 'view' | 'uploading' | 'uploaded';
 
 const containerVariants = cva(
-  'flex gap-3 p-3 rounded-xl w-full bg-bg-white border border-border-gray-light font-inter',
+  'flex gap-3 p-3 rounded-xl w-full bg-bg-primary border border-border-primary font-inter',
   {
     variants: {
       state: {
@@ -90,7 +90,7 @@ export function DocumentTile({
             <button
               type="button"
               onClick={onDelete}
-              className="h-9 p-2.5 rounded-xl bg-btn-bg-bordered border border-border-gray-light flex-shrink-0 flex items-center justify-center"
+              className="h-9 p-2.5 rounded-xl bg-btn-bg-bordered border border-border-primary flex-shrink-0 flex items-center justify-center"
               aria-label="Delete file"
             >
               <TrashIcon className="size-4" aria-hidden="true" />
@@ -98,7 +98,7 @@ export function DocumentTile({
           </div>
           <div className="flex items-center gap-3 w-full">
             <div className="flex-1 min-w-0 h-2 relative rounded-full">
-              <div className="absolute inset-0 rounded-full bg-bg-primary" />
+              <div className="absolute inset-0 rounded-full bg-bg-brand-light" />
               <div
                 className="absolute left-0 top-0 h-full rounded-full bg-bg-brand"
                 style={{ width: `${progress}%` }}
@@ -131,7 +131,7 @@ export function DocumentTile({
           <button
             type="button"
             onClick={onDownload}
-            className="h-9 p-2.5 rounded-xl bg-btn-bg-bordered border border-border-gray-light flex items-center justify-center"
+            className="h-9 p-2.5 rounded-xl bg-btn-bg-bordered border border-border-primary flex items-center justify-center"
             aria-label="Download file"
           >
             <DocumentDownloadIcon className="size-4" aria-hidden="true" />
@@ -141,7 +141,7 @@ export function DocumentTile({
           <button
             type="button"
             onClick={onDelete}
-            className="h-9 p-2.5 rounded-xl bg-btn-bg-bordered border border-border-gray-light flex items-center justify-center"
+            className="h-9 p-2.5 rounded-xl bg-btn-bg-bordered border border-border-primary flex items-center justify-center"
             aria-label="Delete file"
           >
             <TrashIcon className="size-4" aria-hidden="true" />

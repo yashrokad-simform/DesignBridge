@@ -5,7 +5,7 @@ import ComponentPageLayout, {
   type InputValues,
   type VariantGroup,
 } from '../ComponentPageLayout';
-import toggleMd from './toggleButton-instruction.md?raw';
+import toggleMd from '../md_files/toggleButton-instruction.md?raw';
 
 const INPUT_CONFIG: InputConfig[] = [
   { key: 'div0', label: 'Options', type: 'divider' },

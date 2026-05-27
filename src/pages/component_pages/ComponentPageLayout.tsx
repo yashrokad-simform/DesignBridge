@@ -37,8 +37,8 @@ export default function ComponentPageLayout({
   transformMarkdown,
 }: ComponentPageLayoutProps) {
   const [values, setValues] = useState<InputValues>({ ...defaultInputValues });
-  const [copyLabel, setCopyLabel] = useState('Copy MD File');
-  const [drawerCopyLabel, setDrawerCopyLabel] = useState('Copy MD File');
+  const [copyLabel, setCopyLabel] = useState('Copy Instruction');
+  const [drawerCopyLabel, setDrawerCopyLabel] = useState('Copy Instruction');
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const copyTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -64,7 +64,7 @@ export default function ComponentPageLayout({
     navigator.clipboard.writeText(liveMd).then(() => {
       setCopyLabel('Copied!');
       if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
-      copyTimerRef.current = setTimeout(() => setCopyLabel('Copy MD File'), 1800);
+      copyTimerRef.current = setTimeout(() => setCopyLabel('Copy Instruction'), 1800);
     }).catch(() => {});
   }, [liveMd]);
 
@@ -72,7 +72,7 @@ export default function ComponentPageLayout({
     navigator.clipboard.writeText(liveMd).then(() => {
       setDrawerCopyLabel('Copied!');
       if (drawerCopyTimerRef.current) clearTimeout(drawerCopyTimerRef.current);
-      drawerCopyTimerRef.current = setTimeout(() => setDrawerCopyLabel('Copy MD File'), 1800);
+      drawerCopyTimerRef.current = setTimeout(() => setDrawerCopyLabel('Copy Instruction'), 1800);
     }).catch(() => {});
   }, [liveMd]);
 
@@ -103,7 +103,7 @@ export default function ComponentPageLayout({
                 <path d="M1 8s2.5-5 7-5 7 5 7 5-2.5 5-7 5-7-5-7-5Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/>
                 <circle cx="8" cy="8" r="2" stroke="currentColor" strokeWidth="1.4"/>
               </svg>
-              Preview File
+              Preview
             </button>
             <button className="cp-copy-btn" onClick={handleCopy}>
               <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -146,7 +146,7 @@ export default function ComponentPageLayout({
       )}
       <div className={`cp-drawer${drawerOpen ? ' cp-drawer--open' : ''}`}>
         <div className="cp-drawer-hd">
-          <span className="cp-drawer-title">Preview File</span>
+          <span className="cp-drawer-title">Preview</span>
           <div className="cp-drawer-actions">
             <button className="cp-copy-btn" onClick={handleDrawerCopy}>
               <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none">

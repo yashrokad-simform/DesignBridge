@@ -80,10 +80,7 @@ export default function VariantSection({ title = 'Variants', groups }: VariantSe
       <div className="cp-variant-bd">
         {groups.map(group => (
           <div key={group.id} className={`cp-vg${group.noGroupDivider ? ' cp-vg--no-divider' : ''}`}>
-            <div className={`cp-vg-header${group.hideDivider ? ' cp-vg-header--no-border' : ''}`}>
-              {group.dotColor && (
-                <span className="cp-vg-dot" style={{ background: group.dotColor }} />
-              )}
+            <div className="cp-vg-header cp-vg-header--no-border">
               <span className="cp-vg-lbl">{group.label}</span>
             </div>
 

@@ -235,7 +235,7 @@ export function Dropdown({
               <Badge
                 key={v}
                 variant="tertiary"
-                color="black"
+                color="gray"
                 label={opt.label}
                 showSuffix
                 onRemove={() => removeOption(v)}
@@ -270,7 +270,7 @@ export function Dropdown({
                 key={opt.value}
                 className={cn(
                   'flex items-center h-10 px-3 gap-2 cursor-pointer transition-colors',
-                  isSelected ? 'bg-bg-primary' : 'bg-input-bg-primary hover:bg-bg-gray-light',
+                  isSelected ? 'bg-bg-brand-light' : 'bg-input-bg-primary hover:bg-bg-secondary',
                 )}
                 onClick={() => selectOption(opt.value)}
               >

@@ -83,7 +83,7 @@ interface NavProfileData {
 ### Outer Wrapper
 
 ```
-relative bg-bg-white flex items-center h-full
+relative bg-bg-primary flex items-center h-full
 ```
 
 ### Sidebar Panel

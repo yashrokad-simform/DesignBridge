@@ -4,14 +4,10 @@ import {
   TableCell,
   Pagination,
 } from '../../../components/ui/main_components/Table';
-import { Checkbox }       from '../../../components/ui/main_components/Checkbox';
 import { Button }         from '../../../components/ui/main_components/Button';
-import { Badge }          from '../../../components/ui/main_components/Badge';
 import { ToggleButton }   from '../../../components/ui/main_components/ToggleButton';
 import { EditIcon }       from '../../../assets/icons/EditIcon';
 import { TrashIcon }      from '../../../assets/icons/TrashIcon';
-import { ArrowUpIcon }    from '../../../assets/icons/ArrowUpIcon';
-import { ArrowDownIcon }  from '../../../assets/icons/ArrowDownIcon';
 import ComponentPageLayout, {
   type InputConfig,
   type InputValues,
@@ -22,10 +18,19 @@ import { cn } from '../../../lib/utils';
 
 /* ── Controls ────────────────────────────────────────────── */
 
+const ROW_VARIANT_TOGGLES: { key: string; label: string; type: 'default' | 'two-line' | 'status' | 'toggle' | 'tooltip' | 'action' | 'edit-cell' }[] = [
+  { key: 'row_default',  label: 'Default',   type: 'default'   },
+  { key: 'row_twoLine',  label: 'Two Line',  type: 'two-line'  },
+  { key: 'row_status',   label: 'Status',    type: 'status'    },
+  { key: 'row_toggle',   label: 'Toggle',    type: 'toggle'    },
+  { key: 'row_tooltip',  label: 'Tooltip',   type: 'tooltip'   },
+  { key: 'row_action',   label: 'Action',    type: 'action'    },
+  { key: 'row_editCell', label: 'Edit Cell', type: 'edit-cell' },
+];
+
 const INPUT_CONFIG: InputConfig[] = [
-  { key: 'div0', label: 'Appearance', type: 'divider' },
-  { key: 'headerHeight', label: 'Header Height (px)', type: 'number', min: 36, max: 64, step: 2 },
-  { key: 'rowHeight',    label: 'Row Height (px)',    type: 'number', min: 48, max: 88, step: 4 },
+  { key: 'div0', label: 'Row Variants', type: 'divider' },
+  ...ROW_VARIANT_TOGGLES.map(r => ({ key: r.key, label: r.label, type: 'toggle' as const })),
   { key: 'div1', label: 'Pagination', type: 'divider' },
   { key: 'showRowsPerPage', label: 'Rows per Page', type: 'toggle' },
 ];
@@ -34,6 +39,13 @@ const DEFAULT_VALUES: InputValues = {
   headerHeight:    40,
   rowHeight:       60,
   showRowsPerPage: true,
+  row_default:  true,
+  row_twoLine:  true,
+  row_status:   true,
+  row_toggle:   true,
+  row_tooltip:  true,
+  row_action:   true,
+  row_editCell: true,
 };
 
 /* ── Showcase data ───────────────────────────────────────── */
@@ -44,9 +56,6 @@ const VENDOR_ROWS = [
   { id: 3, vendor: 'BlueWave Shipping',    contact: 'Priya Sharma',   email: 'priya.s@bluewaveships.com',  active: false },
   { id: 4, vendor: 'NorthStar Carriers',   contact: 'David Torres',   email: 'd.torres@northstar.net',     active: true  },
 ];
-
-const CELL_CLS = 'flex px-5 py-0 bg-bg-white font-inter items-center';
-const HEADER_CLS = 'flex items-center bg-bg-gray-light font-inter';
 
 /* ── Shared header strip ─────────────────────────────────── */
 
@@ -59,24 +68,32 @@ function HeaderStrip({
   withSort: boolean;
   height: number;
 }) {
-  const [sortDir, setSortDir] = useState<'asc' | 'desc' | null>(null);
-
-  function cycleSortDirection() {
-    setSortDir(d => d === null ? 'asc' : d === 'asc' ? 'desc' : null);
-  }
+  const [vendorSort, setVendorSort] = useState<'asc' | 'desc' | null>(null);
+  const [contactSort, setContactSort] = useState<'asc' | 'desc' | null>(null);
+  const [checked, setChecked] = useState(false);
 
   return (
-    <div className="flex rounded-xl overflow-hidden border border-border-gray-light">
-      {withCheckbox && (
-        <div className="flex-shrink-0 w-14">
-          <TableHeaderCell label="" showCheckbox height={height} />
-        </div>
-      )}
+    <div className="flex overflow-hidden">
       <div className="flex-1 min-w-[160px]">
-        <TableHeaderCell label="Vendor Name" sort={withSort} sortDirection={sortDir} onSort={withSort ? setSortDir : undefined} height={height} />
+        <TableHeaderCell
+          label="Vendor Name"
+          showCheckbox={withCheckbox}
+          checkboxChecked={checked}
+          onCheckboxChange={setChecked}
+          sort={withSort}
+          sortDirection={vendorSort}
+          onSort={withSort ? setVendorSort : undefined}
+          height={height}
+        />
       </div>
       <div className="w-[150px] flex-shrink-0">
-        <TableHeaderCell label="Contact Person" sort={withSort} height={height} />
+        <TableHeaderCell
+          label="Contact Person"
+          sort={withSort}
+          sortDirection={contactSort}
+          onSort={withSort ? setContactSort : undefined}
+          height={height}
+        />
       </div>
       <div className="w-[130px] flex-shrink-0">
         <TableHeaderCell label="Status" height={height} />
@@ -88,48 +105,10 @@ function HeaderStrip({
   );
 }
 
-/* ── Row variants strip ──────────────────────────────────── */
-
-const ROW_TYPES = [
-  { type: 'default'   as const, label: 'Default'   },
-  { type: 'two-line'  as const, label: 'Two Line'  },
-  { type: 'status'    as const, label: 'Status'    },
-  { type: 'toggle'    as const, label: 'Toggle'    },
-  { type: 'tooltip'   as const, label: 'Tooltip'   },
-  { type: 'action'    as const, label: 'Action'    },
-  { type: 'edit-cell' as const, label: 'Edit Cell' },
-];
-
-function RowVariantsDemo({ height }: { height: number }) {
-  return (
-    <div className="w-full rounded-xl overflow-hidden border border-border-gray-light">
-      {/* Header */}
-      <div className="flex">
-        {ROW_TYPES.map(({ label }) => (
-          <div key={label} className="flex-1 min-w-0">
-            <TableHeaderCell label={label} height={height} />
-          </div>
-        ))}
-      </div>
-      {/* One demo row */}
-      <div className="flex">
-        {ROW_TYPES.map(({ type }) => (
-          <div key={type} className="flex-1 min-w-0">
-            <TableCell
-              type={type}
-              height={height}
-              primaryText="Sample"
-              secondaryText="Subtitle"
-              badges={[{ label: 'Active', variant: 'filled', color: 'success' }]}
-            />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 /* ── Full showcase table ─────────────────────────────────── */
+
+const COL_CELL = 'flex items-center px-5 bg-bg-primary font-inter';
+const BORDER_B = 'border-b border-border-primary';
 
 function ShowcaseTable({ headerHeight, rowHeight, showRowsPerPage }: { headerHeight: number; rowHeight: number; showRowsPerPage: boolean }) {
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
@@ -144,23 +123,16 @@ function ShowcaseTable({ headerHeight, rowHeight, showRowsPerPage }: { headerHei
   const someSelected = selectedIds.size > 0 && !allSelected;
 
   function toggleHeader() {
-    if (allSelected) {
-      setSelectedIds(new Set());
-    } else {
-      setSelectedIds(new Set(VENDOR_ROWS.map(r => r.id)));
-    }
+    if (allSelected) setSelectedIds(new Set());
+    else setSelectedIds(new Set(VENDOR_ROWS.map(r => r.id)));
   }
 
-  function toggleRow(id: number) {
+  function toggleRow(id: number, checked: boolean) {
     setSelectedIds(prev => {
       const next = new Set(prev);
-      if (next.has(id)) next.delete(id); else next.add(id);
+      if (checked) next.add(id); else next.delete(id);
       return next;
     });
-  }
-
-  function cycleSortDir() {
-    setSortDir(d => d === null ? 'asc' : d === 'asc' ? 'desc' : null);
   }
 
   const sortedRows = useMemo(() => {
@@ -171,108 +143,81 @@ function ShowcaseTable({ headerHeight, rowHeight, showRowsPerPage }: { headerHei
     });
   }, [sortDir]);
 
-  const BORDER_B = 'border-b border-border-gray-light';
-
   return (
-    <div className="w-full rounded-xl overflow-hidden border border-border-gray-light">
+    <div className="w-full rounded-xl overflow-hidden border border-border-primary">
       <div className="overflow-x-auto">
         <div className="min-w-[860px]">
           {/* Header */}
-          <div className={cn(HEADER_CLS, BORDER_B)} style={{ height: `${headerHeight}px` }}>
-            {/* Checkbox col */}
-            <div className="flex-shrink-0 w-14 flex items-center justify-center px-4">
-              <Checkbox
-                checked={allSelected}
-                indeterminate={someSelected}
-                onChange={toggleHeader}
+          <div className="flex">
+            <div className="flex-1 min-w-[200px]">
+              <TableHeaderCell
+                showCheckbox
+                checkboxChecked={allSelected}
+                checkboxIndeterminate={someSelected}
+                onCheckboxChange={toggleHeader}
+                label="Vendor Name"
+                sort
+                sortDirection={sortDir}
+                onSort={setSortDir}
+                height={headerHeight}
               />
             </div>
-            {/* Vendor Name */}
-            <div className="flex-1 min-w-[200px] flex items-center gap-1.5 px-4">
-              <span className="text-xs font-medium text-text-secondary">Vendor Name</span>
-              <button
-                type="button"
-                onClick={cycleSortDir}
-                className="p-0 bg-transparent border-0 cursor-pointer"
-                aria-label="Sort by Vendor Name"
-              >
-                {sortDir === null && (
-                  <div className="flex flex-col items-center gap-[1px] opacity-50">
-                    <ArrowUpIcon   aria-hidden="true" className="size-2.5 text-text-secondary" />
-                    <ArrowDownIcon aria-hidden="true" className="size-2.5 text-text-secondary" />
-                  </div>
-                )}
-                {sortDir === 'asc'  && <ArrowUpIcon   aria-hidden="true" className="size-3.5 text-text-brand" />}
-                {sortDir === 'desc' && <ArrowDownIcon aria-hidden="true" className="size-3.5 text-text-brand" />}
-              </button>
+            <div className="w-[160px] flex-shrink-0">
+              <TableHeaderCell label="Contact Person" height={headerHeight} />
             </div>
-            {/* Contact Person */}
-            <div className="flex-shrink-0 w-[160px] flex items-center px-4">
-              <span className="text-xs font-medium text-text-secondary">Contact Person</span>
+            <div className="w-[220px] flex-shrink-0">
+              <TableHeaderCell label="Contact Email" height={headerHeight} />
             </div>
-            {/* Contact Email */}
-            <div className="flex-shrink-0 w-[220px] flex items-center px-4">
-              <span className="text-xs font-medium text-text-secondary">Contact Email</span>
+            <div className="w-[100px] flex-shrink-0">
+              <TableHeaderCell label="Status" height={headerHeight} />
             </div>
-            {/* Status */}
-            <div className="flex-shrink-0 w-[100px] flex items-center px-4">
-              <span className="text-xs font-medium text-text-secondary">Status</span>
-            </div>
-            {/* Actions */}
-            <div className="flex-shrink-0 w-[110px] flex items-center px-4">
-              <span className="text-xs font-medium text-text-secondary">Actions</span>
+            <div className="w-[120px] flex-shrink-0">
+              <TableHeaderCell label="Actions" height={headerHeight} />
             </div>
           </div>
 
           {/* Rows */}
           {sortedRows.map((row, idx) => {
             const isLast = idx === sortedRows.length - 1;
+            const borderCls = !isLast ? BORDER_B : '';
             return (
-              <div
-                key={row.id}
-                className={cn(CELL_CLS, !isLast && BORDER_B)}
-                style={{ height: `${rowHeight}px` }}
-              >
-                {/* Checkbox */}
-                <div className="flex-shrink-0 w-14 flex items-center justify-center px-4">
-                  <Checkbox
-                    checked={selectedIds.has(row.id)}
-                    onChange={checked => {
-                      if (checked) {
-                        setSelectedIds(prev => new Set([...prev, row.id]));
-                      } else {
-                        setSelectedIds(prev => { const n = new Set(prev); n.delete(row.id); return n; });
-                      }
-                    }}
+              <div key={row.id} className="flex bg-bg-primary font-inter">
+                {/* Vendor Name — checkbox built into TableCell */}
+                <div className="flex-1 min-w-[200px]">
+                  <TableCell
+                    type="default"
+                    checkbox
+                    checkboxChecked={selectedIds.has(row.id)}
+                    onCheckboxChange={(checked) => toggleRow(row.id, checked)}
+                    avatar={false}
+                    primaryText={row.vendor}
+                    height={rowHeight}
+                    className={isLast ? 'border-b-0' : ''}
                   />
                 </div>
-                {/* Vendor Name */}
-                <div className="flex-1 min-w-[200px] flex items-center px-4">
-                  <span className="text-sm font-medium text-text-primary truncate">{row.vendor}</span>
-                </div>
-                {/* Contact Person */}
-                <div className="flex-shrink-0 w-[160px] flex items-center px-4">
+                <div className={cn(COL_CELL, 'w-[160px] flex-shrink-0', borderCls)} style={{ height: `${rowHeight}px` }}>
                   <span className="text-sm font-medium text-text-primary truncate">{row.contact}</span>
                 </div>
-                {/* Contact Email */}
-                <div className="flex-shrink-0 w-[220px] flex items-center px-4">
+                <div className={cn(COL_CELL, 'w-[220px] flex-shrink-0', borderCls)} style={{ height: `${rowHeight}px` }}>
                   <span className="text-sm font-medium text-text-secondary truncate">{row.email}</span>
                 </div>
-                {/* Status toggle */}
-                <div className="flex-shrink-0 w-[100px] flex items-center px-4">
+                <div className={cn(COL_CELL, 'w-[100px] flex-shrink-0', borderCls)} style={{ height: `${rowHeight}px` }}>
                   <ToggleButton
                     checked={activeRows[row.id]}
                     onChange={checked => setActiveRows(prev => ({ ...prev, [row.id]: checked }))}
                   />
                 </div>
-                {/* Actions */}
-                <div className="flex-shrink-0 w-[110px] flex items-center gap-2 px-4">
-                  <Button variant="icon-secondary" size="sm" aria-label="Edit">
-                    <EditIcon aria-hidden="true" className="size-4" />
-                  </Button>
-                  <Button variant="critical-bordered" size="sm" aria-label="Delete">
-                    <TrashIcon aria-hidden="true" className="size-4" />
-                  </Button>
+                <div className={cn('flex items-center gap-2 px-5 w-[120px] flex-shrink-0 bg-bg-primary font-inter', borderCls)} style={{ height: `${rowHeight}px` }}>
+                  <div className="flex-shrink-0">
+                    <Button variant="icon-secondary" size="sm" aria-label="Edit">
+                      <EditIcon aria-hidden="true" className="size-4" />
+                    </Button>
+                  </div>
+                  <div className="flex-shrink-0">
+                    <Button variant="icon-secondary" size="sm" aria-label="Delete">
+                      <TrashIcon aria-hidden="true" className="size-4 text-btn-text-critical" />
+                    </Button>
+                  </div>
                 </div>
               </div>
             );
@@ -300,6 +245,16 @@ function buildVariants(vals: InputValues): VariantGroup[] {
   const rowHeight        = (vals.rowHeight        as number)  ?? 60;
   const showRowsPerPage  = (vals.showRowsPerPage  as boolean) ?? true;
 
+  const rowVariantCells = [
+    { key: 'row_default',  label: 'Default',   node: <TableCell type="default"   primaryText="Sample content" /> },
+    { key: 'row_twoLine',  label: 'Two Line',  node: <TableCell type="two-line"  primaryText="Sample content" secondaryText="Subtitle text" /> },
+    { key: 'row_status',   label: 'Status',    node: <TableCell type="status"    badges={[{ label: 'Active', variant: 'filled', color: 'success' }]} /> },
+    { key: 'row_toggle',   label: 'Toggle',    node: <TableCell type="toggle" /> },
+    { key: 'row_tooltip',  label: 'Tooltip',   node: <TableCell type="tooltip"   primaryText="Sample content" /> },
+    { key: 'row_action',   label: 'Action',    node: <TableCell type="action"    button2={false} /> },
+    { key: 'row_editCell', label: 'Edit Cell', node: <TableCell type="edit-cell" /> },
+  ].filter(c => (vals[c.key] as boolean) !== false).map(({ label, node }) => ({ label, node }));
+
   return [
     /* ── 1. Header Variants ── */
     {
@@ -309,21 +264,9 @@ function buildVariants(vals: InputValues): VariantGroup[] {
       styles: [
         {
           id: 'hv-checkbox-sort',
-          label: 'Checkbox + Sort',
+          label: '',
           accentColor: '#0056b8',
           rows: [{ cells: [{ label: '', node: <div className="w-full"><HeaderStrip withCheckbox withSort height={headerHeight} /></div> }] }],
-        },
-        {
-          id: 'hv-sort',
-          label: 'Sort Only',
-          accentColor: '#0056b8',
-          rows: [{ cells: [{ label: '', node: <div className="w-full"><HeaderStrip withCheckbox={false} withSort height={headerHeight} /></div> }] }],
-        },
-        {
-          id: 'hv-plain',
-          label: 'Plain',
-          accentColor: '#0056b8',
-          rows: [{ cells: [{ label: '', node: <div className="w-full"><HeaderStrip withCheckbox={false} withSort={false} height={headerHeight} /></div> }] }],
         },
       ],
     },
@@ -332,13 +275,14 @@ function buildVariants(vals: InputValues): VariantGroup[] {
     {
       id: 'row-variants',
       label: 'Row',
-      dotColor: '#c65910',
+      dotColor: '',
+      hideDivider: true,
       styles: [
         {
           id: 'rv-all',
-          label: 'All Cell Types',
-          accentColor: '#c65910',
-          rows: [{ cells: [{ label: '', node: <div className="w-full"><RowVariantsDemo height={rowHeight} /></div> }] }],
+          label: '',
+          accentColor: '',
+          rows: [{ cells: rowVariantCells }],
         },
       ],
     },
@@ -351,13 +295,13 @@ function buildVariants(vals: InputValues): VariantGroup[] {
       styles: [
         {
           id: 'pag-demo',
-          label: 'Component',
+          label: '',
           accentColor: '#036821',
           rows: [{
             cells: [{
               label: '',
               node: (
-                <div className="w-full rounded-xl overflow-hidden border border-border-gray-light">
+                <div className="w-full">
                   <PaginationDemo showRowsPerPage={showRowsPerPage} />
                 </div>
               ),
@@ -414,6 +358,65 @@ function resolveTokens(_vals: InputValues): Record<string, string> {
   return {};
 }
 
+function stripSection(src: string, headingPrefix: string): string {
+  const startIdx = src.indexOf(headingPrefix);
+  if (startIdx === -1) return src;
+  const remainder = src.slice(startIdx);
+  // First, look for the next heading of equal or higher level
+  const headingLevel = (headingPrefix.match(/^#+/)?.[0].length) ?? 3;
+  const stopHeadingRegex = new RegExp(`\\n#{1,${headingLevel}} `);
+  const sepRegex = /\n---\n/;
+  const nextStop = remainder.slice(headingPrefix.length).search(stopHeadingRegex);
+  const sepMatch = remainder.slice(headingPrefix.length).search(sepRegex);
+
+  const candidates = [nextStop, sepMatch].filter(n => n !== -1) as number[];
+  let endOffset: number;
+  if (candidates.length === 0) {
+    endOffset = remainder.length;
+  } else {
+    const minStop = Math.min(...candidates);
+    // include the trailing `---\n` separator if that's what we matched first
+    endOffset = headingPrefix.length + minStop + (minStop === sepMatch ? '\n---\n'.length : 1);
+  }
+  return src.slice(0, startIdx) + src.slice(startIdx + endOffset);
+}
+
+function transformMarkdown(raw: string, vals: InputValues): string {
+  let out = raw;
+
+  const disabled = ROW_VARIANT_TOGGLES.filter(r => vals[r.key] === false);
+  const enabledCount = ROW_VARIANT_TOGGLES.length - disabled.length;
+
+  // 1. Strip disabled row-variant subsections inside Part B
+  disabled.forEach(r => {
+    out = stripSection(out, `### \`${r.type}\``);
+  });
+
+  // 2. Strip the layout-variation table row for each disabled variant
+  disabled.forEach(r => {
+    const rowRegex = new RegExp(`^\\| \`${r.type}\` \\|.*$\\n?`, 'm');
+    out = out.replace(rowRegex, '');
+  });
+
+  // 3. Remove the variant from the TableCellType union
+  disabled.forEach(r => {
+    out = out.replace(new RegExp(`'${r.type}'\\s*\\|\\s*`, 'g'), '');
+    out = out.replace(new RegExp(`\\s*\\|\\s*'${r.type}'`, 'g'), '');
+  });
+
+  // 4. Update "7 variants" / "7 types" counters
+  out = out.replace(/(\b)7(\s+(?:variants|types)\b)/g, `$1${enabledCount}$2`);
+
+  // 5. Strip Pagination "Rows Per Page" content if disabled
+  if (vals.showRowsPerPage === false) {
+    out = stripSection(out, '## Rows Per Page Selector');
+    // Drop the inline mention in the Pagination overview line
+    out = out.replace(/,\s*rows-per-page selector \(center-left\)/i, '');
+  }
+
+  return out;
+}
+
 /* ── Page ───────────────────────────────────────────────── */
 
 export default function TablePage() {
@@ -426,6 +429,7 @@ export default function TablePage() {
       markdownContent={tableMd}
       markdownFileName="table"
       resolveTokens={resolveTokens}
+      transformMarkdown={transformMarkdown}
     />
   );
 }

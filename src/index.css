@@ -3,10 +3,6 @@
 
 @theme {
 
-  /* fonts */
-  --font-inter: 'Inter', system-ui, sans-serif;
-  --font-dm-sans: 'DM Sans', system-ui, sans-serif;
-
   /* typography */
   --text-2xs: 10px;
   --text-xs: 12px;
@@ -107,7 +103,7 @@
   --color-fuchsia-dark: #991daf;
   --color-fuchsia-light: #fdf3ff;
   --color-rose-dark: #e31b54;
-  --color-rose-light: #fff1f3;
+  --color-rose-light: #fff1f5;
   --color-teal-dark: #0e9384;
   --color-teal-light: #f0fdf9;
 
@@ -129,17 +125,18 @@
   --color-text-brand-light: var(--color-primary-100);               /* textTextBrandLight */
   --color-text-brand-secondary: var(--color-secondary-500);         /* textTextBrandSecondary */
   --color-text-brand-secondary-light: var(--color-secondary-100);   /* textTextBrandSecondaryLight */
-  --color-text-gray-light: var(--color-gray-400);                   /* textTextGrayLight */
   --color-text-white: var(--color-white);                           /* textTextWhite */
+  --color-text-black: var(--color-black);                           /* textTextBlack */
+  
 
   /* — Background — */
-  --color-bg-primary: var(--color-primary-50);                      /* backgroundBgPrimary */
-  --color-bg-secondary: var(--color-secondary-50);                  /* backgroundBgSecondary */
-  --color-bg-white: var(--color-white);                             /* backgroundBgWhite */
+  --color-bg-brand-light: var(--color-primary-50);                      /* backgroundBgPrimary */
+  --color-bg-brand-secondary-light: var(--color-secondary-50);                  /* backgroundBgSecondary */
+  --color-bg-primary: var(--color-white);                             /* backgroundBgWhite */
   --color-bg-black: var(--color-black);                             /* backgroundBgBlack */
   --color-bg-brand: var(--color-primary-500);                       /* backgroundBgBrand */
   --color-bg-brand-secondary: var(--color-secondary-500);           /* backgroundBgBrandSecondary */
-  --color-bg-gray-light: var(--color-gray-50);                      /* backgroundBgGrayLight */
+  --color-bg-secondary: var(--color-gray-50);                      /* backgroundBgGrayLight */
   --color-bg-gray-dark: var(--color-gray-300);                      /* backgroundBgGrayDark */
   --color-bg-success: var(--color-success-500);                     /* backgroundBgSuccess */
   --color-bg-success-light: var(--color-success-50);                /* backgroundBgSuccessLight */
@@ -152,7 +149,7 @@
   --color-border-brand: var(--color-primary-500);                   /* borderBorderBrand */
   --color-border-brand-light: var(--color-primary-100);             /* borderBorderBrandLight */
   --color-border-brand-secondary: var(--color-secondary-500);       /* borderBorderSecondary */
-  --color-border-gray-light: var(--color-gray-100);                 /* borderBorderGrayLight */
+  --color-border-primary: var(--color-gray-100);                    /* borderBorderPrimary */
   --color-border-gray-dark: var(--color-gray-300);                  /* borderBorderGrayDark */
   --color-border-success: var(--color-success-500);                 /* borderBorderSuccess */
   --color-border-warning: var(--color-warning-500);                 /* borderBorderWarning */
@@ -175,6 +172,7 @@
   --color-icon-critical: var(--color-critical-500);                 /* iconIconCritical */
   --color-icon-critical-light: var(--color-critical-100);           /* iconIconCriticalLight */
   --color-icon-white: var(--color-white);                           /* iconIconWhite */
+  --color-icon-black: var(--color-black);                           /* iconIconBlack */
 
   /* — Button — */
   --color-btn-text-primary: var(--color-white);                     /* componentButtonBtnTextPrimary */
@@ -250,7 +248,7 @@
     @apply border-border-gray-light;
   }
   body {
-    @apply bg-bg-white text-text-primary;
+    @apply bg-bg-primary text-text-primary;
   }
 }
 

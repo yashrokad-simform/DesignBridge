@@ -61,8 +61,8 @@ box-border relative overflow-hidden transition-colors
 
 | State | Classes |
 |---|---|
-| `enabled` | `bg-bg-white border border-border-gray-dark` |
-| `hover` | `bg-bg-white border border-border-warning` |
+| `enabled` | `bg-bg-primary border border-border-gray-dark` |
+| `hover` | `bg-bg-primary border border-border-warning` |
 | `selected` | `bg-bg-brand-secondary border-0` |
 | `indeterminate` | `border-0` |
 | `disabled` | `bg-input-bg-disabled border border-input-border-disabled` |
@@ -115,7 +115,7 @@ All icons live in `src/assets/icons/`. Do not create a subfolder for checkbox ic
 
 | File | Used For | Placement |
 |---|---|---|
-| `CheckIcon.tsx` | Selected state | `absolute inset-[2.25px]` inside control box · `text-text-white` |
+| `CheckIcon.tsx` | Selected state | `absolute inset-[2.25px]` inside control box · `text-icon-white` |
 | `IndeterminateIcon.tsx` | Indeterminate state | `absolute inset-0` fills full control box · self-contained (includes own bg + dash) |
 
 Import directly from `@/assets/icons/`. Never inline SVG markup inside the Checkbox component.
@@ -126,14 +126,14 @@ Import directly from `@/assets/icons/`. Never inline SVG markup inside the Check
 
 | State | Control Box bg | Control Box border | Icon | Label |
 |---|---|---|---|---|
-| Enabled | `bg-bg-white` | `border-border-gray-dark` | — | `text-text-primary` |
-| Hover | `bg-bg-white` | `border-border-warning` | — | `text-text-primary` |
-| Selected | `bg-bg-brand-secondary` | none | `CheckIcon` (`text-text-white`) | `text-text-primary` |
+| Enabled | `bg-bg-primary` | `border-border-gray-dark` | — | `text-text-primary` |
+| Hover | `bg-bg-primary` | `border-border-warning` | — | `text-text-primary` |
+| Selected | `bg-bg-brand-secondary` | none | `CheckIcon` (`text-icon-white`) | `text-text-primary` |
 | Indeterminate | — | none | `IndeterminateIcon` (self-contained) | `text-text-primary` |
 | Disabled | `bg-input-bg-disabled` | `border-input-border-disabled` | `CheckIcon` if checked (muted) | `text-input-text-disabled` |
 | Disabled Selected | `bg-input-bg-disabled` | `border-input-border-disabled` | `CheckIcon` (`text-bg-gray-dark`) | `text-input-text-disabled` |
 
-> **Disabled + Selected:** Render `CheckIcon` with `text-text-white opacity-60` over the disabled background. Do not swap to a separate asset.
+> **Disabled + Selected:** Render `CheckIcon` with `text-icon-white opacity-60` over the disabled background. Do not swap to a separate asset.
 > **Disabled Selected variant:** Use `state='disabled-selected'` when `disabled={true}` and `checked={true}`. Same background as disabled (`bg-input-bg-disabled`). Renders `CheckIcon` with `text-bg-gray-dark` instead of white. Pointer events and cursor match the standard disabled state.
 
 ---
@@ -209,11 +209,11 @@ cursor-pointer transition-colors
 
 | State | Classes |
 |---|---|
-| `enabled` | `bg-bg-white border-input-border-enabled` |
-| `hover` | `bg-bg-white border-border-warning` |
-| `selected` | `bg-bg-secondary border-border-warning` |
-| `disabled` | `bg-bg-white border-input-border-disabled cursor-not-allowed pointer-events-none` |
-| `disabled-selected` | `bg-bg-white border-input-border-disabled cursor-not-allowed pointer-events-none` |
+| `enabled` | `bg-bg-primary border-input-border-enabled` |
+| `hover` | `bg-bg-primary border-border-warning` |
+| `selected` | `bg-bg-brand-secondary-light border-border-warning` |
+| `disabled` | `bg-bg-primary border-input-border-disabled cursor-not-allowed pointer-events-none` |
+| `disabled-selected` | `bg-bg-primary border-input-border-disabled cursor-not-allowed pointer-events-none` |
 
 > Hover driven by CSS `:hover` on the tile — use `hover:border-border-warning` in the enabled base and conditionally apply `selected` via `checked` prop.
 
@@ -262,11 +262,11 @@ Disabled: `text-input-text-disabled`
 
 | State | Tile bg | Tile border | Title & Caption | Embedded checkbox |
 |---|---|---|---|---|
-| Enabled | `bg-bg-white` | `border-input-border-enabled` | `text-text-primary` / `text-text-secondary` | Enabled state |
-| Hover | `bg-bg-white` | `border-border-warning` | `text-text-primary` / `text-text-secondary` | Hover state (synchronized) |
-| Selected | `bg-bg-secondary` | `border-border-warning` | `text-text-primary` / `text-text-secondary` | Selected state |
-| Disabled | `bg-bg-white` | `border-input-border-disabled` | `text-input-text-disabled` / `text-input-text-disabled` | Disabled state |
-| Disabled Selected | `bg-bg-white` | `border-input-border-disabled` | `text-input-text-disabled` / `text-input-text-disabled` | Disabled Selected state |
+| Enabled | `bg-bg-primary` | `border-input-border-enabled` | `text-text-primary` / `text-text-secondary` | Enabled state |
+| Hover | `bg-bg-primary` | `border-border-warning` | `text-text-primary` / `text-text-secondary` | Hover state (synchronized) |
+| Selected | `bg-bg-brand-secondary-light` | `border-border-warning` | `text-text-primary` / `text-text-secondary` | Selected state |
+| Disabled | `bg-bg-primary` | `border-input-border-disabled` | `text-input-text-disabled` / `text-input-text-disabled` | Disabled state |
+| Disabled Selected | `bg-bg-primary` | `border-input-border-disabled` | `text-input-text-disabled` / `text-input-text-disabled` | Disabled Selected state |
 
 ---
 
@@ -274,9 +274,9 @@ Disabled: `text-input-text-disabled`
 
 | Token | Tailwind Class | Used For |
 |---|---|---|
-| `--color-bg-white` | `bg-bg-white` | Control box + tile bg (enabled/hover) |
+| `--color-bg-primary` | `bg-bg-primary` | Control box + tile bg (enabled/hover) |
 | `--color-bg-brand-secondary` | `bg-bg-brand-secondary` | Control box bg (selected) |
-| `--color-bg-secondary` | `bg-bg-secondary` | Tile bg (selected) |
+| `--color-bg-brand-secondary-light` | `bg-bg-brand-secondary-light` | Tile bg (selected) |
 | `--color-bg-gray-dark` | `text-bg-gray-dark` | CheckIcon color (disabled-selected) |
 | `--color-input-bg-disabled` | `bg-input-bg-disabled` | Control box bg (disabled) |
 | `--color-border-gray-dark` | `border-border-gray-dark` | Control box border (enabled) |

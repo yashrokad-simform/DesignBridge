@@ -63,7 +63,7 @@ A single reusable header cell. The full table header is built by repeating `Tabl
 
 ```txt
 flex items-center gap-3 px-5 py-2.5
-bg-bg-gray-light border-b border-border-gray-light
+bg-bg-secondary border-b border-border-primary
 ```
 
 - Remove `Checkbox` from DOM when `showCheckbox={false}`.
@@ -121,8 +121,8 @@ Clicking a sortable header cycles through three states in order:
 
 | Token | Tailwind Class | Used For |
 |---|---|---|
-| `--color-bg-gray-light` | `bg-bg-gray-light` | Header cell background |
-| `--color-border-gray-light` | `border-border-gray-light` | Bottom border |
+| `--color-bg-secondary` | `bg-bg-secondary` | Header cell background |
+| `--color-border-primary` | `border-border-primary` | Bottom border |
 | `--color-text-secondary` | `text-text-secondary` | Column label text |
 
 ---
@@ -159,7 +159,7 @@ A single reusable row cell supporting 7 variants via a `type` prop. One componen
 
 ```txt
 flex h-15 px-5 py-0
-bg-bg-white border-b border-border-gray-light
+bg-bg-primary border-b border-border-primary
 ```
 
 ### Layout variations by type
@@ -300,8 +300,8 @@ All cell text: `font-medium` (500). Truncation via `truncate` on text elements.
 
 | Token | Tailwind Class | Used For |
 |---|---|---|
-| `--color-bg-white` | `bg-bg-white` | Cell background |
-| `--color-border-gray-light` | `border-border-gray-light` | Cell bottom border |
+| `--color-bg-primary` | `bg-bg-primary` | Cell background |
+| `--color-border-primary` | `border-border-primary` | Cell bottom border |
 | `--color-text-primary` | `text-text-primary` | Primary text |
 | `--color-text-secondary` | `text-text-secondary` | Secondary / two-line label |
 | `--color-btn-bg-bordered` | `bg-btn-bg-bordered` | Action button background |
@@ -335,7 +335,7 @@ A full-width bar placed below the table. Contains: total rows count (left), rows
 
 ```txt
 flex items-center justify-center gap-6 px-5 py-3
-bg-bg-white border-t border-border-gray-light w-full
+bg-bg-primary border-t border-border-primary w-full
 ```
 
 ---
@@ -368,7 +368,7 @@ text-sm font-medium leading-4.5 text-text-primary whitespace-nowrap
 **Input dropdown:**
 ```txt
 flex items-center gap-2 px-3 py-2 w-20
-bg-bg-white border border-border-gray-light rounded-lg
+bg-bg-primary border border-border-primary rounded-lg
 overflow-hidden
 shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)]
 ```
@@ -413,11 +413,11 @@ flex items-center justify-center
 
 | Variant | Classes |
 |---|---|
-| `page` (default) | `bg-bg-white` |
+| `page` (default) | `bg-bg-primary` |
 | `active` (current page) | `bg-bg-brand` |
-| `ellipsis` | `bg-bg-white` |
-| `prev` | `bg-bg-white border border-border-gray-light` |
-| `next` | `bg-bg-white border border-border-gray-light` |
+| `ellipsis` | `bg-bg-primary` |
+| `prev` | `bg-bg-primary border border-border-primary` |
+| `next` | `bg-bg-primary border border-border-primary` |
 
 ### Label / Icon Content
 
@@ -476,4 +476,4 @@ The Pagination component generates the visible page sequence dynamically:
 
 | Token | Tailwind Class | Used For |
 |---|---|---|
-| `--color-bg-white` | `bg-bg-white` | Pagination bar bg + default/prev/next button
+| `--color-bg-primary` | `bg-bg-primary` | Pagination bar bg + default/prev/next button

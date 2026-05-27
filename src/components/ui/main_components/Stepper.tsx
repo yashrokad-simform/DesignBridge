@@ -26,8 +26,8 @@ const stepIconVariants = cva(
   {
     variants: {
       state: {
-        incomplete: 'bg-bg-white border-[1.5px] border-border-gray-light',
-        current:    'bg-bg-secondary border-[1.5px] border-border-brand-secondary',
+        incomplete: 'bg-bg-primary border-[1.5px] border-border-primary',
+        current:    'bg-bg-brand-secondary-light border-[1.5px] border-border-brand-secondary',
         completed:  'bg-bg-success',
       },
       size: {
@@ -47,7 +47,7 @@ function StepIcon({ state, size }: { state: StepState; size: StepSize }) {
         <StepDotIcon
           aria-hidden="true"
           className={cn(
-            'text-border-gray-light',
+            'text-border-primary',
             size === 'regular' ? 'size-2' : 'size-3',
           )}
         />
@@ -80,7 +80,7 @@ function Connector({ state, size }: { state: StepState; size: StepSize }) {
     <div className={cn(
       'w-0.5 rounded-full flex-shrink-0',
       size === 'regular' ? 'h-7' : 'h-16',
-      state === 'completed' ? 'bg-border-success' : 'bg-border-gray-light',
+      state === 'completed' ? 'bg-border-success' : 'bg-border-primary',
     )} />
   );
 }

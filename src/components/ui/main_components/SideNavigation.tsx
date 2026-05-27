@@ -154,7 +154,7 @@ export function SideNav({
   className,
 }: SideNavProps) {
   return (
-    <div className={cn('relative bg-bg-white flex items-center h-full font-inter', className)}>
+    <div className={cn('relative bg-bg-primary flex items-center h-full font-inter', className)}>
 
       {/* Sidebar Panel */}
       <div className={cn(

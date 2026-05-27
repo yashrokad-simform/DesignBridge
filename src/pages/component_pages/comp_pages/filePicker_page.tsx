@@ -219,7 +219,7 @@ function transformMarkdown(raw: string, vals: InputValues): string {
 
   /* Part A — FilePicker CVA base classes block */
   md = md.replace(
-    /(```\nflex flex-col items-center p-3 )(rounded-\S+)(\nbg-bg-white w-full\n```)/,
+    /(```\nflex flex-col items-center p-3 )(rounded-\S+)(\nbg-bg-primary w-full\n```)/,
     (_, pre, _old, post) => `${pre}${radiusCls}${post}`,
   );
 
@@ -231,7 +231,7 @@ function transformMarkdown(raw: string, vals: InputValues): string {
 
   /* Part B — DocumentTile Container classes */
   md = md.replace(
-    /(```\nflex gap-3 p-3 )(rounded-\S+)( w-full\nbg-bg-white border border-border-gray-light\n```)/,
+    /(```\nflex gap-3 p-3 )(rounded-\S+)( w-full\nbg-bg-primary border border-border-primary\n```)/,
     (_, pre, _old, post) => `${pre}${radiusCls}${post}`,
   );
 
@@ -249,7 +249,7 @@ function transformMarkdown(raw: string, vals: InputValues): string {
 
   /* Part B — View State Download button */
   md = md.replace(
-    /(h-9 p-2\.5 )(rounded-\S+)(\nbg-btn-bg-bordered border border-border-gray-light)/,
+    /(h-9 p-2\.5 )(rounded-\S+)(\nbg-btn-bg-bordered border border-border-primary)/,
     (_, pre, _old, post) => `${pre}${radiusCls}${post}`,
   );
 

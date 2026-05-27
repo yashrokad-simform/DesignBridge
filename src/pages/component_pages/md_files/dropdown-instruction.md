@@ -178,9 +178,9 @@ flex items-center h-10 px-3 gap-2 cursor-pointer transition-colors
 | State | Background | Notes |
 |---|---|---|
 | Default | `bg-input-bg-primary` | — |
-| Hover | `bg-bg-gray-light` | — |
-| Selected (single) | `bg-bg-primary` | Tick icon from `src/assets/icons/` in trailing slot · `size-5` |
-| Selected (multi) | `bg-bg-primary` | `<Checkbox checked={true} />` in trailing slot — no `label` prop |
+| Hover | `bg-bg-secondary` | — |
+| Selected (single) | `bg-bg-brand-light` | Tick icon from `src/assets/icons/` in trailing slot · `size-5` |
+| Selected (multi) | `bg-bg-brand-light` | `<Checkbox checked={true} />` in trailing slot — no `label` prop |
 | Unselected (multi) | `bg-input-bg-primary` | `<Checkbox checked={false} />` in trailing slot — no `label` prop |
 
 > For multi-select option rows, use the `<Checkbox>` component directly (no `label` prop). Do not import raw checkbox icons from `src/assets/icons/`. Pass `checked` and suppress `onChange` — selection is handled by the option row's `onClick`.
@@ -239,5 +239,5 @@ All tokens shared with Input Field (`--color-input-*` namespace).
 | `--color-input-icon-enabled` | `text-input-icon-enabled` | Leading icon + chevron (default/open) |
 | `--color-input-icon-disabled` | `text-input-icon-disabled` | Leading icon + chevron (disabled) |
 | `--color-input-icon-critical` | `text-input-icon-critical` | Leading icon + chevron (error) |
-| `--color-bg-primary` | `bg-bg-primary` | Selected option row background |
-| `--color-bg-gray-light` | `bg-bg-gray-light` | Option row hover background |
+| `--color-bg-brand-light` | `bg-bg-brand-light` | Selected option row background |
+| `--color-bg-secondary` | `bg-bg-secondary` | Option row hover background |

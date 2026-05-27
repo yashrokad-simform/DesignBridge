@@ -53,7 +53,7 @@ interface FileTypeIconProps {
 export function FileTypeIcon({ fileType = 'img', src, className }: FileTypeIconProps) {
   if (fileType === 'image-preview') {
     return (
-      <div className={cn('relative size-10 flex-shrink-0 border border-border-gray-light rounded-lg overflow-hidden', className)}>
+      <div className={cn('relative size-10 flex-shrink-0 border border-border-primary rounded-lg overflow-hidden', className)}>
         <img
           src={src}
           alt=""

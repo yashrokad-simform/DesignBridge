@@ -105,8 +105,8 @@ interface StepItemData {
 
 | State | Icon Appearance | Title Color | Connector Color |
 |---|---|---|---|
-| `incomplete` | White circle, gray border, gray dot | `text-text-primary` | `bg-border-gray-light` |
-| `current` | Orange-tinted circle, orange border, spinner | `text-text-brand-secondary` | `bg-border-gray-light` |
+| `incomplete` | White circle, gray border, gray dot | `text-text-primary` | `bg-border-primary` |
+| `current` | Orange-tinted circle, orange border, spinner | `text-text-brand-secondary` | `bg-border-primary` |
 | `completed` | Green filled circle, white check | `text-text-success` | `bg-border-success` |
 
 ---
@@ -123,10 +123,10 @@ flex items-center justify-center rounded-full flex-shrink-0
 
 | State + Size | Classes |
 |---|---|
-| `incomplete` + `regular` | `size-6 bg-bg-white border-[1.5px] border-border-gray-light` |
-| `incomplete` + `large` | `size-8 bg-bg-white border-[1.5px] border-border-gray-light` |
-| `current` + `regular` | `size-6 bg-bg-secondary border-[1.5px] border-border-brand-secondary` |
-| `current` + `large` | `size-8 bg-bg-secondary border-[1.5px] border-border-brand-secondary` |
+| `incomplete` + `regular` | `size-6 bg-bg-primary border-[1.5px] border-border-primary` |
+| `incomplete` + `large` | `size-8 bg-bg-primary border-[1.5px] border-border-primary` |
+| `current` + `regular` | `size-6 bg-bg-brand-secondary-light border-[1.5px] border-border-brand-secondary` |
+| `current` + `large` | `size-8 bg-bg-brand-secondary-light border-[1.5px] border-border-brand-secondary` |
 | `completed` + `regular` | `size-6 bg-bg-success` |
 | `completed` + `large` | `size-8 bg-bg-success` |
 
@@ -185,8 +185,8 @@ w-0.5 rounded-full flex-shrink-0
 
 | Step state | Connector color |
 |---|---|
-| `incomplete` | `bg-border-gray-light` |
-| `current` | `bg-border-gray-light` |
+| `incomplete` | `bg-border-primary` |
+| `current` | `bg-border-primary` |
 | `completed` | `bg-border-success` |
 
 > The connector below a completed step is green, visually joining completed icons in sequence.
@@ -344,10 +344,10 @@ All icons are `aria-hidden="true"`. Do not create inline SVG inside the Stepper 
 
 | Token | Tailwind Class | Used For |
 |---|---|---|
-| `--color-bg-white` | `bg-bg-white` | Step icon bg (incomplete) |
-| `--color-bg-secondary` | `bg-bg-secondary` | Step icon bg (current) |
+| `--color-bg-primary` | `bg-bg-primary` | Step icon bg (incomplete) |
+| `--color-bg-brand-secondary-light` | `bg-bg-brand-secondary-light` | Step icon bg (current) |
 | `--color-bg-success` | `bg-bg-success` | Step icon bg (completed) |
-| `--color-border-gray-light` | `border-border-gray-light` | Icon border (incomplete) · Connector (incomplete/current) |
+| `--color-border-primary` | `border-border-primary` | Icon border (incomplete) · Connector (incomplete/current) |
 | `--color-border-brand-secondary` | `border-border-brand-secondary` | Icon border (current) |
 | `--color-border-success` | `bg-border-success` | Connector (completed) — used as `bg-*` on the connector div |
 | `--color-text-primary` | `text-text-primary` | Title (incomplete) |

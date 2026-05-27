@@ -41,7 +41,7 @@ Compact pill-shaped label for status, tags, and metadata. Non-interactive except
 | `showSuffix` | `boolean` | `false` |
 | `onRemove` | `() => void` | `undefined` |
 
-**BadgeColor:** `primary` `secondary` `success` `warning` `critical` `gray` `black` `cyan` `indigo` `purple` `fuchsia` `rose` `teal`
+**BadgeColor:** `primary` `secondary` `success` `warning` `critical` `gray` `cyan` `indigo` `purple` `fuchsia` `rose` `teal`
 
 ---
 
@@ -117,7 +117,7 @@ text-xs font-medium leading-4
 
 ## Color Token Map
 
-### Filled — `text-text-white` applies to text, dot, and icon for all 13 colors
+### Filled — `text-text-white` applies to text, dot, and icon for all 12 colors
 
 | Color | Background |
 |---|---|
@@ -127,7 +127,6 @@ text-xs font-medium leading-4
 | `warning` | `bg-bg-warning` |
 | `critical` | `bg-bg-critical` |
 | `gray` | `bg-bg-gray-dark` |
-| `black` | `bg-bg-black` |
 | `cyan` | `bg-cyan-dark` |
 | `indigo` | `bg-indigo-dark` |
 | `purple` | `bg-purple-dark` |
@@ -139,13 +138,12 @@ text-xs font-medium leading-4
 
 | Color | Background | Border | Text |
 |---|---|---|---|
-| `primary` | `bg-bg-primary` | `border border-border-brand` | `text-text-brand` |
-| `secondary` | `bg-bg-secondary` | `border border-border-brand-secondary` | `text-text-brand-secondary` |
+| `primary` | `bg-bg-brand-light` | `border border-border-brand` | `text-text-brand` |
+| `secondary` | `bg-bg-brand-secondary-light` | `border border-border-brand-secondary` | `text-text-brand-secondary` |
 | `success` | `bg-bg-success-light` | `border border-border-success` | `text-text-success` |
 | `warning` | `bg-bg-warning-light` | `border border-border-warning` | `text-text-warning` |
 | `critical` | `bg-bg-critical-light` | `border border-border-critical` | `text-text-critical` |
-| `gray` | `bg-bg-gray-light` | `border border-border-gray-dark` | `text-text-secondary` |
-| `black` | `bg-bg-white` | `border border-border-black` | `text-text-primary` |
+| `gray` | `bg-bg-secondary` | `border border-border-gray-dark` | `text-text-secondary` |
 | `cyan` | `bg-cyan-light` | `border border-cyan-dark` | `text-cyan-dark` |
 | `indigo` | `bg-indigo-light` | `border border-indigo-dark` | `text-indigo-dark` |
 | `purple` | `bg-purple-light` | `border border-purple-dark` | `text-purple-dark` |
@@ -157,13 +155,12 @@ text-xs font-medium leading-4
 
 | Color | Background | Text |
 |---|---|---|
-| `primary` | `bg-bg-primary` | `text-text-brand` |
-| `secondary` | `bg-bg-secondary` | `text-text-brand-secondary` |
+| `primary` | `bg-bg-brand-light` | `text-text-brand` |
+| `secondary` | `bg-bg-brand-secondary-light` | `text-text-brand-secondary` |
 | `success` | `bg-bg-success-light` | `text-text-success` |
 | `warning` | `bg-bg-warning-light` | `text-text-warning` |
 | `critical` | `bg-bg-critical-light` | `text-text-critical` |
-| `gray` | `bg-bg-gray-light` | `text-text-secondary` |
-| `black` | `bg-bg-gray-light` | `text-text-primary` |
+| `gray` | `bg-bg-secondary` | `text-text-secondary` |
 | `cyan` | `bg-cyan-light` | `text-cyan-dark` |
 | `indigo` | `bg-indigo-light` | `text-indigo-dark` |
 | `purple` | `bg-purple-light` | `text-purple-dark` |

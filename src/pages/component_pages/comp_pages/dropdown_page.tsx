@@ -70,7 +70,7 @@ const DEFAULT_VALUES: InputValues = {
   showLabel:    true,
   showRequired: true,
   showHelper:   true,
-  showLeading:  false,
+  showLeading:  true,
   cornerRadius: '12px',
   padding:      '12px',
   height:       44,

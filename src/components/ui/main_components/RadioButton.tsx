@@ -70,7 +70,7 @@ const radioCircle = cva(
   {
     variants: {
       state: {
-        enabled:  'bg-bg-white border-border-gray-dark group-hover:border-border-brand-secondary',
+        enabled:  'bg-bg-primary border-border-gray-dark group-hover:border-border-brand-secondary',
         selected: 'bg-bg-brand-secondary border-0',
         disabled: 'bg-input-bg-disabled border-input-border-disabled',
       },
@@ -136,7 +136,7 @@ export function RadioButton({
         )}
       >
         {checked && (
-          <span className={cn('size-2 rounded-full', disabled ? 'bg-input-border-disabled' : 'bg-bg-white')} />
+          <span className={cn('size-2 rounded-full', disabled ? 'bg-input-border-disabled' : 'bg-bg-primary')} />
         )}
       </div>
       {label && (
@@ -154,8 +154,8 @@ const tileCva = cva(
   {
     variants: {
       state: {
-        enabled:  'bg-bg-white border-input-border-enabled hover:border-border-brand-secondary',
-        selected: 'bg-bg-secondary border-border-brand-secondary',
+        enabled:  'bg-bg-primary border-input-border-enabled hover:border-border-brand-secondary',
+        selected: 'bg-bg-brand-secondary-light border-border-brand-secondary',
         disabled: 'bg-input-bg-disabled border-input-border-disabled cursor-not-allowed pointer-events-none',
       },
     },
@@ -218,7 +218,7 @@ export function RadioTile({
         )}
       >
         {checked && (
-          <span className={cn('size-2 rounded-full', disabled ? 'bg-input-border-disabled' : 'bg-bg-white')} />
+          <span className={cn('size-2 rounded-full', disabled ? 'bg-input-border-disabled' : 'bg-bg-primary')} />
         )}
       </div>
       {icon && (

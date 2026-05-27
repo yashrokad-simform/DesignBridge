@@ -91,9 +91,9 @@ size-[18px] rounded-full flex items-center justify-center flex-shrink-0 border t
 
 | State | Classes |
 |---|---|
-| `enabled` | `bg-bg-white border-border-gray-dark group-hover:border-border-brand-secondary` |
+| `enabled` | `bg-bg-primary border-border-gray-dark group-hover:border-border-brand-secondary` |
 | `selected` | `bg-bg-brand-secondary border-0` |
-| `disabledSelected` | `bg-bg-white border-input-border-disabled` |
+| `disabledSelected` | `bg-bg-primary border-input-border-disabled` |
 
 > Hover is CSS-only via `group-hover:` — no JS hover state needed. Only applies when state is `enabled`.
 
@@ -112,7 +112,7 @@ When `checked` and not `disabled`, render a centered white dot inside the contro
 For `disabledSelected`, render the same centered dot but use the disabled border color token:
 
 ```
-size-2 rounded-full bg-bg-white
+size-2 rounded-full bg-bg-primary
 ```
 
 ```
@@ -159,9 +159,9 @@ Applied on the control circle via the `peer` from the hidden input.
 
 | State | Circle bg | Circle border | Inner dot | Label |
 |---|---|---|---|---|
-| Enabled | `bg-bg-white` | `border-border-gray-dark` | — | `text-text-primary` |
-| Hover | `bg-bg-white` | `border-border-brand-secondary` | — | `text-text-primary` |
-| Selected | `bg-bg-brand-secondary` | none | `bg-bg-white size-2` | `text-text-primary` |
+| Enabled | `bg-bg-primary` | `border-border-gray-dark` | — | `text-text-primary` |
+| Hover | `bg-bg-primary` | `border-border-brand-secondary` | — | `text-text-primary` |
+| Selected | `bg-bg-brand-secondary` | none | `bg-bg-primary size-2` | `text-text-primary` |
 | Disabled | `bg-input-bg-disabled` | `border-input-border-disabled` | — | `text-input-text-disabled` |
 | Disabled Selected | `bg-input-bg-disabled` | `border-input-border-disabled` | `bg-input-border-disabled size-2` | `text-input-text-disabled` |
 
@@ -206,8 +206,8 @@ transition-colors select-none cursor-pointer
 
 | State | Classes |
 |---|---|
-| `enabled` | `bg-bg-white border-input-border-enabled hover:border-border-brand-secondary` |
-| `selected` | `bg-bg-secondary border-border-brand-secondary` |
+| `enabled` | `bg-bg-primary border-input-border-enabled hover:border-border-brand-secondary` |
+| `selected` | `bg-bg-brand-secondary-light border-border-brand-secondary` |
 | `disabled` | `bg-input-bg-disabled border-input-border-disabled cursor-not-allowed pointer-events-none` |
 | `disabledSelected` | `bg-input-bg-disabled border-input-border-disabled cursor-not-allowed pointer-events-none` |
 
@@ -270,9 +270,9 @@ flex-shrink-0 flex items-center
 
 | State | Tile bg | Tile border | Radio control | Title | Caption |
 |---|---|---|---|---|---|
-| Enabled | `bg-bg-white` | `border-input-border-enabled` | Enabled state | `text-text-primary` | `text-text-secondary` |
-| Hover | `bg-bg-white` | `border-border-brand-secondary` | Hover state | `text-text-primary` | `text-text-secondary` |
-| Selected | `bg-bg-secondary` | `border-border-brand-secondary` | Selected state | `text-text-primary` | `text-text-secondary` |
+| Enabled | `bg-bg-primary` | `border-input-border-enabled` | Enabled state | `text-text-primary` | `text-text-secondary` |
+| Hover | `bg-bg-primary` | `border-border-brand-secondary` | Hover state | `text-text-primary` | `text-text-secondary` |
+| Selected | `bg-bg-brand-secondary-light` | `border-border-brand-secondary` | Selected state | `text-text-primary` | `text-text-secondary` |
 | Disabled | `bg-input-bg-disabled` | `border-input-border-disabled` | Disabled state | `text-input-text-disabled` | `text-input-text-disabled` |
 | Disabled Selected | `bg-input-bg-disabled` | `border-input-border-disabled` | Disabled selected state | `text-input-text-disabled` | `text-input-text-disabled` |
 
@@ -282,9 +282,9 @@ flex-shrink-0 flex items-center
 
 | Token | Tailwind Class | Used For |
 |---|---|---|
-| `--color-bg-white` | `bg-bg-white` | Circle + tile bg (enabled/hover) |
+| `--color-bg-primary` | `bg-bg-primary` | Circle + tile bg (enabled/hover) |
 | `--color-bg-brand-secondary` | `bg-bg-brand-secondary` | Circle bg (selected) |
-| `--color-bg-secondary` | `bg-bg-secondary` | Tile bg (selected) |
+| `--color-bg-brand-secondary-light` | `bg-bg-brand-secondary-light` | Tile bg (selected) |
 | `--color-input-bg-disabled` | `bg-input-bg-disabled` | Circle + tile bg (disabled) |
 | `--color-border-gray-dark` | `border-border-gray-dark` | Circle border (enabled) |
 | `--color-border-brand-secondary` | `border-border-brand-secondary` | Circle + tile border (hover + selected) |
@@ -293,4 +293,4 @@ flex-shrink-0 flex items-center
 | `--color-text-primary` | `text-text-primary` | Label + title (active states) |
 | `--color-text-secondary` | `text-text-secondary` | Caption (active states) |
 | `--color-input-text-disabled` | `text-input-text-disabled` | Label + title + caption (disabled) |
-| `--color-bg-white` | `bg-bg-white` | Inner selected dot |
+| `--color-bg-primary` | `bg-bg-primary` | Inner selected dot |

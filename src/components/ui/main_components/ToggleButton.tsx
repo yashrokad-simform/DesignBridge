@@ -15,10 +15,10 @@ const trackCva = cva(
   {
     variants: {
       state: {
-        'enabled':        'bg-bg-primary',
+        'enabled':        'bg-bg-brand-light',
         'active':         'bg-bg-brand-secondary',
-        'disabled':       'bg-bg-gray-light',
-        'active-disabled': 'bg-bg-gray-light',
+        'disabled':       'bg-bg-secondary',
+        'active-disabled': 'bg-bg-secondary',
       },
     },
     defaultVariants: { state: 'enabled' },

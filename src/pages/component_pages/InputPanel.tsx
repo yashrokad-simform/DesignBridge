@@ -63,7 +63,7 @@ export default function InputPanel({
         </button>
         {onUpdateMd && (
           <button className="cp-btn cp-btn-primary" onClick={onUpdateMd}>
-            Update MD File
+            Update Instruction
           </button>
         )}
       </div>

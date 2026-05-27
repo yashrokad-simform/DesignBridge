@@ -11,7 +11,6 @@ export type BadgeColor =
   | 'warning'
   | 'critical'
   | 'gray'
-  | 'black'
   | 'cyan'
   | 'indigo'
   | 'purple'
@@ -40,7 +39,6 @@ const badgeVariants = cva(
         warning:   '',
         critical:  '',
         gray:      '',
-        black:     '',
         cyan:      '',
         indigo:    '',
         purple:    '',
@@ -57,7 +55,6 @@ const badgeVariants = cva(
       { variant: 'filled', color: 'warning',   className: 'bg-bg-warning text-text-white' },
       { variant: 'filled', color: 'critical',  className: 'bg-bg-critical text-text-white' },
       { variant: 'filled', color: 'gray',      className: 'bg-bg-gray-dark text-text-white' },
-      { variant: 'filled', color: 'black',     className: 'bg-bg-black text-text-white' },
       { variant: 'filled', color: 'cyan',      className: 'bg-cyan-dark text-text-white' },
       { variant: 'filled', color: 'indigo',    className: 'bg-indigo-dark text-text-white' },
       { variant: 'filled', color: 'purple',    className: 'bg-purple-dark text-text-white' },
@@ -65,13 +62,12 @@ const badgeVariants = cva(
       { variant: 'filled', color: 'rose',      className: 'bg-rose-dark text-text-white' },
       { variant: 'filled', color: 'teal',      className: 'bg-teal-dark text-text-white' },
       // ── Bordered ────────────────────────────────────────────────────────────
-      { variant: 'bordered', color: 'primary',   className: 'bg-bg-primary border border-border-brand text-text-brand' },
-      { variant: 'bordered', color: 'secondary', className: 'bg-bg-secondary border border-border-brand-secondary text-text-brand-secondary' },
+      { variant: 'bordered', color: 'primary',   className: 'bg-bg-brand-light border border-border-brand text-text-brand' },
+      { variant: 'bordered', color: 'secondary', className: 'bg-bg-brand-secondary-light border border-border-brand-secondary text-text-brand-secondary' },
       { variant: 'bordered', color: 'success',   className: 'bg-bg-success-light border border-border-success text-text-success' },
       { variant: 'bordered', color: 'warning',   className: 'bg-bg-warning-light border border-border-warning text-text-warning' },
       { variant: 'bordered', color: 'critical',  className: 'bg-bg-critical-light border border-border-critical text-text-critical' },
-      { variant: 'bordered', color: 'gray',      className: 'bg-bg-gray-light border border-border-gray-dark text-text-secondary' },
-      { variant: 'bordered', color: 'black',     className: 'bg-bg-white border border-border-black text-text-primary' },
+      { variant: 'bordered', color: 'gray',      className: 'bg-bg-secondary border border-border-gray-dark text-text-secondary' },
       { variant: 'bordered', color: 'cyan',      className: 'bg-cyan-light border border-cyan-dark text-cyan-dark' },
       { variant: 'bordered', color: 'indigo',    className: 'bg-indigo-light border border-indigo-dark text-indigo-dark' },
       { variant: 'bordered', color: 'purple',    className: 'bg-purple-light border border-purple-dark text-purple-dark' },
@@ -79,13 +75,12 @@ const badgeVariants = cva(
       { variant: 'bordered', color: 'rose',      className: 'bg-rose-light border border-rose-dark text-rose-dark' },
       { variant: 'bordered', color: 'teal',      className: 'bg-teal-light border border-teal-dark text-teal-dark' },
       // ── Tertiary ────────────────────────────────────────────────────────────
-      { variant: 'tertiary', color: 'primary',   className: 'bg-bg-primary text-text-brand' },
-      { variant: 'tertiary', color: 'secondary', className: 'bg-bg-secondary text-text-brand-secondary' },
+      { variant: 'tertiary', color: 'primary',   className: 'bg-bg-brand-light text-text-brand' },
+      { variant: 'tertiary', color: 'secondary', className: 'bg-bg-brand-secondary-light text-text-brand-secondary' },
       { variant: 'tertiary', color: 'success',   className: 'bg-bg-success-light text-text-success' },
       { variant: 'tertiary', color: 'warning',   className: 'bg-bg-warning-light text-text-warning' },
       { variant: 'tertiary', color: 'critical',  className: 'bg-bg-critical-light text-text-critical' },
-      { variant: 'tertiary', color: 'gray',      className: 'bg-bg-gray-light text-text-secondary' },
-      { variant: 'tertiary', color: 'black',     className: 'bg-bg-gray-light text-text-primary' },
+      { variant: 'tertiary', color: 'gray',      className: 'bg-bg-secondary text-text-secondary' },
       { variant: 'tertiary', color: 'cyan',      className: 'bg-cyan-light text-cyan-dark' },
       { variant: 'tertiary', color: 'indigo',    className: 'bg-indigo-light text-indigo-dark' },
       { variant: 'tertiary', color: 'purple',    className: 'bg-purple-light text-purple-dark' },
