@@ -86,7 +86,7 @@ export function FilePicker({
         <div className="flex flex-col items-center gap-3 w-full">
           <div className={cn('flex items-center justify-center size-6 rounded-full border flex-shrink-0', iconBgBorder)}>
             {isDisabled
-              ? <DocumentUploadDisabledIcon className="size-3 text-icon-gray-light" aria-hidden="true" />
+              ? <DocumentUploadDisabledIcon className="size-3 text-icon-secondary" aria-hidden="true" />
               : <DocumentUploadIcon className="size-3 text-icon-brand" aria-hidden="true" />
             }
           </div>

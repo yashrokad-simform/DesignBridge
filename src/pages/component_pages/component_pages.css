@@ -299,6 +299,39 @@
   background: var(--cp-surface);
 }
 
+/* Combined color picker + hex text input */
+.cp-colorhex {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+.cp-colorhex .cp-colorhex-picker {
+  width: 32px; height: 32px;
+  flex-shrink: 0;
+  border: 1px solid var(--cp-line);
+  border-radius: var(--cp-radius-sm);
+  padding: 2px; cursor: pointer;
+  background: var(--cp-surface);
+}
+.cp-colorhex .cp-colorhex-picker::-webkit-color-swatch-wrapper { padding: 0; }
+.cp-colorhex .cp-colorhex-picker::-webkit-color-swatch { border: 0; border-radius: 3px; }
+.cp-colorhex .cp-colorhex-text {
+  flex: 1;
+  min-width: 0;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--cp-line);
+  border-radius: var(--cp-radius-sm);
+  background: var(--cp-surface);
+  font-family: 'DM Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+  color: var(--cp-text);
+  outline: none;
+  text-transform: lowercase;
+}
+.cp-colorhex .cp-colorhex-text:focus { border-color: var(--cp-accent); }
+
 /* Divider */
 .cp-field-divider {
   display: flex;

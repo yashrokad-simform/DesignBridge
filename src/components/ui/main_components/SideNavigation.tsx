@@ -20,6 +20,8 @@ export interface NavProfileData {
   href?: string;
 }
 
+export type NavTextSize = '12px' | '14px' | '16px';
+
 export interface SideNavProps {
   collapsed: boolean;
   onToggle: () => void;
@@ -28,8 +30,17 @@ export interface SideNavProps {
   showProfile?: boolean;
   profile?: NavProfileData;
   navItemHeight?: number;
+  /** Font size for expanded nav-item labels. Collapsed under-icon caption stays at its compact size. */
+  textSize?: NavTextSize;
   className?: string;
 }
+
+/* Mirrors sideNavigation_page.tsx TEXT_SIZE map — keep in sync. */
+const NAV_TEXT_SIZE_CLASS: Record<NavTextSize, string> = {
+  '12px': 'text-xs leading-4',
+  '14px': 'text-sm leading-4.5',
+  '16px': 'text-md leading-5.5',
+};
 
 /* ── Profile Avatar ──────────────────────────────────────── */
 function ProfileAvatar({ profile, size = 'md' }: { profile: NavProfileData; size?: 'sm' | 'md' }) {
@@ -95,9 +106,10 @@ interface NavItemProps {
   selected?: boolean;
   collapsed?: boolean;
   navItemHeight?: number;
+  textSize?: NavTextSize;
 }
 
-function NavItem({ label, icon, href, selected = false, collapsed = false, navItemHeight }: NavItemProps) {
+function NavItem({ label, icon, href, selected = false, collapsed = false, navItemHeight, textSize = '14px' }: NavItemProps) {
   const variant: NavItemVariant = collapsed
     ? selected ? 'collapsed-selected' : 'collapsed-default'
     : selected ? 'expanded-selected'  : 'expanded-default';
@@ -132,7 +144,8 @@ function NavItem({ label, icon, href, selected = false, collapsed = false, navIt
           {cloneIcon(icon, iconColor)}
         </div>
         <span className={cn(
-          'text-sm leading-4.5 flex-1 min-w-0',
+          NAV_TEXT_SIZE_CLASS[textSize],
+          'flex-1 min-w-0',
           selected ? 'font-semibold text-nav-text-primary' : 'font-medium text-nav-text-secondary',
         )}>
           {label}
@@ -151,6 +164,7 @@ export function SideNav({
   showProfile = true,
   profile,
   navItemHeight,
+  textSize,
   className,
 }: SideNavProps) {
   return (
@@ -187,6 +201,7 @@ export function SideNav({
               selected={item.selected}
               collapsed={collapsed}
               navItemHeight={collapsed ? undefined : navItemHeight}
+              textSize={textSize}
             />
           ))}
         </div>

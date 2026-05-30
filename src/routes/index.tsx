@@ -5,6 +5,7 @@ import { PageLoader, PageNotFound } from "@/components/shared";
 
 const PrivateLayout = lazy(() => import("@/pages/private/privateLayout"));
 const IntroductionPage = lazy(() => import("@/pages/component_pages/comp_pages/introduction_page"));
+const ColorsPage = lazy(() => import("@/pages/component_pages/comp_pages/colors_page"));
 const BadgePage = lazy(() => import("@/pages/component_pages/comp_pages/badge_page"));
 const BreadcrumbPage = lazy(() => import("@/pages/component_pages/comp_pages/breadcrumb_page"));
 const ButtonPage = lazy(() => import("@/pages/component_pages/comp_pages/button_page"));
@@ -40,7 +41,7 @@ export const routes: RouteObject[] = [
       { index: true, element: <Navigate to="/introduction" replace /> },
       { path: "introduction", element: lazyLoad(IntroductionPage) },
       { path: "figma-mcp", element: lazyLoad(IntroductionPage) },
-      { path: "colors", element: lazyLoad(IntroductionPage) },
+      { path: "colors", element: lazyLoad(ColorsPage) },
       { path: "typography", element: lazyLoad(IntroductionPage) },
       { path: "spacing", element: lazyLoad(IntroductionPage) },
       { path: "badge", element: lazyLoad(BadgePage) },

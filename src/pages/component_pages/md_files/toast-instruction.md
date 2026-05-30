@@ -137,10 +137,10 @@ text-sm font-medium leading-[22px] text-text-white w-full
 ### Description
 
 ```
-text-xs font-normal leading-4 text-text-secondary w-full
+text-xs font-normal leading-4 text-text-white w-full
 ```
 
-> `text-xs` = 12px · `leading-4` = 16px · `text-text-brand-light` = `--color-text-brand-light` = `#b0cbe9` (light blue — readable on dark background)
+> `text-xs` = 12px · `leading-4` = 16px · `text-text-white` = `--color-text-white` — matches the title color for a unified on-dark text style.
 
 - Remove description from DOM when not provided — never render empty element.
 
@@ -161,7 +161,7 @@ flex items-center py-[2px] flex-shrink-0
 ### Close Icon
 
 ```
-size-4 cursor-pointer text-icon-gray-light
+size-4 cursor-pointer text-icon-secondary
 ```
 
 > `size-4` = 16×16px
@@ -213,5 +213,5 @@ Use `tw-animate-css` utilities already available in the project for enter/exit t
 |---|---|---|
 | `--color-bg-black` | `bg-bg-black` | Toast container background |
 | `--color-text-white` | `text-text-white` | Title text |
-| `--color-text-secondary` | `text-text-secondary` | Description text |
-| `--color-icon-gray-light` | `text-icon-gray-light` | Close icon |
+| `--color-text-white` | `text-text-white` | Description text |
+| `--color-icon-secondary` | `text-icon-secondary` | Close icon |

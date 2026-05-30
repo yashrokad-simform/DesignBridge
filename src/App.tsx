@@ -10,7 +10,7 @@ const router = createBrowserRouter(routes);
 function App() {
   return (
     <ErrorBoundary>
-      <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
+      <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
         <RouterProvider router={router} />
       </ThemeProvider>
     </ErrorBoundary>

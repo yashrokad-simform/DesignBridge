@@ -69,7 +69,7 @@ export function Toast({ variant = 'info', title, description, onClose, cornerRad
       <div className="flex flex-col gap-0.5 flex-1 min-w-0">
         <span className="text-sm font-medium leading-[22px] text-text-white w-full">{title}</span>
         {description && (
-          <span className="text-xs font-normal leading-4 text-text-secondary w-full">{description}</span>
+          <span className="text-xs font-normal leading-4 text-text-white w-full">{description}</span>
         )}
       </div>
 
@@ -81,7 +81,7 @@ export function Toast({ variant = 'info', title, description, onClose, cornerRad
             aria-label="Close notification"
             className="flex items-center justify-center bg-transparent border-0 p-0"
           >
-            <CloseIcon className="size-4 cursor-pointer text-icon-gray-light" aria-hidden="true" />
+            <CloseIcon className="size-4 cursor-pointer text-icon-secondary" aria-hidden="true" />
           </button>
         </div>
       )}

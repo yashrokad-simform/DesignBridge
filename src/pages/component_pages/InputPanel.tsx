@@ -1,6 +1,6 @@
 import React from 'react';
 
-export type InputType = 'text' | 'number' | 'color' | 'select' | 'toggle' | 'multicheck' | 'togglegroup' | 'togglelist' | 'divider' | 'colorswatches';
+export type InputType = 'text' | 'number' | 'color' | 'colorhex' | 'select' | 'toggle' | 'multicheck' | 'togglegroup' | 'togglelist' | 'divider' | 'colorswatches';
 
 export interface SelectOption {
   value: string;
@@ -111,6 +111,36 @@ function Field({
           onChange={e => onChange(e.target.value)}
         />
       );
+
+    case 'colorhex': {
+      const v = (value as string) ?? '';
+      const validHex = /^#[0-9a-fA-F]{6}$/.test(v);
+      const handleText = (next: string) => {
+        // Allow incremental typing of a hex (up to # + 6 hex digits)
+        if (next === '' || /^#?[0-9a-fA-F]{0,6}$/.test(next)) {
+          onChange(next.startsWith('#') || next === '' ? next : `#${next}`);
+        }
+      };
+      return (
+        <div className="cp-colorhex">
+          <input
+            type="color"
+            value={validHex ? v.toLowerCase() : '#000000'}
+            onChange={e => onChange(e.target.value)}
+            className="cp-colorhex-picker"
+            aria-label={`${field.label} picker`}
+          />
+          <input
+            type="text"
+            value={v}
+            onChange={e => handleText(e.target.value)}
+            className="cp-colorhex-text"
+            spellCheck={false}
+            aria-label={`${field.label} hex`}
+          />
+        </div>
+      );
+    }
 
     case 'select':
       return (

@@ -144,7 +144,7 @@ Rendered only when `showClose={true}`. Remove from DOM when absent.
 
 - Use `CloseIcon` from `src/assets/icons/CloseIcon.tsx` if it exists. Otherwise create it.
 - Size: `size-4` (16×16px).
-- Color: `text-icon-gray-light` — apply to the icon element via `currentColor`.
+- Color: `text-icon-secondary` — apply to the icon element via `currentColor`.
 - Wrap in `<button type="button" aria-label="Close tooltip">`.
 - Button base classes: `flex items-start bg-transparent border-0 p-0 flex-shrink-0`.
 
@@ -242,4 +242,4 @@ Use `arrow()` middleware from `@floating-ui/react` if programmatic arrow positio
 |---|---|---|
 | `--color-bg-black` | `bg-bg-black` | Body + arrow beak background |
 | `--color-text-white` | `text-text-white` | Heading + caption text |
-| `--color-icon-gray-light` | `text-icon-gray-light` | Close icon color |
+| `--color-icon-secondary` | `text-icon-secondary` | Close icon color |

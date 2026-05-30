@@ -168,7 +168,7 @@ export function Tooltip({
                     onClick={handleClose}
                     className="flex items-start bg-transparent border-0 p-0 flex-shrink-0"
                   >
-                    <CloseIcon aria-hidden="true" className="size-4 text-icon-gray-light" />
+                    <CloseIcon aria-hidden="true" className="size-4 text-icon-secondary" />
                   </button>
                 )}
               </div>

@@ -227,7 +227,7 @@ export default function PrivateLayout() {
               {selectedSection}
             </h1>
 
-            {page.eyebrow === "Components" && page.desc && (
+            {page.desc && (
               <p className="pl-page-desc">
                 {page.desc}
               </p>

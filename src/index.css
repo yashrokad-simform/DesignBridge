@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Dark mode is driven by a `.dark` class on <html> (see theme-provider.tsx). */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
 
   /* typography */
@@ -93,19 +96,51 @@
   --color-warning-800: #7a4e02;
   --color-warning-900: #5d3b01;
 
-  /* Status primitives — no group exists in tokens.json primitives, hex only here */
-  --color-cyan-dark: #067699;
-  --color-cyan-light: #ecfdff;
-  --color-indigo-dark: #444ce7;
-  --color-indigo-light: #eef4ff;
-  --color-purple-dark: #7839ee;
-  --color-purple-light: #f5f3ff;
-  --color-fuchsia-dark: #991daf;
-  --color-fuchsia-light: #fdf3ff;
-  --color-rose-dark: #e31b54;
-  --color-rose-light: #fff1f5;
-  --color-teal-dark: #0e9384;
-  --color-teal-light: #f0fdf9;
+  /* Status primitives — full ramps from tokens.json → primitives.light (statusCyanCyan*, etc.) */
+  --color-cyan-50: #ecfdff;
+  --color-cyan-100: #a5eaff;
+  --color-cyan-500: #077799;
+  --color-cyan-700: #063e4f;
+  --color-cyan-900: #032029;
+  --color-indigo-50: #eef4ff;
+  --color-indigo-100: #d2d5ff;
+  --color-indigo-500: #444ce7;
+  --color-indigo-700: #082969;
+  --color-indigo-900: #051a42;
+  --color-purple-50: #f7f3ff;
+  --color-purple-100: #d5beff;
+  --color-purple-500: #7839ee;
+  --color-purple-700: #320e7a;
+  --color-purple-900: #220a53;
+  --color-fuchsia-50: #fdf3ff;
+  --color-fuchsia-100: #ecb5f6;
+  --color-fuchsia-500: #991daf;
+  --color-fuchsia-700: #470b54;
+  --color-fuchsia-900: #27062e;
+  --color-rose-50: #fff1f4;
+  --color-rose-100: #ffd9e3;
+  --color-rose-500: #e31b54;
+  --color-rose-700: #571125;
+  --color-rose-900: #2b0d16;
+  --color-teal-50: #f0fdf9;
+  --color-teal-100: #cffffa;
+  --color-teal-500: #0e9384;
+  --color-teal-700: #06473f;
+  --color-teal-900: #03221e;
+
+  /* Status back-compat aliases — Badge consumes bg-/border-/text-{color}-dark|light directly */
+  --color-cyan-dark: var(--color-cyan-500);
+  --color-cyan-light: var(--color-cyan-50);
+  --color-indigo-dark: var(--color-indigo-500);
+  --color-indigo-light: var(--color-indigo-50);
+  --color-purple-dark: var(--color-purple-500);
+  --color-purple-light: var(--color-purple-50);
+  --color-fuchsia-dark: var(--color-fuchsia-500);
+  --color-fuchsia-light: var(--color-fuchsia-50);
+  --color-rose-dark: var(--color-rose-500);
+  --color-rose-light: var(--color-rose-50);
+  --color-teal-dark: var(--color-teal-500);
+  --color-teal-light: var(--color-teal-50);
 
   /* ==========================================================
    * LAYER 2 — SEMANTIC COLORS (var() references only, no hex)
@@ -160,7 +195,6 @@
   /* — Icon — */
   --color-icon-primary: var(--color-black);                         /* iconIconPrimary */
   --color-icon-secondary: var(--color-gray-500);                    /* iconIconSecondary */
-  --color-icon-gray-light: var(--color-gray-400);                   /* iconIconGrayLight */
   --color-icon-brand: var(--color-primary-500);                     /* iconIconBrand */
   --color-icon-brand-light: var(--color-primary-100);               /* iconIconBrandLight */
   --color-icon-brand-secondary: var(--color-secondary-500);         /* iconIconBrandSecondary */
@@ -228,24 +262,186 @@
   --color-nav-tile-bg-primary: var(--color-white);                  /* componentNavigationNvBgPrimary */
   --color-nav-tile-bg-secondary: var(--color-gray-800);             /* componentNavigationNvBgSecondary */
 
-  /* — Status — */
-  --color-status-cyan-dark: var(--color-cyan-dark);                 /* statusCyanDark */
-  --color-status-cyan-light: var(--color-cyan-light);               /* statusCyanLight */
-  --color-status-indigo-dark: var(--color-indigo-dark);             /* statusIndigoDark */
-  --color-status-indigo-light: var(--color-indigo-light);           /* statusIndigoLight */
-  --color-status-purple-dark: var(--color-purple-dark);             /* statusPurpleDark */
-  --color-status-purple-light: var(--color-purple-light);           /* statusPurpleLight */
-  --color-status-fuchsia-dark: var(--color-fuchsia-dark);           /* statusFuchsiaDark */
-  --color-status-fuchsia-light: var(--color-fuchsia-light);         /* statusFuchsiaLight */
-  --color-status-rose-dark: var(--color-rose-dark);                 /* statusRoseDark */
-  --color-status-rose-light: var(--color-rose-light);               /* statusRoseLight */
-  --color-status-teal-dark: var(--color-teal-dark);                 /* statusTealDark */
-  --color-status-teal-light: var(--color-teal-light);               /* statusTealLight */
+  /* — Status — (Badge: bg = filled fill, text = label, border = outline, bg-light = soft fill) */
+  --color-status-cyan-bg: var(--color-cyan-500);                    /* statusCyanBg */
+  --color-status-cyan-text: var(--color-cyan-500);                  /* statusCyanText */
+  --color-status-cyan-border: var(--color-cyan-500);                /* statusCyanBorder */
+  --color-status-cyan-bg-light: var(--color-cyan-50);               /* statusCyanBgLight */
+  --color-status-indigo-bg: var(--color-indigo-500);                /* statusIndigoBg */
+  --color-status-indigo-text: var(--color-indigo-500);              /* statusIndigoText */
+  --color-status-indigo-border: var(--color-indigo-500);            /* statusIndigoBorder */
+  --color-status-indigo-bg-light: var(--color-indigo-50);           /* statusIndigoBgLight */
+  --color-status-purple-bg: var(--color-purple-500);                /* statusPurpleBg */
+  --color-status-purple-text: var(--color-purple-500);              /* statusPurpleText */
+  --color-status-purple-border: var(--color-purple-500);            /* statusPurpleBorder */
+  --color-status-purple-bg-light: var(--color-purple-50);           /* statusPurpleBgLight */
+  --color-status-fuchsia-bg: var(--color-fuchsia-500);              /* statusFuchsiaBg */
+  --color-status-fuchsia-text: var(--color-fuchsia-500);            /* statusFuchsiaText */
+  --color-status-fuchsia-border: var(--color-fuchsia-500);          /* statusFuchsiaBorder */
+  --color-status-fuchsia-bg-light: var(--color-fuchsia-50);         /* statusFuchsiaBgLight */
+  --color-status-rose-bg: var(--color-rose-500);                    /* statusRoseBg */
+  --color-status-rose-text: var(--color-rose-500);                  /* statusRoseText */
+  --color-status-rose-border: var(--color-rose-500);                /* statusRoseBorder */
+  --color-status-rose-bg-light: var(--color-rose-50);               /* statusRoseBgLight */
+  --color-status-teal-bg: var(--color-teal-500);                    /* statusTealBg */
+  --color-status-teal-text: var(--color-teal-500);                  /* statusTealText */
+  --color-status-teal-border: var(--color-teal-500);                /* statusTealBoder */
+  --color-status-teal-bg-light: var(--color-teal-50);               /* statusTealBgLight */
+  --color-status-text-white: var(--color-white);                    /* statusTextWhite */
+}
+
+/* ==========================================================
+ * DARK THEME — semantic remaps from tokens.json → colorStyle.darkTheme
+ * Primitives are shared (no dark ramp); only the semantic → primitive
+ * mapping changes. Applied when `.dark` is present on a parent (<html>).
+ * Kept UNLAYERED so it overrides the @theme :root defaults by source order.
+ * ========================================================== */
+.dark {
+  /* — Text — */
+  --color-text-primary: var(--color-white);
+  --color-text-secondary: var(--color-gray-200);
+  --color-text-success: var(--color-success-200);
+  --color-text-success-light: var(--color-success-800);
+  --color-text-warning: var(--color-warning-200);
+  --color-text-warning-light: var(--color-warning-800);
+  --color-text-critical: var(--color-critical-200);
+  --color-text-critical-light: var(--color-critical-800);
+  --color-text-brand: var(--color-primary-200);
+  --color-text-brand-light: var(--color-primary-700);
+  --color-text-brand-secondary: var(--color-secondary-200);
+  --color-text-brand-secondary-light: var(--color-secondary-700);
+  --color-text-white: var(--color-black);          /* tokens: dark textTextWhite → neutralsBlack (inverts) */
+  --color-text-black: var(--color-white);           /* not in tokens.json — inverted to mirror text-white */
+
+  /* — Background — */
+  --color-bg-brand-light: var(--color-primary-900);
+  --color-bg-brand-secondary-light: var(--color-secondary-900);
+  --color-bg-primary: var(--color-black);
+  --color-bg-black: var(--color-white);             /* tokens: dark backgroundBgBlack → neutralsWhite (inverts) */
+  --color-bg-brand: var(--color-primary-500);
+  --color-bg-brand-secondary: var(--color-secondary-500);
+  --color-bg-secondary: var(--color-gray-900);
+  --color-bg-gray-dark: var(--color-gray-700);
+  --color-bg-success: var(--color-success-500);
+  --color-bg-success-light: var(--color-success-900);
+  --color-bg-critical: var(--color-critical-500);
+  --color-bg-critical-light: var(--color-critical-900);
+  --color-bg-warning: var(--color-warning-500);
+  --color-bg-warning-light: var(--color-warning-900);
+
+  /* — Border — */
+  --color-border-brand: var(--color-primary-700);
+  --color-border-brand-light: var(--color-primary-800);
+  --color-border-brand-secondary: var(--color-secondary-700);
+  --color-border-primary: var(--color-gray-900);
+  --color-border-gray-dark: var(--color-gray-800);
+  --color-border-success: var(--color-success-700);
+  --color-border-warning: var(--color-warning-700);
+  --color-border-critical: var(--color-critical-700);
+  --color-border-white: var(--color-white);
+  --color-border-black: var(--color-white);         /* tokens: dark borderBorderBlack → neutralsWhite (inverts) */
+
+  /* — Icon — */
+  --color-icon-primary: var(--color-white);
+  --color-icon-secondary: var(--color-gray-300);
+  --color-icon-brand: var(--color-primary-200);
+  --color-icon-brand-light: var(--color-primary-700);
+  --color-icon-brand-secondary: var(--color-secondary-200);
+  --color-icon-brand-secondary-light: var(--color-secondary-700);
+  --color-icon-success: var(--color-success-200);
+  --color-icon-success-light: var(--color-success-800);
+  --color-icon-warning: var(--color-warning-100);
+  --color-icon-warning-light: var(--color-warning-800);
+  --color-icon-critical: var(--color-critical-200);
+  --color-icon-critical-light: var(--color-critical-800);
+  --color-icon-white: var(--color-white);
+  --color-icon-black: var(--color-white);           /* not in tokens.json — inverted to mirror icon-white */
+
+  /* — Button — */
+  --color-btn-text-primary: var(--color-white);
+  --color-btn-text-disabled: var(--color-gray-200);
+  --color-btn-text-bordered: var(--color-white);    /* tokens: dark btnTextBordered → neutralsWhite (light was black) */
+  --color-btn-text-critical: var(--color-critical-500);
+  --color-btn-text-secondary: var(--color-secondary-300);
+  --color-btn-text-secondary-focused: var(--color-secondary-400);
+  --color-btn-text-secondary-disabled: var(--color-secondary-700);
+  --color-btn-bg-primary: var(--color-primary-500);
+  --color-btn-bg-primary-focused: var(--color-primary-700);
+  --color-btn-bg-primary-disabled: var(--color-gray-800);
+  --color-btn-bg-bordered: var(--color-gray-900);
+  --color-btn-bg-critical: var(--color-critical-500);
+  --color-btn-border-primary: var(--color-gray-800);
+  --color-btn-border-focused: var(--color-gray-200);
+  --color-btn-border-disabled: var(--color-gray-900);
+  --color-btn-border-critical: var(--color-critical-500);
+  --color-btn-icon-primary: var(--color-white);
+  --color-btn-icon-bordered: var(--color-white);    /* tokens: dark btnIconBordered → neutralsWhite (light was black) */
+  --color-btn-icon-secondary: var(--color-secondary-300);
+  --color-btn-icon-secondary-focused: var(--color-secondary-400);
+  --color-btn-icon-secondary-disabled: var(--color-secondary-700);
+  --color-btn-icon-disabled: var(--color-gray-200);
+  --color-btn-icon-critical: var(--color-critical-500);
+
+  /* — Input Field — */
+  --color-input-text-label: var(--color-white);
+  --color-input-text-enabled: var(--color-white);
+  --color-input-text-placeholder: var(--color-gray-300);
+  --color-input-text-disabled: var(--color-gray-700);
+  --color-input-text-helper: var(--color-gray-500);
+  --color-input-text-critical: var(--color-critical-500);
+  --color-input-bg-primary: var(--color-gray-900);
+  --color-input-bg-disabled: var(--color-black);
+  --color-input-border-enabled: var(--color-gray-700);
+  --color-input-border-selected: var(--color-primary-300);
+  --color-input-border-critical: var(--color-critical-500);
+  --color-input-border-disabled: var(--color-gray-800);
+  --color-input-icon-enabled: var(--color-white);
+  --color-input-icon-disabled: var(--color-gray-700);
+  --color-input-icon-critical: var(--color-critical-500);
+
+  /* — Navigation — */
+  --color-nav-bg: var(--color-gray-900);
+  --color-nav-bg-secondary: var(--color-gray-800);  /* not in tokens.json — inferred */
+  --color-nav-bg-hover: var(--color-gray-700);
+  --color-nav-text-primary: var(--color-black);
+  --color-nav-text-primary-collapse: var(--color-white);
+  --color-nav-text-secondary: var(--color-gray-100);
+  --color-nav-icon-primary: var(--color-black);
+  --color-nav-icon-secondary: var(--color-gray-200);
+  --color-nav-tile-bg-primary: var(--color-white);
+  --color-nav-tile-bg-secondary: var(--color-gray-800);
+
+  /* — Status — (Badge) */
+  --color-status-bg-cyan: var(--color-cyan-500);
+  --color-status-text-cyan: var(--color-cyan-100);
+  --color-status-border-cyan: var(--color-cyan-700);
+  --color-status-bg-cyan-light: var(--color-cyan-900);
+  --color-status-bg-indigo: var(--color-indigo-500);
+  --color-status-text-indigo: var(--color-indigo-100);
+  --color-status-border-indigo: var(--color-indigo-700);
+  --color-status-bg-indigo-light: var(--color-indigo-900);
+  --color-status-bg-purple: var(--color-purple-500);
+  --color-status-text-purple: var(--color-purple-100);
+  --color-status-border-purple: var(--color-purple-700);
+  --color-status-bg-purple-light: var(--color-purple-900);
+  --color-status-bg-fuchsia: var(--color-fuchsia-500);
+  --color-status-text-fuchsia: var(--color-fuchsia-100);
+  --color-status-border-fuchsia: var(--color-fuchsia-700);
+  --color-status-bg-fuchsia-light: var(--color-fuchsia-900);
+  --color-status-bg-rose: var(--color-rose-500);
+  --color-status-text-rose: var(--color-rose-100);
+  --color-status-border-rose: var(--color-rose-700);
+  --color-status-bg-rose-light: var(--color-rose-900);
+  --color-status-bg-teal: var(--color-teal-500);
+  --color-status-text-teal: var(--color-teal-100);
+  --color-status-border-teal: var(--color-teal-700);
+  --color-status-bg-teal-light: var(--color-teal-900);
+  --color-status-text-white: var(--color-white);
 }
 
 @layer base {
   * {
-    @apply border-border-gray-light;
+    @apply border-border-primary;
   }
   body {
     @apply bg-bg-primary text-text-primary;
