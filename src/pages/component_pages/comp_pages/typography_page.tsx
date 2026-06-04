@@ -1,0 +1,259 @@
+import ComponentPageLayout, {
+  type InputConfig,
+  type InputValues,
+  type VariantGroup,
+} from '../ComponentPageLayout';
+import typographyMd from '../md_files/typography-instruction.md?raw';
+import typographyFigmaMd from '../figma_prompt/typography.md?raw';
+
+/* ────────────────────────────────────────────────────────────────
+ * Typography tiers — anchored to typography-instruction.md.
+ * The markdown file is the read-only source of truth; this page
+ * regenerates it per the user's choices.
+ * ──────────────────────────────────────────────────────────────── */
+type TierKey =
+  | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+  | '2xl' | '3xl' | '4xl' | '5xl' | '6xl' | '7xl';
+
+interface Tier {
+  key: TierKey;
+  className: string;     // tailwind class, e.g. `text-2xs`
+  defaultPx: number;
+  figmaLabel: string;    // matches the Figma → Tailwind reference table
+}
+
+const TIERS: Tier[] = [
+  { key: '2xs', className: 'text-2xs', defaultPx: 10, figmaLabel: 'Label sm' },
+  { key: 'xs',  className: 'text-xs',  defaultPx: 12, figmaLabel: 'Label sm' },
+  { key: 'sm',  className: 'text-sm',  defaultPx: 14, figmaLabel: 'Body sm' },
+  { key: 'md',  className: 'text-md',  defaultPx: 16, figmaLabel: 'Body md' },
+  { key: 'lg',  className: 'text-lg',  defaultPx: 18, figmaLabel: 'Body lg' },
+  { key: 'xl',  className: 'text-xl',  defaultPx: 20, figmaLabel: 'Heading md' },
+  { key: '2xl', className: 'text-2xl', defaultPx: 24, figmaLabel: 'Heading lg' },
+  { key: '3xl', className: 'text-3xl', defaultPx: 32, figmaLabel: 'Heading xl' },
+  { key: '4xl', className: 'text-4xl', defaultPx: 40, figmaLabel: 'Display sm' },
+  { key: '5xl', className: 'text-5xl', defaultPx: 48, figmaLabel: 'Display md' },
+  { key: '6xl', className: 'text-6xl', defaultPx: 60, figmaLabel: 'Display lg' },
+  { key: '7xl', className: 'text-7xl', defaultPx: 72, figmaLabel: 'Display xl' },
+];
+
+const ALL_TIER_KEYS = TIERS.map(t => t.key).join(',');
+const sizeKey = (k: TierKey) => `size_${k}`;
+
+/* ────────────────────────────────────────────────────────────────
+ * Customise panel
+ * ──────────────────────────────────────────────────────────────── */
+const buildInputConfig = (vals: InputValues): InputConfig[] => {
+  const enabledSet = new Set((vals.enabled as string ?? '').split(',').filter(Boolean));
+  const fields: InputConfig[] = [
+    { key: 'div0',     label: 'Tiers',  type: 'divider' },
+    {
+      key: 'enabled', label: '', type: 'togglelist',
+      options: TIERS.map(t => ({ value: t.key, label: t.className })),
+    },
+  ];
+  const enabledTiers = TIERS.filter(t => enabledSet.has(t.key));
+  if (enabledTiers.length > 0) {
+    fields.push({ key: 'div1', label: 'Sizes', type: 'divider' });
+    for (const t of enabledTiers) {
+      fields.push({
+        key: sizeKey(t.key),
+        label: `${t.className} (px)`,
+        type: 'number',
+        min: 6,
+        max: 200,
+      });
+    }
+  }
+  return fields;
+};
+
+const DEFAULT_VALUES: InputValues = {
+  enabled: ALL_TIER_KEYS,
+  ...Object.fromEntries(TIERS.map(t => [sizeKey(t.key), t.defaultPx])),
+};
+
+/* ────────────────────────────────────────────────────────────────
+ * Variants — one row per enabled tier, sample glyph + class + size.
+ * ──────────────────────────────────────────────────────────────── */
+function getEnabled(vals: InputValues): Tier[] {
+  const set = new Set((vals.enabled as string ?? '').split(',').filter(Boolean));
+  return TIERS.filter(t => set.has(t.key));
+}
+
+function buildVariants(vals: InputValues): VariantGroup[] {
+  const enabled = getEnabled(vals);
+  return [{
+    id: 'typography',
+    label: 'Typography Scale',
+    dotColor: '',
+    hideDivider: true,
+    styles: [{
+      id: 'scale',
+      label: '',
+      accentColor: '#0056b8',
+      rows: enabled.map(t => {
+        const px = Number(vals[sizeKey(t.key)]) || t.defaultPx;
+        return {
+          cells: [{
+            label: '',
+            node: <TypeRow key={t.key} className={t.className} px={px} />,
+          }],
+        };
+      }),
+    }],
+  }];
+}
+
+function TypeRow({ className, px }: { className: string; px: number }) {
+  return (
+    <div className="tp-row">
+      <div className="tp-row-meta">
+        <span className="tp-row-class">{className}</span>
+        <span className="tp-row-size">{px}px</span>
+      </div>
+      <div className="tp-row-sample" style={{ fontSize: `${px}px` }}>
+        The quick brown fox
+      </div>
+    </div>
+  );
+}
+
+/* ────────────────────────────────────────────────────────────────
+ * MD generation — preserve the original document structure and
+ * only substitute sizes / drop disabled tiers.
+ * ──────────────────────────────────────────────────────────────── */
+function transformMarkdown(raw: string, vals: InputValues): string {
+  const enabledSet = new Set((vals.enabled as string ?? '').split(',').filter(Boolean));
+
+  const lines = raw.split('\n');
+  const out: string[] = [];
+
+  for (const line of lines) {
+    // CSS line e.g. `--text-2xs: 10px;`  (allow surrounding whitespace)
+    const cssMatch = line.match(/^(\s*)--text-([0-9a-z]+):\s*\d+px;\s*$/);
+    if (cssMatch) {
+      const tierKey = cssMatch[2] as TierKey;
+      if (!enabledSet.has(tierKey)) continue;
+      const px = Number(vals[sizeKey(tierKey)]) || TIERS.find(t => t.key === tierKey)?.defaultPx;
+      // preserve indent and the original column alignment after the colon
+      const original = line.match(/^(\s*--text-[0-9a-z]+:)(\s*)\d+px;\s*$/);
+      if (original) {
+        out.push(`${original[1]}${original[2]}${px}px;`);
+      } else {
+        out.push(`${cssMatch[1]}--text-${tierKey}: ${px}px;`);
+      }
+      continue;
+    }
+
+    // Figma → Tailwind table row e.g. `| Label sm | 12px | \`text-xs\` |`
+    const tableMatch = line.match(/^\|\s*[^|]+\|\s*\d+px\s*\|\s*`text-([0-9a-z]+)`\s*\|\s*$/);
+    if (tableMatch) {
+      const tierKey = tableMatch[1] as TierKey;
+      if (!enabledSet.has(tierKey)) continue;
+      const tier = TIERS.find(t => t.key === tierKey);
+      const px = Number(vals[sizeKey(tierKey)]) || tier?.defaultPx;
+      out.push(`| ${tier?.figmaLabel ?? '—'} | ${px}px | \`text-${tierKey}\` |`);
+      continue;
+    }
+
+    out.push(line);
+  }
+
+  return out.join('\n');
+}
+
+/**
+ * Figma transform — substitutes the `Font/Size/{figmaLabel} → N` lines
+ * from the user-supplied tier sizes. Disabled tiers are skipped (line
+ * dropped). The 2xs tier has no Figma equivalent, so it is never
+ * emitted on this side. Line-height, letter-spacing, and font-weight
+ * sections are left untouched — the input panel doesn't customise them.
+ */
+function transformFigmaMarkdown(raw: string, vals: InputValues): string {
+  const enabledSet = new Set((vals.enabled as string ?? '').split(',').filter(Boolean));
+  const labelToTier = new Map<string, typeof TIERS[number]>();
+  for (const t of TIERS) {
+    if (t.figmaLabel && t.figmaLabel !== '—') labelToTier.set(t.figmaLabel, t);
+  }
+
+  const out: string[] = [];
+  for (const line of raw.split('\n')) {
+    const m = line.match(/^(\s*Font\/Size\/)([A-Za-z ]+?)(\s*→\s*)\d+\s*$/);
+    if (m) {
+      const figmaLabel = m[2].trim();
+      const tier = labelToTier.get(figmaLabel);
+      if (tier) {
+        if (!enabledSet.has(tier.key)) continue;
+        const px = Number(vals[sizeKey(tier.key)]) || tier.defaultPx;
+        out.push(`${m[1]}${m[2]}${m[3]}${px}`);
+        continue;
+      }
+    }
+    out.push(line);
+  }
+  return out.join('\n');
+}
+
+function resolveTokens(_vals: InputValues): Record<string, string> { return {}; }
+
+/* ────────────────────────────────────────────────────────────────
+ * Page
+ * ──────────────────────────────────────────────────────────────── */
+export default function TypographyPage() {
+  return (
+    <>
+      <style>{LOCAL_CSS}</style>
+      <ComponentPageLayout
+        inputConfig={buildInputConfig}
+        defaultInputValues={DEFAULT_VALUES}
+        buildVariants={buildVariants}
+        variantTitle="Variants"
+        markdownContent={typographyMd}
+        markdownFileName="typography-instruction"
+        figmaMarkdownContent={typographyFigmaMd}
+        resolveTokens={resolveTokens}
+        transformMarkdown={transformMarkdown}
+        transformFigmaMarkdown={transformFigmaMarkdown}
+      />
+    </>
+  );
+}
+
+const LOCAL_CSS = `
+  .tp-row {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 12px 4px;
+    border-bottom: 1px solid #eef0f3;
+    width: 100%;
+  }
+  .tp-row:last-child { border-bottom: none; }
+  .tp-row-meta {
+    flex: 0 0 140px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .tp-row-class {
+    color: #051325;
+    font-weight: 600;
+    font-size: 12px;
+    font-family: 'DM Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .tp-row-size {
+    color: #4f5c6d;
+    font-size: 11px;
+    font-family: 'DM Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .tp-row-sample {
+    color: #051325;
+    line-height: 1.15;
+    font-weight: 500;
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+`;

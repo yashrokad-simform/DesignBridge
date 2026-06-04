@@ -6,6 +6,7 @@ import ComponentPageLayout, {
   type VariantGroup,
 } from '../ComponentPageLayout';
 import badgeMd from '../md_files/badge-instruction.md?raw';
+import badgeFigmaMd from '../figma_prompt/badge-prompt.md?raw';
 
 const INPUT_CONFIG: InputConfig[] = [
   { key: 'div0', label: 'Variants', type: 'divider' },
@@ -249,6 +250,176 @@ function transformBadgeMd(raw: string, vals: InputValues): string {
   return md;
 }
 
+/* ── Figma maps ─────────────────────────────────────────── */
+const BADGE_FIGMA_RADIUS: Record<string, { var: string; px: string; desc: string }> = {
+  '4px':  { var: 'radius-xs',   px: '4px',   desc: '4px' },
+  '8px':  { var: 'radius-md',   px: '8px',   desc: '8px' },
+  'full': { var: 'radius-full', px: '9999px', desc: '9999 (pill shape)' },
+};
+const BADGE_FIGMA_PADDING: Record<string, { var: string; px: string }> = {
+  'px-2': { var: 'spacing-md', px: '8px' },
+  'px-3': { var: 'spacing-xl', px: '12px' },
+};
+const BADGE_FIGMA_TYPO: Record<string, { style: string; px: string; lh: string }> = {
+  '12px': { style: 'Label sm', px: '12px', lh: '16px' },
+  '14px': { style: 'Body sm',  px: '14px', lh: '18px' },
+};
+
+function transformBadgeFigmaMd(raw: string, vals: InputValues): string {
+  let md = raw;
+  const textSize    = vals.textSize     as string;
+  const borderRadius = vals.borderRadius as string;
+  const paddingX    = vals.paddingX     as string;
+  const dotPrefix   = vals.dotPrefix    as boolean;
+
+  const selectedVariants: string[] = [];
+  if (vals.filled)   selectedVariants.push('filled');
+  if (vals.bordered) selectedVariants.push('bordered');
+  if (vals.tertiary) selectedVariants.push('tertiary');
+
+  // ── 1. Typography ─────────────────────────────────────────
+  const typo = BADGE_FIGMA_TYPO[textSize] ?? BADGE_FIGMA_TYPO['12px'];
+  if (textSize !== '12px') {
+    md = md.replace(/Label sm\/Medium/g,   `${typo.style}/Medium`);
+    md = md.replace(/Label sm\/Regular/g,  `${typo.style}/Regular`);
+    md = md.replace(/12px · 16px LH · 0 LS/g, `${typo.px} · ${typo.lh} LH · 0 LS`);
+    md = md.replace(/Inter · Medium \(500\) · 12px/g, `Inter · Medium (500) · ${typo.px}`);
+    md = md.replace(/\| `Label sm\/Medium` \|/g, `| \`${typo.style}/Medium\` |`);
+  }
+
+  // ── 2. Corner radius ──────────────────────────────────────
+  const rr = BADGE_FIGMA_RADIUS[borderRadius] ?? BADGE_FIGMA_RADIUS['full'];
+  if (rr.var !== 'radius-full') {
+    md = md.replace(/\bradius-full\b/g, rr.var);
+    md = md.replace(/9999 \(pill shape\)/g, rr.desc);
+    md = md.replace(/9999px/g, rr.px);
+    md = md.replace(/\(9999\)/g, `(${rr.px})`);
+  }
+
+  // ── 3. Padding variable ───────────────────────────────────
+  const pad = BADGE_FIGMA_PADDING[paddingX] ?? BADGE_FIGMA_PADDING['px-2'];
+  if (paddingX !== 'px-2') {
+    md = md.replace(/`spacing-md` \| 8px(?=.*Left|.*Right|.*Padding)/g, `\`${pad.var}\` | ${pad.px}`);
+    md = md.replace(/Padding Left\/Right \| `spacing-md`/g, `Padding Left/Right | \`${pad.var}\``);
+    md = md.replace(/Padding Left \| `spacing-md`/g,  `Padding Left | \`${pad.var}\``);
+    md = md.replace(/Padding Right \| `spacing-md`/g, `Padding Right | \`${pad.var}\``);
+  }
+
+  // ── 4. Show Dot default ───────────────────────────────────
+  md = md.replace(
+    /(`Show Dot#[^`]+` \| BOOLEAN \| )`(?:true|false)`/,
+    `$1\`${dotPrefix}\``,
+  );
+
+  // ── 5. Remove disabled variant type sections ──────────────
+  const VARIANT_MAP: Array<{ key: string; header: string }> = [
+    { key: 'filled',   header: '### Colors — Filled Type' },
+    { key: 'bordered', header: '### Colors — Bordered Type' },
+    { key: 'tertiary', header: '### Colors — Tertiary Type' },
+  ];
+  for (const { key, header } of VARIANT_MAP) {
+    if (!selectedVariants.includes(key)) {
+      const escaped = header.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      md = md.replace(
+        new RegExp(`\\n${escaped}[\\s\\S]*?(?=\\n### |\\n---|\n## |$)`),
+        '',
+      );
+    }
+  }
+
+  // Remove disabled type from "Type (N options)" table rows
+  if (!selectedVariants.includes('filled'))   md = md.replace(/^\| `Filled` \|[^\n]*\n?/gm, '');
+  if (!selectedVariants.includes('bordered')) md = md.replace(/^\| `Bordered` \|[^\n]*\n?/gm, '');
+  if (!selectedVariants.includes('tertiary')) md = md.replace(/^\| `Tertiary` \|[^\n]*\n?/gm, '');
+
+  // ── 6. Code-block filtering ────────────────────────────────
+  const typeNames: Record<string, string> = { filled: 'Filled', bordered: 'Bordered', tertiary: 'Tertiary' };
+  const totalVariants = selectedVariants.length * 12;
+
+  // Section header
+  md = md.replace(/### Type \(3 options\)/, `### Type (${selectedVariants.length} option${selectedVariants.length === 1 ? '' : 's'})`);
+
+  // Overview count
+  md = md.replace(
+    /\| Total Variants \| 36 \(3 Types × 12 Colors\) \|/,
+    `| Total Variants | ${totalVariants} (${selectedVariants.length} Type${selectedVariants.length === 1 ? '' : 's'} × 12 Colors) |`,
+  );
+
+  // Component Hierarchy code block — Level 2 explicit examples
+  // Filled and Bordered are the two explicitly shown types; Tertiary is in "N more"
+  if (!selectedVariants.includes('filled')) {
+    md = md.replace(
+      /^    └── Type=Filled, Color=Primary \[COMPONENT — variant wrapper\][^\n]*\n          └── _base Badge[^\n]*\n/m,
+      '',
+    );
+  }
+  if (!selectedVariants.includes('bordered')) {
+    md = md.replace(
+      /^    └── Type=Bordered, Color=Primary\n          └── _base Badge[^\n]*\n/m,
+      '',
+    );
+  }
+  // If both Filled and Bordered are off but Tertiary is on, show Tertiary as the example
+  if (!selectedVariants.includes('filled') && !selectedVariants.includes('bordered') && selectedVariants.includes('tertiary')) {
+    md = md.replace(
+      /^    └── … \(\d+ more variants, same structure\)/m,
+      '    └── Type=Tertiary, Color=Primary [COMPONENT — variant wrapper]\n          └── _base Badge          [INSTANCE of Level 1]\n    └── … (11 more variants, same structure)',
+    );
+  } else {
+    // Update "N more" count in hierarchy
+    const hierarchyShown = selectedVariants.filter(v => v === 'filled' || v === 'bordered').length;
+    const hierarchyMore = totalVariants - hierarchyShown;
+    md = md.replace(/^    └── … \(\d+ more variants, same structure\)/m, `    └── … (${hierarchyMore} more variants, same structure)`);
+  }
+
+  // Level 2 Variant Structure code block — remove disabled type blocks
+  for (const key of ['filled', 'bordered', 'tertiary']) {
+    if (!selectedVariants.includes(key)) {
+      const name = typeNames[key];
+      md = md.replace(
+        new RegExp(`  ├── Type=${name}, Color=Primary[^\\n]*\\n(?:  │[^\\n]*\\n)*  │\\n`),
+        '',
+      );
+    }
+  }
+  // Update "N more variants" count in Variant Structure
+  const structureShown = selectedVariants.length; // one per enabled type
+  const structureMore = totalVariants - structureShown;
+  md = md.replace(/^  └── … \d+ more variants \(same structure\)/m, `  └── … ${structureMore} more variants (same structure)`);
+
+  // Inheritance blockquote example — ensure it shows an enabled type
+  // Original shows "Type=Bordered" — change if Bordered is off
+  if (!selectedVariants.includes('bordered')) {
+    const fallback = typeNames[selectedVariants[0]] ?? 'Filled';
+    md = md.replace(
+      /^> ▼ Type=Bordered, Color=Primary/m,
+      `> ▼ Type=${fallback}, Color=Primary`,
+    );
+    md = md.replace(
+      /^> ▼ Bordered, Primary/m,
+      `> ▼ ${fallback}, Primary`,
+    );
+  }
+
+  // "What changes between variants" table — remove disabled type columns
+  // The table has format: | What changes | Filled | Bordered | Tertiary |
+  for (const key of ['filled', 'bordered', 'tertiary']) {
+    if (!selectedVariants.includes(key)) {
+      const name = typeNames[key];
+      // Header row
+      md = md.replace(new RegExp(` \\| ${name}(?= \\||$)`, 'gm'), '');
+      // Separator row — remove one |---| for each disabled col
+      // Done after all column removals below
+    }
+  }
+  // Fix separator row to match remaining column count (1 "What changes" + N enabled types)
+  const colCount = 1 + selectedVariants.length;
+  const newSep = Array(colCount).fill('---').map(s => `| ${s} `).join('') + '|';
+  md = md.replace(/^\|---\|---\|---\|---\|$/m, newSep);
+
+  return md;
+}
+
 /* ── Page ───────────────────────────────────────────────── */
 export default function BadgePage() {
   return (
@@ -259,8 +430,10 @@ export default function BadgePage() {
       variantTitle="Variants"
       markdownContent={badgeMd}
       markdownFileName="badge"
+      figmaMarkdownContent={badgeFigmaMd}
       resolveTokens={resolveTokens}
       transformMarkdown={transformBadgeMd}
+      transformFigmaMarkdown={transformBadgeFigmaMd}
     />
   );
 }

@@ -13,6 +13,7 @@ import ComponentPageLayout, {
   type VariantGroup,
 } from '../ComponentPageLayout';
 import dropdownMd from '../md_files/dropdown-instruction.md?raw';
+import dropdownFigmaMd from '../figma_prompt/dropdown-prompt.md?raw';
 
 const FRUITS: DropdownOption[] = [
   { value: 'apple',      label: 'Apple' },
@@ -276,6 +277,70 @@ function transformMarkdown(raw: string, vals: InputValues): string {
   return md;
 }
 
+/* ── Figma transform ────────────────────────────────────── */
+const DD_FIGMA_RADIUS: Record<string, string> = {
+  '4px': 'radius-xs', '8px': 'radius-md', '12px': 'radius-xl', '16px': 'radius-2xl', 'full': 'radius-full',
+};
+const DD_FIGMA_PAD: Record<string, { var: string; px: string }> = {
+  '12px': { var: 'spacing-xl',  px: '12px' },
+  '14px': { var: 'spacing-2xl', px: '14px' },
+  '16px': { var: 'spacing-3xl', px: '16px' },
+  '20px': { var: 'spacing-4xl', px: '20px' },
+};
+const DD_FIGMA_TYPO: Record<string, { style: string; px: string; lh: string }> = {
+  '14px': { style: 'Body sm', px: '14px', lh: '18px' },
+  '16px': { style: 'Body md', px: '16px', lh: '22px' },
+};
+
+function transformDropdownFigmaMd(raw: string, vals: InputValues): string {
+  let md = raw;
+  const textSize    = vals.textSize    as string;
+  const cornerRadius = vals.cornerRadius as DropdownCornerRadius;
+  const padding     = vals.padding     as DropdownPadding;
+  const height      = vals.height      as number;
+  const showLabel   = vals.showLabel   as boolean;
+  const showHelper  = vals.showHelper  as boolean;
+  const showLeading = vals.showLeading as boolean;
+
+  // ── Typography ────────────────────────────────────────────
+  const typo = DD_FIGMA_TYPO[textSize] ?? DD_FIGMA_TYPO['14px'];
+  if (textSize !== '14px') {
+    md = md.replace(/Body md\/Medium/g,  `${typo.style}/Medium`);
+    md = md.replace(/Body md\/Regular/g, `${typo.style}/Regular`);
+    md = md.replace(/14px · 18px LH/g,  `${typo.px} · ${typo.lh} LH`);
+    md = md.replace(/Inter · Medium \(500\) · 14px/g, `Inter · Medium (500) · ${typo.px}`);
+  }
+
+  // ── Corner radius ─────────────────────────────────────────
+  const rr = DD_FIGMA_RADIUS[cornerRadius] ?? 'radius-xl';
+  if (rr !== 'radius-xl') {
+    md = md.replace(/\bradius-xl\b(?!.*radius-xs)/g, rr);
+  }
+
+  // ── Padding left/right ────────────────────────────────────
+  const pad = DD_FIGMA_PAD[padding] ?? DD_FIGMA_PAD['12px'];
+  if (padding !== '12px') {
+    md = md.replace(/`spacing-xl` \(12px\)(?=.*(?:Left|Right|Padding L))/g, `\`${pad.var}\` (${pad.px})`);
+    md = md.replace(/Padding L\/R:\s*spacing-xl \(12px\)/g, `Padding L/R: ${pad.var} (${pad.px})`);
+    md = md.replace(/(Input padding (?:Left|Right) \| )`spacing-xl` \| 12px/g, `$1\`${pad.var}\` | ${pad.px}`);
+  }
+
+  // ── Height ────────────────────────────────────────────────
+  if (height !== 44) {
+    md = md.replace(/FIXED height \(44px\)/g,  `FIXED height (${height}px)`);
+    md = md.replace(/FIXED\(44px\)/g,          `FIXED(${height}px)`);
+    md = md.replace(/× FIXED\(44px\)/g,        `× FIXED(${height}px)`);
+    md = md.replace(/\b44px\b(?=.*(?:fixed|FIXED|height|Input))/gi, `${height}px`);
+  }
+
+  // ── Boolean defaults ──────────────────────────────────────
+  md = md.replace(/(Show Label[^|]*\| BOOLEAN \| )`(?:true|false)`/, `$1\`${showLabel}\``);
+  md = md.replace(/(Show Hint[^|]*\| BOOLEAN \| )`(?:true|false)`/,  `$1\`${showHelper}\``);
+  md = md.replace(/(Show Prefix[^|]*\| BOOLEAN \| )`(?:true|false)`/, `$1\`${showLeading}\``);
+
+  return md;
+}
+
 /* ── Page ───────────────────────────────────────────────── */
 export default function DropdownPage() {
   return (
@@ -286,8 +351,10 @@ export default function DropdownPage() {
       variantTitle="Variants"
       markdownContent={dropdownMd}
       markdownFileName="dropdown"
+      figmaMarkdownContent={dropdownFigmaMd}
       resolveTokens={resolveTokens}
       transformMarkdown={transformMarkdown}
+      transformFigmaMarkdown={transformDropdownFigmaMd}
     />
   );
 }

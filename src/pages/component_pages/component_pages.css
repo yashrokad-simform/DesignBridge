@@ -92,6 +92,27 @@
   gap: 7px;
   height: 36px;
   padding: 0 16px;
+  background: #0076B8;
+  color: #ffffff;
+  border: 0;
+  border-radius: var(--cp-radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 140ms;
+  flex-shrink: 0;
+}
+.cp-copy-btn:hover { background: #00609A; }
+.cp-copy-btn img { display: block; }
+
+/* Figma copy button */
+.cp-figma-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 36px;
+  padding: 0 16px;
   background: #051325;
   color: #ffffff;
   border: 0;
@@ -103,7 +124,8 @@
   transition: background 140ms;
   flex-shrink: 0;
 }
-.cp-copy-btn:hover { background: #0b1f3a; }
+.cp-figma-btn:hover { background: #0b1f3a; }
+.cp-figma-btn img { display: block; }
 
 /* Body */
 .cp-bottom-body {
@@ -616,6 +638,37 @@
   background: var(--cp-surface-2);
   border-color: var(--cp-ink);
 }
+
+.cp-drawer-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 8px 16px 0;
+  background: var(--cp-surface-2);
+  border-bottom: 1px solid var(--cp-line-2);
+  flex-shrink: 0;
+}
+.cp-drawer-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border: 0;
+  background: transparent;
+  color: #4f5c6d;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 140ms, border-color 140ms, background 140ms;
+}
+.cp-drawer-tab:hover { color: #051325; }
+.cp-drawer-tab--active {
+  color: #0076B8;
+  border-bottom-color: #0076B8;
+}
+.cp-drawer-tab img { display: block; }
 
 .cp-drawer-body {
   flex: 1;

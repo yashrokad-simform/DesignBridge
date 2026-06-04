@@ -6,6 +6,7 @@ import ComponentPageLayout, {
   type VariantGroup,
 } from '../ComponentPageLayout';
 import checkboxMd from '../md_files/checkbox-instruction.md?raw';
+import checkboxFigmaMd from '../figma_prompt/checkbox-prompt.md?raw';
 
 const INPUT_CONFIG: InputConfig[] = [
   { key: 'div0', label: 'Options', type: 'divider' },
@@ -179,6 +180,52 @@ function resolveTokens(_vals: InputValues): Record<string, string> {
   return {};
 }
 
+/* ── Figma maps ─────────────────────────────────────────── */
+const CB_FIGMA_RADIUS: Record<string, string> = {
+  '4px': 'radius-xs', '8px': 'radius-md', '12px': 'radius-xl', '16px': 'radius-2xl',
+};
+const CB_FIGMA_TYPO: Record<string, { style: string; px: string; lh: string }> = {
+  '12px': { style: 'Label sm', px: '12px', lh: '16px' },
+  '14px': { style: 'Body sm',  px: '14px', lh: '18px' },
+  '16px': { style: 'Body md',  px: '16px', lh: '22px' },
+};
+
+function transformCheckboxFigmaMd(raw: string, vals: InputValues): string {
+  let md = raw;
+  const textSize    = vals.textSize     as string;
+  const cornerRadius = vals.cornerRadius as string;
+  const showCaption  = vals.showCaption  as boolean;
+
+  // ── 1. Typography (Body sm is default at 14px) ───────────
+  const typo = CB_FIGMA_TYPO[textSize] ?? CB_FIGMA_TYPO['14px'];
+  if (textSize !== '14px') {
+    md = md.replace(/Body sm\/Medium/g, `${typo.style}/Medium`);
+    md = md.replace(/Body sm\/Regular/g, `${typo.style}/Regular`);
+    md = md.replace(/Inter · Medium \(500\) · 14px · 18px LH/g,
+      `Inter · Medium (500) · ${typo.px} · ${typo.lh} LH`);
+    md = md.replace(/14px · 18px LH/g, `${typo.px} · ${typo.lh} LH`);
+  }
+
+  // ── 2. Tile corner radius ─────────────────────────────────
+  const rr = CB_FIGMA_RADIUS[cornerRadius] ?? 'radius-xl';
+  if (rr !== 'radius-xl') {
+    // Only replace radius-xl in the Checkbox Tile context (not radius-xs for the box)
+    md = md.replace(/Tile corner radius \(all 4\) \| `radius-xl`/g,
+      `Tile corner radius (all 4) | \`${rr}\``);
+    md = md.replace(/(Checkbox Tile[\s\S]*?Corner Radius:) radius-xl/g, `$1 ${rr}`);
+    md = md.replace(/(Bind corner radius all 4 corners → )`radius-xl`/g, `$1\`${rr}\``);
+    md = md.replace(/(Tile frame \| Corner radius[^|]*\| )`radius-xl`/g, `$1\`${rr}\``);
+  }
+
+  // ── 3. Show Caption default ───────────────────────────────
+  md = md.replace(
+    /(`Show Caption#[^`]+` \| BOOLEAN \| )`(?:true|false)`/,
+    `$1\`${showCaption}\``,
+  );
+
+  return md;
+}
+
 export default function CheckboxPage() {
   return (
     <ComponentPageLayout
@@ -188,8 +235,10 @@ export default function CheckboxPage() {
       variantTitle="Variants"
       markdownContent={checkboxMd}
       markdownFileName="checkbox"
+      figmaMarkdownContent={checkboxFigmaMd}
       resolveTokens={resolveTokens}
       transformMarkdown={transformMarkdown}
+      transformFigmaMarkdown={transformCheckboxFigmaMd}
     />
   );
 }

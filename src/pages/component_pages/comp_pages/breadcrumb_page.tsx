@@ -7,6 +7,7 @@ import ComponentPageLayout, {
 } from '../ComponentPageLayout';
 
 import breadcrumbMd from '../md_files/breadcrumb-instruction.md?raw';
+import breadcrumbFigmaMd from '../figma_prompt/breadcrumb-prompt.md?raw';
 
 const INPUT_CONFIG: InputConfig[] = [
   { key: 'div0', label: 'Typography', type: 'divider' },
@@ -202,6 +203,69 @@ function resolveTokens(vals: InputValues): Record<string, string> {
   };
 }
 
+/* ── Figma typography map ───────────────────────────────── */
+const FIGMA_TYPO: Record<string, { style: string; px: string; lh: string }> = {
+  '12px': { style: 'Label sm', px: '12px', lh: '16px' },
+  '14px': { style: 'Body sm',  px: '14px', lh: '18px' },
+  '16px': { style: 'Body md',  px: '16px', lh: '22px' },
+};
+const FIGMA_GAP: Record<string, { var: string; px: string }> = {
+  '0.5': { var: 'spacing-xxs', px: '2px' },
+  '1':   { var: 'spacing-xs',  px: '4px' },
+  '1.5': { var: 'spacing-sm',  px: '6px' },
+  '2':   { var: 'spacing-md',  px: '8px' },
+};
+
+function transformFigmaMarkdown(raw: string, vals: InputValues): string {
+  let md = raw;
+  const tSize = vals.textSize as string;
+  const sSize = vals.separatorSize as string;
+  const gap   = vals.gap as string;
+
+  // ── 1. Text style (typography) ──────────────────────────
+  const typo = FIGMA_TYPO[tSize] ?? FIGMA_TYPO['14px'];
+  if (tSize !== '14px') {
+    md = md.replace(/Body sm\/Regular/g, `${typo.style}/Regular`);
+    md = md.replace(/Body sm\/Medium/g,  `${typo.style}/Medium`);
+    md = md.replace(/14px · 18px LH · 0 LS/g, `${typo.px} · ${typo.lh} LH · 0 LS`);
+    md = md.replace(/14px · 18px LH/g,         `${typo.px} · ${typo.lh} LH`);
+    md = md.replace(/Inter · Regular \(400\) · 14px/g, `Inter · Regular (400) · ${typo.px}`);
+    md = md.replace(/Inter · Medium \(500\) · 14px/g,  `Inter · Medium (500) · ${typo.px}`);
+  }
+
+  // ── 2. Separator icon size ───────────────────────────────
+  if (sSize !== '12px') {
+    md = md.replace(/Property 1 — Size \| `12px`/g, `Property 1 — Size | \`${sSize}\``);
+    md = md.replace(/Property 1 — Size \* \| \`12px\`/g, `Property 1 — Size * | \`${sSize}\``);
+    md = md.replace(/Size=12px/g,  `Size=${sSize}`);
+    md = md.replace(/\bsize=12px\b/g, `size=${sSize}`);
+    // In icon property tables
+    md = md.replace(/(Property 1 — Size \| )`12px`/g, `$1\`${sSize}\``);
+    md = md.replace(/arrow-right · 12px/g,  `arrow-right · ${sSize}`);
+    md = md.replace(/\| `12px` \|(?=.*arrow-right)/g, `| \`${sSize}\` |`);
+    md = md.replace(/Icon \[INSTANCE\] → 12px/g,  `Icon [INSTANCE] → ${sSize}`);
+    md = md.replace(/12px \[COMPONENT\]/g,          `${sSize} [COMPONENT]`);
+  }
+
+  // ── 3. Gap variable ─────────────────────────────────────
+  const gapEntry = FIGMA_GAP[gap] ?? FIGMA_GAP['1'];
+  // Replace any existing spacing var (xxs/xs/sm/md) + px value in gap context
+  md = md.replace(/`spacing-(?:xxs|xs|sm|md)` \((?:2|4|6|8)px\)(?= (?:gap|Gap))/g,
+    `\`${gapEntry.var}\` (${gapEntry.px})`);
+  md = md.replace(/Bind \*\*Gap\*\* → `spacing-(?:xxs|xs|sm|md)` \((?:2|4|6|8)px\)/g,
+    `Bind **Gap** → \`${gapEntry.var}\` (${gapEntry.px})`);
+  md = md.replace(/(Gap between items \| )`spacing-(?:xxs|xs|sm|md)` \| (?:2|4|6|8)px/g,
+    `$1\`${gapEntry.var}\` | ${gapEntry.px}`);
+  md = md.replace(/(Gap \| )`spacing-(?:xxs|xs|sm|md)`/g, `$1\`${gapEntry.var}\``);
+  // Variable attachment table
+  md = md.replace(/(`Step` variant frame \| Gap \| )`spacing-(?:xxs|xs|sm|md)`/g,
+    `$1\`${gapEntry.var}\``);
+  // Fallback: any remaining spacing-xs tied to 2px (the known wrong default in the prompt)
+  md = md.replace(/spacing-xs \(2px\)/g, `${gapEntry.var} (${gapEntry.px})`);
+
+  return md;
+}
+
 export default function BreadcrumbPage() {
   return (
     <ComponentPageLayout
@@ -211,7 +275,9 @@ export default function BreadcrumbPage() {
       variantTitle="Variants"
       markdownContent={breadcrumbMd}
       markdownFileName="breadcrumb"
+      figmaMarkdownContent={breadcrumbFigmaMd}
       resolveTokens={resolveTokens}
+      transformFigmaMarkdown={transformFigmaMarkdown}
     />
   );
 }

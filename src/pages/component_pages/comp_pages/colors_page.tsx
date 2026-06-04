@@ -5,6 +5,7 @@ import ComponentPageLayout, {
   type VariantGroup,
 } from '../ComponentPageLayout';
 import colorsMd from '../md_files/color-instruction.md?raw';
+import colorsFigmaMd from '../figma_prompt/colorStyles.md?raw';
 
 /* ────────────────────────────────────────────────────────────────
  * Defaults — anchored to color-instruction.md (READ-ONLY reference)
@@ -83,11 +84,11 @@ function generateShades(hex: string): Palette {
  * Customise panel — same structure as every other page (divider +
  * fields). Uses the built-in `color` InputPanel field.
  * ──────────────────────────────────────────────────────────────── */
-const INPUT_CONFIG: InputConfig[] = [
-  { key: 'div0',      label: 'Anchors',       type: 'divider' },
-  { key: 'primary',   label: 'Primary 500',   type: 'colorhex' },
-  { key: 'secondary', label: 'Secondary 500', type: 'colorhex' },
-  { key: 'neutral',   label: 'Neutral 500',   type: 'colorhex' },
+const buildInputConfig = (_vals: InputValues): InputConfig[] => [
+  { key: 'div1',      label: 'Anchors',        type: 'divider' },
+  { key: 'primary',   label: 'Primary 500',    type: 'colorhex' },
+  { key: 'secondary', label: 'Secondary 500',  type: 'colorhex' },
+  { key: 'neutral',   label: 'Neutral 500',    type: 'colorhex' },
 ];
 
 const DEFAULT_VALUES: InputValues = { ...DEFAULTS };
@@ -153,6 +154,7 @@ function substituteHex(md: string, tokenName: string, newHex: string): string {
   return md.replace(re, `$1${newHex.toLowerCase()}`);
 }
 
+
 function transformMarkdown(raw: string, vals: InputValues): string {
   const primary   = generateShades(vals.primary   as string);
   const secondary = generateShades(vals.secondary as string);
@@ -162,7 +164,33 @@ function transformMarkdown(raw: string, vals: InputValues): string {
   for (const k of SHADES) {
     md = substituteHex(md, `primary-${k}`,   primary[k]);
     md = substituteHex(md, `secondary-${k}`, secondary[k]);
-    md = substituteHex(md, `gray-${k}`,      neutral[k]);   // MD token is `gray`, UI label is "Neutral"
+    md = substituteHex(md, `gray-${k}`,      neutral[k]);
+  }
+  return md;
+}
+
+/**
+ * Figma MD substitutes hex in lines shaped like:
+ *   | `Primary/primary 500` | `#0056b8` |
+ * Anchors on the variable name (with shade number) before the closing
+ * backtick so `primary 50` and `primary 500` stay distinct.
+ */
+function substituteFigmaHex(md: string, varName: string, newHex: string): string {
+  const escaped = varName.replace(/[/\\^$*+?.()|[\]{}]/g, '\\$&');
+  const re = new RegExp(`(\\\`${escaped}\\\`\\s*\\|\\s*\\\`)#[0-9a-fA-F]{3,8}`);
+  return md.replace(re, `$1${newHex.toLowerCase()}`);
+}
+
+function transformFigmaMarkdown(raw: string, vals: InputValues): string {
+  const primary   = generateShades(vals.primary   as string);
+  const secondary = generateShades(vals.secondary as string);
+  const neutral   = generateShades(vals.neutral   as string);
+
+  let md = raw;
+  for (const k of SHADES) {
+    md = substituteFigmaHex(md, `Primary/primary ${k}`,    primary[k]);
+    md = substituteFigmaHex(md, `Secondary/secondary ${k}`, secondary[k]);
+    md = substituteFigmaHex(md, `Neutrals/gray ${k}`,      neutral[k]);
   }
   return md;
 }
@@ -177,14 +205,16 @@ export default function ColorsPage() {
     <>
       <style>{LOCAL_CSS}</style>
       <ComponentPageLayout
-        inputConfig={INPUT_CONFIG}
+        inputConfig={buildInputConfig}
         defaultInputValues={DEFAULT_VALUES}
         buildVariants={buildVariants}
         variantTitle="Variants"
         markdownContent={colorsMd}
         markdownFileName="color-instruction"
+        figmaMarkdownContent={colorsFigmaMd}
         resolveTokens={resolveTokens}
         transformMarkdown={transformMarkdown}
+        transformFigmaMarkdown={transformFigmaMarkdown}
       />
     </>
   );

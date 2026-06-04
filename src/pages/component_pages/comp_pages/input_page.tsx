@@ -8,6 +8,7 @@ import ComponentPageLayout, {
   type VariantGroup,
 } from '../ComponentPageLayout';
 import inputMd from '../md_files/input-instruction.md?raw';
+import inputFigmaMd from '../figma_prompt/input-prompt.md?raw';
 
 /* ── Input config ───────────────────────────────────────── */
 const INPUT_CONFIG: InputConfig[] = [
@@ -298,6 +299,70 @@ function transformMarkdown(raw: string, vals: InputValues): string {
   return md;
 }
 
+/* ── Figma transform ────────────────────────────────────── */
+const INP_FIGMA_RADIUS: Record<string, string> = {
+  '4px': 'radius-xs', '8px': 'radius-md', '12px': 'radius-xl', '16px': 'radius-2xl', 'full': 'radius-full',
+};
+const INP_FIGMA_PAD: Record<string, { var: string; px: string }> = {
+  '12px': { var: 'spacing-xl',  px: '12px' },
+  '14px': { var: 'spacing-2xl', px: '14px' },
+  '16px': { var: 'spacing-3xl', px: '16px' },
+  '20px': { var: 'spacing-4xl', px: '20px' },
+};
+
+function transformInputFigmaMd(raw: string, vals: InputValues): string {
+  let md = raw;
+  const textSize    = vals.textSize    as InputTextSize;
+  const cornerRadius = vals.cornerRadius as InputCornerRadius;
+  const padding     = vals.padding     as InputPadding;
+  const height      = vals.height      as number;
+  const showLabel   = vals.showLabel   as boolean;
+  const showRequired = vals.showRequired as boolean;
+  const showHelper  = vals.showHelper  as boolean;
+  const showLeading = vals.showLeading as boolean;
+  const showTrailing = vals.showTrailing as boolean;
+
+  // ── Typography ─────────────────────────────────────────
+  if (textSize === '16px') {
+    md = md.replace(/Body md\/Medium/g, 'Body lg/Medium');
+    md = md.replace(/Inter · Medium 500 · 14px · 18px LH/g, 'Inter · Medium 500 · 16px · 22px LH');
+    md = md.replace(/14px · 18px LH · truncated/g, '16px · 22px LH · truncated');
+  }
+
+  // ── Corner radius ──────────────────────────────────────
+  const rr = INP_FIGMA_RADIUS[cornerRadius] ?? 'radius-xl';
+  if (rr !== 'radius-xl') {
+    md = md.replace(/`radius-xl`(?=.*(?:Input|corner|Radius))/g, `\`${rr}\``);
+    md = md.replace(/(Radius:\s*)radius-xl/g, `$1${rr}`);
+    md = md.replace(/(corner radius[^|]*\| )`radius-xl`/g, `$1\`${rr}\``);
+  }
+
+  // ── Padding ────────────────────────────────────────────
+  const pad = INP_FIGMA_PAD[padding] ?? INP_FIGMA_PAD['12px'];
+  if (padding !== '12px') {
+    md = md.replace(/`spacing-xl` \(12px\)(?=.*(?:Left|Right|Padding))/g, `\`${pad.var}\` (${pad.px})`);
+    md = md.replace(/(Input padding (?:Left|Right) \| )`spacing-xl` \| 12px/g, `$1\`${pad.var}\` | ${pad.px}`);
+    md = md.replace(/Padding:  spacing-xl \(12px\) Left\/Right/g, `Padding:  ${pad.var} (${pad.px}) Left/Right`);
+  }
+
+  // ── Height ─────────────────────────────────────────────
+  if (height !== 44) {
+    md = md.replace(/FIXED\(44px\)/g,   `FIXED(${height}px)`);
+    md = md.replace(/FIXED at 44px/g,   `FIXED at ${height}px`);
+    md = md.replace(/Fixed \(44px\)/g,  `Fixed (${height}px)`);
+    md = md.replace(/height = \*\*FIXED at 44px\*\*/g, `height = **FIXED at ${height}px**`);
+  }
+
+  // ── Boolean defaults ───────────────────────────────────
+  md = md.replace(/(Show Label[^|]*\| BOOLEAN \| )`(?:true|false)`/, `$1\`${showLabel}\``);
+  md = md.replace(/(Mandatory[^|]*\| BOOLEAN \| )`(?:true|false)`/, `$1\`${showRequired}\``);
+  md = md.replace(/(Show Hint[^|]*\| BOOLEAN \| )`(?:true|false)`/, `$1\`${showHelper}\``);
+  md = md.replace(/(Show Prefix[^|]*\| BOOLEAN \| )`(?:true|false)`/, `$1\`${showLeading}\``);
+  md = md.replace(/(Show Suffix[^|]*\| BOOLEAN \| )`(?:true|false)`/, `$1\`${showTrailing}\``);
+
+  return md;
+}
+
 /* ── Page ───────────────────────────────────────────────── */
 export default function InputPage() {
   return (
@@ -308,8 +373,10 @@ export default function InputPage() {
       variantTitle="Variants"
       markdownContent={inputMd}
       markdownFileName="input"
+      figmaMarkdownContent={inputFigmaMd}
       resolveTokens={resolveTokens}
       transformMarkdown={transformMarkdown}
+      transformFigmaMarkdown={transformInputFigmaMd}
     />
   );
 }

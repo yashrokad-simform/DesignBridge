@@ -13,6 +13,7 @@ import ComponentPageLayout, {
   type VariantGroup,
 } from '../ComponentPageLayout';
 import buttonMd from '../md_files/button-instruction.md?raw';
+import buttonFigmaMd from '../figma_prompt/button-prompt.md?raw';
 
 type BtnVariant =
   | 'primary' | 'bordered' | 'text' | 'link' | 'critical'
@@ -375,6 +376,348 @@ function resolveTokens(_vals: InputValues): Record<string, string> {
   return {};
 }
 
+/* ── Figma helpers ──────────────────────────────────────── */
+const FIGMA_RADIUS_BTN: Record<string, string> = {
+  '4px': 'radius-xs', '8px': 'radius-md', '12px': 'radius-xl',
+  '16px': 'radius-2xl', 'full': 'radius-full',
+};
+const FIGMA_SPACING_BTN: Record<number, string> = {
+  0: 'spacing-none', 2: 'spacing-xxs', 4: 'spacing-xs', 6: 'spacing-sm',
+  8: 'spacing-md', 10: 'spacing-lg', 12: 'spacing-xl', 14: 'spacing-2xl',
+  16: 'spacing-3xl', 20: 'spacing-4xl', 24: 'spacing-5xl', 32: 'spacing-6xl',
+  40: 'spacing-7xl', 48: 'spacing-8xl',
+};
+const BTN_TEXT_FIGMA: Record<string, string> = {
+  '12px': 'Label sm/Medium', '14px': 'Body md/Medium', '16px': 'Body lg/Medium',
+};
+
+/* ── transformFigmaMarkdown ─────────────────────────────── */
+
+// Ordered list: code key → display name (for inline stripping)
+const ALL_BTN_TYPES: Array<{ key: string; name: string }> = [
+  { key: 'primary',          name: 'Primary' },
+  { key: 'bordered',         name: 'Bordered' },
+  { key: 'text',             name: 'Text' },
+  { key: 'link',             name: 'Link' },
+  { key: 'icon-filled',      name: 'Icon Filled' },
+  { key: 'icon-secondary',   name: 'Icon Secondary' },
+  { key: 'icon-only',        name: 'Icon Only' },
+  { key: 'critical',         name: 'Critical Primary' },
+  { key: 'critical-bordered', name: 'Critical Bordered' },
+  { key: 'critical-text',    name: 'Critical Text' },
+];
+
+function transformFigmaMarkdown(raw: string, vals: InputValues): string {
+  let md = raw;
+  const hLg  = vals.heightLg    as number;
+  const hSm  = vals.heightSm    as number;
+  const pLg  = vals.paddingXLg  as number;
+  const pSm  = vals.paddingXSm  as number;
+  const cr   = vals.cornerRadius as string;
+  const tLg  = vals.textSizeLg  as string;
+  const tSm  = vals.textSizeSm  as string;
+
+  const rvLg = FIGMA_SPACING_BTN[pLg]  ?? `${pLg}px`;
+  const rvSm = FIGMA_SPACING_BTN[pSm]  ?? `${pSm}px`;
+  const rr   = FIGMA_RADIUS_BTN[cr]    ?? 'radius-xl';
+  const stLg = BTN_TEXT_FIGMA[tLg]     ?? 'Body md/Medium';
+  const stSm = BTN_TEXT_FIGMA[tSm]     ?? 'Label sm/Medium';
+
+  const enabledVariants = (vals.variants as string).split(',').filter(Boolean);
+  const enabledSizes    = (vals.sizes    as string).split(',').filter(Boolean);
+  const has = (k: string) => enabledVariants.includes(k);
+
+  // ── Large height ─────────────────────────────────────────
+  md = md.replace(/44px \(fixed\)/g,        `${hLg}px (fixed)`);
+  md = md.replace(/FIXED \(44px\)/g,        `FIXED (${hLg}px)`);
+  md = md.replace(/FIXED height \(44px\)/g, `FIXED height (${hLg}px)`);
+  md = md.replace(/Large \(44px\)/g,        `Large (${hLg}px)`);
+  md = md.replace(/44×44px/g,               `${hLg}×${hLg}px`);
+
+  // ── Small height ─────────────────────────────────────────
+  md = md.replace(/36px \(fixed\)/g,        `${hSm}px (fixed)`);
+  md = md.replace(/FIXED \(36px\)/g,        `FIXED (${hSm}px)`);
+  md = md.replace(/Small \(36px\)/g,        `Small (${hSm}px)`);
+  md = md.replace(/36×36px/g,               `${hSm}×${hSm}px`);
+  md = md.replace(/→ `36px` \(fixed\)/g,    `→ \`${hSm}px\` (fixed)`);
+
+  // ── Large H-padding ──────────────────────────────────────
+  md = md.replace(/`spacing-4xl` \| 20px/g,           `\`${rvLg}\` | ${pLg}px`);
+  md = md.replace(/`spacing-4xl` \(20px\)/g,           `\`${rvLg}\` (${pLg}px)`);
+  md = md.replace(/spacing-4xl \(20px\)/g,             `${rvLg} (${pLg}px)`);
+  md = md.replace(/20px left\/right \(spacing-4xl\)/g, `${pLg}px left/right (${rvLg})`);
+  md = md.replace(/`spacing-4xl`/g,                    `\`${rvLg}\``);
+
+  // ── Small H-padding ──────────────────────────────────────
+  md = md.replace(/`spacing-3xl` \| 16px/g,           `\`${rvSm}\` | ${pSm}px`);
+  md = md.replace(/`spacing-3xl` \(16px\)/g,           `\`${rvSm}\` (${pSm}px)`);
+  md = md.replace(/spacing-3xl \(16px\)/g,             `${rvSm} (${pSm}px)`);
+  md = md.replace(/16px left\/right \(spacing-3xl\)/g, `${pSm}px left/right (${rvSm})`);
+  md = md.replace(/`spacing-3xl`/g,                    `\`${rvSm}\``);
+
+  // ── Corner radius ────────────────────────────────────────
+  if (rr !== 'radius-xl') md = md.replace(/\bradius-xl\b/g, rr);
+
+  // ── Large text style ─────────────────────────────────────
+  if (stLg !== 'Body md/Medium') {
+    md = md.replace(/Body md\/Medium/g, stLg);
+    if (tLg === '16px') {
+      md = md.replace(/14px · 18px LH · 0 LS/g, '16px · 22px LH · 0 LS');
+      md = md.replace(/Inter · Medium \(500\) · 14px/g, 'Inter · Medium (500) · 16px');
+    }
+  }
+
+  // ── Small text style ─────────────────────────────────────
+  if (stSm !== 'Label sm/Medium') {
+    md = md.replace(/Label sm\/Medium/g, stSm);
+    if (tSm === '14px') {
+      md = md.replace(/12px · 16px LH · 0 LS/g, '14px · 18px LH · 0 LS');
+      md = md.replace(/Inter · Medium \(500\) · 12px/g, 'Inter · Medium (500) · 14px');
+    }
+  }
+
+  // ══════════════════════════════════════════════════════════
+  // VARIANT REMOVAL — remove every trace of disabled variants
+  // ══════════════════════════════════════════════════════════
+
+  // 1. Remove whole "#### Section" blocks (Variable Map Per Variant)
+  for (const { key, name } of ALL_BTN_TYPES) {
+    if (!has(key)) {
+      const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      md = md.replace(
+        new RegExp(`#### ${escaped}[\\s\\S]*?(?=\\n####|\\n---|\n## |$)`), '',
+      );
+    }
+  }
+
+  // 2. Remove rows from "Type (N options)" table: | `Primary` | ... |
+  for (const { key, name } of ALL_BTN_TYPES) {
+    if (!has(key)) {
+      const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      md = md.replace(new RegExp(`^\\| \`${escaped}\` \\|[^\\n]*\\n?`, 'gm'), '');
+    }
+  }
+
+  // 3. Remove rows from "State Details Per Type" table: | Primary | ... |
+  for (const { key, name } of ALL_BTN_TYPES) {
+    if (!has(key)) {
+      const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      md = md.replace(new RegExp(`^\\| ${escaped} \\|[^\\n]*\\n?`, 'gm'), '');
+    }
+  }
+
+  // 4. Strip inline "Name · " and " · Name" mentions from variable table cells
+  for (const { key, name } of ALL_BTN_TYPES) {
+    if (!has(key)) {
+      const n = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      md = md.replace(new RegExp(`${n} · `, 'g'), '');
+      md = md.replace(new RegExp(` · ${n}`, 'g'), '');
+      md = md.replace(new RegExp(`, ${n}`, 'g'), '');
+      md = md.replace(new RegExp(`${n}, `, 'g'), '');
+    }
+  }
+
+  // 5. Update Type list in Step 5 construction guide
+  const enabledTypeNames = ALL_BTN_TYPES
+    .filter(({ key }) => has(key))
+    .map(({ name }) => `\`${name}\``);
+  md = md.replace(
+    /- `Type` → `Primary`, `Bordered`, `Text`, `Link`, `Icon Only`, `Icon Secondary`, `Icon Filled`, `Critical Primary`, `Critical Bordered`, `Critical Text`/,
+    `- \`Type\` → ${enabledTypeNames.join(', ')}`,
+  );
+
+  // 6. Icon Filled/Secondary-specific size table rows and rules
+  if (!has('icon-filled') && !has('icon-secondary')) {
+    md = md.replace(/^\| \*\*Padding H \(Icon Filled · Icon Secondary\)\*\*[^\n]*\n?/gm, '');
+    md = md.replace(/^\| \*\*Padding Left\/Right\*\* \*\(Icon Filled · Icon Secondary only\)\*[^\n]*\n?/gm, '');
+    md = md.replace(/> \*\*Icon Filled & Icon Secondary sizing rule:\*\*[^\n]*\n?/gm, '');
+    md = md.replace(/- \*\*For `Icon Filled` and `Icon Secondary`\*\*:[^\n]*\n?/gm, '');
+  }
+
+  // 7. Icon Only-specific rows and rules
+  if (!has('icon-only')) {
+    md = md.replace(/^\| \*\*Padding H \(Icon Only\)\*\*[^\n]*\n?/gm, '');
+    md = md.replace(/^\| \*\*Padding V \(Icon Only\)\*\*[^\n]*\n?/gm, '');
+    md = md.replace(/^\| \*\*Gap \(Icon Only\)\*\*[^\n]*\n?/gm, '');
+    md = md.replace(/^\| \*\*All Padding \+ Gap\*\* \*\(Icon Only\)\*[^\n]*\n?/gm, '');
+    md = md.replace(/> \*\*Icon Only sizing rule:\*\*[^\n]*\n?/gm, '');
+    md = md.replace(/- \*\*For `Icon Only`\*\*:[^\n]*\n?/gm, '');
+  }
+
+  // 8. Text/Link-specific rows and rules
+  if (!has('text') && !has('link')) {
+    md = md.replace(/^\| \*\*Padding H \(Text · Link\)\*\*[^\n]*\n?/gm, '');
+    md = md.replace(/^\| \*\*Padding V \(Text · Link\)\*\*[^\n]*\n?/gm, '');
+    md = md.replace(/^\| \*\*All Padding\*\* \*\(Text · Link\)\*[^\n]*\n?/gm, '');
+    md = md.replace(/> ⚠️ \*\*CRITICAL — Text & Link Padding Removal[^\n]*\n(>[^\n]*\n)*/gm, '');
+    md = md.replace(/- \*\*For `Text` and `Link`\*\*:[^\n]*\n?/gm, '');
+    md = md.replace(/> \*\*Text & Link sizing rule:\*\*[^\n]*\n?/gm, '');
+  }
+
+  // 9. All-critical disabled: remove the "Critical types" note and rule
+  if (!has('critical') && !has('critical-bordered') && !has('critical-text')) {
+    md = md.replace(/> \*\*Critical types\*\*[^\n]*\n?/gm, '');
+    md = md.replace(/- \*\*Critical types are Disabled-only\.\*\*[^\n]*\n?/gm, '');
+  }
+
+  // 10. Size filtering
+  if (!enabledSizes.includes('lg')) {
+    // Table rows
+    md = md.replace(/^\| Large \|[^\n]*\n?/gm, '');
+    md = md.replace(/\| Large \([^)]+\)/g, '');
+
+    // Size table: 3-col header/separator → 2-col
+    md = md.replace(/^\| Property \| Large \| Small \|$/m, '| Property | Small |');
+    md = md.replace(/^\|---\|---\|---\|$/m, '|---|---|');
+
+    // Section header
+    md = md.replace(/### Size \(2 options\)/, '### Size (1 option)');
+
+    // Overview counts
+    md = md.replace(/\| Total Variants \| 48 \|/, '| Total Variants | 24 |');
+
+    // Code block — component hierarchy: remove ├── Size=Large [COMPONENT] line
+    md = md.replace(/^[ \t]*├── Size=Large[ \t]+\[COMPONENT\][^\n]*\n?/gm, '');
+    // Component hierarchy Level 2: remove Size=Large variant example lines
+    md = md.replace(/^[ \t]*└── Size=Large, State=[^\n]*\n(?:[ \t]*└── [^\n]*\n)?/gm, '');
+    // Level 2 struct block: ├── Size=Large, ... lines with │ children
+    md = md.replace(/^  ├── Size=Large,[^\n]*\n(?:  │[^\n]*\n)*/gm, '');
+
+    // Blockquote inheritance example: ▼ Size=Large → ▼ Size=Small
+    md = md.replace(/^> ▼ Size=Large,[^\n]*/gm, '> ▼ Size=Small, State=Enabled, Type=Primary   ← variant COMPONENT');
+
+    // Component structure code block: remove _base Button — Size=Large block
+    md = md.replace(/_base Button — Size=Large[\s\S]*?(?=_base Button — Size=Small)/g, '');
+    md = md.replace(/\[All other properties same as Large\]\n?/g, '');
+
+    // "What never changes" table rows
+    md = md.replace(/^\| Padding \(Large\)[^\n]*\n?/gm, '');
+    md = md.replace(/^\| Gap \(Large\)[^\n]*\n?/gm, '');
+    md = md.replace(/^\| Icon size \(Large\)[^\n]*\n?/gm, '');
+
+    // Step 7 variable attachment rows
+    md = md.replace(/^\| `_base Button` frame \(Large\)[^\n]*\n?/gm, '');
+    md = md.replace(/^\| `Button` text layer \(Large\)[^\n]*\n?/gm, '');
+
+    // Icon sizes table
+    md = md.replace(/^\| `20px` \| `_base Button — Size=Large` \|\n?/gm, '');
+
+    // CRITICAL base-component note
+    md = md.replace(
+      /two size variants — Large and Small — each with[^.]*\. When building a Button variant, always place an instance of the correct size \(`Size=Large` or `Size=Small`\)/,
+      'one size variant — Small. When building a Button variant, always place an instance of `Size=Small`',
+    );
+
+    // Component Properties default
+    md = md.replace(/\| `Size` \| VARIANT \| `Large` \|/, '| `Size` | VARIANT | `Small` |');
+
+    // Mandatory rules
+    md = md.replace(/`Size=Large` or `Size=Small`/g, '`Size=Small`');
+    md = md.replace(/\(`spacing-xl` for Large, `spacing-lg` for Small\)/g, '(`spacing-lg`)');
+
+    // Construction Guide — remove Steps 1 & 2 (Size=Large build)
+    md = md.replace(/### Step 1 — Build `_base Button — Size=Large`[\s\S]*?(?=### Step 3)/, '');
+    // Rename & renumber remaining steps
+    md = md.replace(/### Step 3 — Build `_base Button — Size=Small`/, '### Step 1 — Build `_base Button — Size=Small`');
+    md = md.replace(
+      /Duplicate `Size=Large` and apply every adjustment below\.[^\n]*/,
+      'Create a new **Frame**. Name it `Size=Small`. Apply **Horizontal Auto Layout**, set to **HUG × FIXED (36px)**, and configure:',
+    );
+    md = md.replace(/### Step 4 — Combine into/, '### Step 2 — Combine into');
+    md = md.replace(/1\. Select both `Size=Large` and `Size=Small` components\./, '1. Select the `Size=Small` component.');
+    md = md.replace(/3\. Add variant property `Size` → options: `Large`, `Small`\./, '3. Add variant property `Size` → option: `Small`.');
+    md = md.replace(/### Step 5 — Build Button Variants/, '### Step 3 — Build Button Variants');
+    md = md.replace(/### Step 6 — Expose/, '### Step 4 — Expose');
+    md = md.replace(/### Step 7 — Variable/, '### Step 5 — Variable');
+    md = md.replace(/### Step 8 — Naming/, '### Step 6 — Naming');
+    md = md.replace(/`Size` → `Large`, `Small`/, '`Size` → `Small`');
+    md = md.replace(/Name it: `Size=Large, State=Enabled, Type=Primary`/, 'Name it: `Size=Small, State=Enabled, Type=Primary`');
+    md = md.replace(/For each of the 48 variants:/, 'For each of the 24 variants:');
+    md = md.replace(/Select all 48 variant components/, 'Select all 24 variant components');
+    md = md.replace(/Do this for \*\*all 48 variants\*\*/, 'Do this for **all 24 variants**');
+
+    // Page arrangement tagline
+    md = md.replace(/48 variants · Size: Large · Small/g, '24 variants · Size: Small');
+    md = md.replace(/Size: Large · Small/g, 'Size: Small');
+    md = md.replace(/Large \(44px\) · Small \(36px\)/g, 'Small (36px)');
+    md = md.replace(/2 size variants · Large \(44px\) · Small \(36px\)/g, '1 size variant · Small (36px)');
+  }
+
+  if (!enabledSizes.includes('sm')) {
+    // Table rows
+    md = md.replace(/^\| Small \|[^\n]*\n?/gm, '');
+    md = md.replace(/\| Small \([^)]+\)/g, '');
+
+    // Size table: 3-col header/separator → 2-col
+    md = md.replace(/^\| Property \| Large \| Small \|$/m, '| Property | Large |');
+    md = md.replace(/^\|---\|---\|---\|$/m, '|---|---|');
+
+    // Section header
+    md = md.replace(/### Size \(2 options\)/, '### Size (1 option)');
+
+    // Overview counts
+    md = md.replace(/\| Total Variants \| 48 \|/, '| Total Variants | 24 |');
+
+    // Code block — component hierarchy: remove └── Size=Small [COMPONENT] line
+    md = md.replace(/^[ \t]*└── Size=Small[ \t]+\[COMPONENT\][^\n]*\n?/gm, '');
+    // Promote ├── Size=Large to └──
+    md = md.replace(/├── Size=Large(\s+\[COMPONENT\])/, '└── Size=Large$1');
+    // Level 2: remove Size=Small variant example lines
+    md = md.replace(/^[ \t]*└── Size=Small, State=[^\n]*\n(?:[ \t]*└── [^\n]*\n)?/gm, '');
+    md = md.replace(/^  ├── Size=Small,[^\n]*\n(?:  │[^\n]*\n)*/gm, '');
+
+    // Blockquote inheritance example already shows Size=Large — no change needed
+
+    // Component structure code block: remove _base Button — Size=Small block
+    md = md.replace(/\n\n_base Button — Size=Small[\s\S]*?\[All other properties same as Large\]\n?/g, '');
+
+    // "What never changes" table rows
+    md = md.replace(/^\| Padding \(Small\)[^\n]*\n?/gm, '');
+    md = md.replace(/^\| Gap \(Small\)[^\n]*\n?/gm, '');
+    md = md.replace(/^\| Icon size \(Small\)[^\n]*\n?/gm, '');
+
+    // Step 7 variable attachment rows
+    md = md.replace(/^\| `_base Button` frame \(Small\)[^\n]*\n?/gm, '');
+    md = md.replace(/^\| `Button` text layer \(Small\)[^\n]*\n?/gm, '');
+
+    // Icon sizes table
+    md = md.replace(/^\| `16px` \| `_base Button — Size=Small` \|\n?/gm, '');
+
+    // CRITICAL base-component note
+    md = md.replace(
+      /two size variants — Large and Small — each with[^.]*\. When building a Button variant, always place an instance of the correct size \(`Size=Large` or `Size=Small`\)/,
+      'one size variant — Large. When building a Button variant, always place an instance of `Size=Large`',
+    );
+
+    // Mandatory rules
+    md = md.replace(/`Size=Large` or `Size=Small`/g, '`Size=Large`');
+    md = md.replace(/\(`spacing-xl` for Large, `spacing-lg` for Small\)/g, '(`spacing-xl`)');
+
+    // Construction Guide — remove Step 3 (Size=Small build)
+    md = md.replace(/### Step 3 — Build `_base Button — Size=Small`[\s\S]*?(?=### Step 4)/, '');
+    // Renumber remaining steps
+    md = md.replace(/### Step 4 — Combine into/, '### Step 2 — Combine into');
+    md = md.replace(/1\. Select both `Size=Large` and `Size=Small` components\./, '1. Select the `Size=Large` component.');
+    md = md.replace(/3\. Add variant property `Size` → options: `Large`, `Small`\./, '3. Add variant property `Size` → option: `Large`.');
+    md = md.replace(/### Step 5 — Build Button Variants/, '### Step 3 — Build Button Variants');
+    md = md.replace(/### Step 6 — Expose/, '### Step 4 — Expose');
+    md = md.replace(/### Step 7 — Variable/, '### Step 5 — Variable');
+    md = md.replace(/### Step 8 — Naming/, '### Step 6 — Naming');
+    md = md.replace(/`Size` → `Large`, `Small`/, '`Size` → `Large`');
+    md = md.replace(/For each of the 48 variants:/, 'For each of the 24 variants:');
+    md = md.replace(/Select all 48 variant components/, 'Select all 24 variant components');
+    md = md.replace(/Do this for \*\*all 48 variants\*\*/, 'Do this for **all 24 variants**');
+
+    // Page arrangement tagline
+    md = md.replace(/48 variants · Size: Large · Small/g, '24 variants · Size: Large');
+    md = md.replace(/Size: Large · Small/g, 'Size: Large');
+    md = md.replace(/Large \(44px\) · Small \(36px\)/g, 'Large (44px)');
+    md = md.replace(/2 size variants · Large \(44px\) · Small \(36px\)/g, '1 size variant · Large (44px)');
+  }
+
+  return md;
+}
+
 /* ── Page ───────────────────────────────────────────────── */
 export default function ButtonPage() {
   return (
@@ -385,8 +728,10 @@ export default function ButtonPage() {
       variantTitle="Variants"
       markdownContent={buttonMd}
       markdownFileName="button"
+      figmaMarkdownContent={buttonFigmaMd}
       resolveTokens={resolveTokens}
       transformMarkdown={transformMarkdown}
+      transformFigmaMarkdown={transformFigmaMarkdown}
     />
   );
 }

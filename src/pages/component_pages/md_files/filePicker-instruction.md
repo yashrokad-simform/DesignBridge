@@ -204,7 +204,6 @@ Derive accepted MIME types and extensions from the `acceptedTypes` prop (e.g. `'
 | `DOC` | `.doc`, `.docx` | `application/msword`, `application/vnd.openxmlformats-officedocument.wordprocessingml.document` |
 | `XLS` | `.xls`, `.xlsx` | `application/vnd.ms-excel`, `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet` |
 | `PPT` | `.ppt`, `.pptx` | `application/vnd.ms-powerpoint`, `application/vnd.openxmlformats-officedocument.presentationml.presentation` |
-| `IMG` | `.jpg`, `.jpeg`, `.png`, `.gif`, `.webp` | `image/*` |
 | `CSV` | `.csv` | `text/csv`, `application/csv` |
 
 Check both `file.type` (MIME) and the file extension from `file.name` — MIME may be empty on some OS/browsers.
@@ -479,11 +478,11 @@ A 40×40px file type thumbnail. Seven variants sharing a consistent two-layer st
 
 | Prop | Type | Default |
 |---|---|---|
-| `fileType` | `FileTypeVariant` | `'img'` |
+| `fileType` | `FileTypeVariant` | `'pdf'` |
 | `src` | `string` | `undefined` — `image-preview` only |
 | `className` | `string` | `undefined` |
 
-**FileTypeVariant:** `'img' | 'jpg' | 'png' | 'pdf' | 'doc' | 'csv' | 'image-preview'`
+**FileTypeVariant:** `'jpg' | 'png' | 'pdf' | 'doc' | 'csv' | 'image-preview'`
 
 ---
 
@@ -501,7 +500,7 @@ border border-border-primary rounded-lg overflow-hidden
 
 ---
 
-## Standard Variants (img, jpg, png, pdf, doc, csv)
+## Standard Variants (jpg, png, pdf, doc, csv)
 
 Two absolutely-positioned layers inside the 40×40 container:
 
@@ -517,7 +516,6 @@ Import the corresponding page asset from `src/assets/icons/file-type/`:
 
 | Variant | Asset file |
 |---|---|
-| `img` | `PageImg.svg` |
 | `jpg` | `PageJpg.svg` |
 | `png` | `PagePng.svg` |
 | `pdf` | `PagePdf.svg` |
@@ -530,7 +528,6 @@ Absolutely positioned badge in the bottom-center of the page. Inset values per v
 
 | Variant | Inset classes |
 |---|---|
-| `img` | `absolute inset-[63.41%_29.17%_19.78%_29.42%]` |
 | `jpg` | `absolute inset-[63.41%_28.92%_19.78%_28.27%]` |
 | `png` | `absolute inset-[63.41%_27.06%_19.78%_27.31%]` |
 | `pdf` | `absolute inset-[63.64%_28.86%_20%_29.37%]` |
@@ -541,7 +538,6 @@ Import the corresponding label badge asset from `src/assets/icons/file-type/`:
 
 | Variant | Asset file |
 |---|---|
-| `img` | `LabelImg.svg` |
 | `jpg` | `LabelJpg.svg` |
 | `png` | `LabelPng.svg` |
 | `pdf` | `LabelPdf.svg` |

@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import vscodeIcon from '../../assets/vscodeicon.svg';
+import vscodeButtonIcon from '../../assets/VS code-icon.svg';
 import './component_pages.css';
 import InputPanel, { type InputConfig, type InputValues } from './InputPanel';
 import VariantSection, { type VariantGroup } from './VariantSection';
@@ -10,7 +12,8 @@ export type { VariantGroup, VariantStyleGroup, VariantRow, VariantCell } from '.
 export interface ComponentPageLayoutProps {
   title?: string;
   description?: string;
-  inputConfig: InputConfig[];
+  /** Static config OR a function of current values — use the function form to conditionally show/hide fields. */
+  inputConfig: InputConfig[] | ((values: InputValues) => InputConfig[]);
   defaultInputValues: InputValues;
   buildVariants: (values: InputValues) => VariantGroup[];
   variantTitle?: string;
@@ -18,6 +21,11 @@ export interface ComponentPageLayoutProps {
   markdownFileName: string;
   resolveTokens: (values: InputValues) => Record<string, string>;
   transformMarkdown?: (raw: string, values: InputValues) => string;
+  /** Optional Figma-prompt markdown for this component. Used by the
+   *  "Copy Figma Prompt" action. If omitted, the button still
+   *  renders but copies an empty string. */
+  figmaMarkdownContent?: string;
+  transformFigmaMarkdown?: (raw: string, values: InputValues) => string;
 }
 
 function applyTokens(content: string, tokens: Record<string, string>): string {
@@ -35,15 +43,16 @@ export default function ComponentPageLayout({
   markdownFileName,
   resolveTokens,
   transformMarkdown,
+  figmaMarkdownContent,
+  transformFigmaMarkdown,
 }: ComponentPageLayoutProps) {
   const [values, setValues] = useState<InputValues>({ ...defaultInputValues });
-  const [copyLabel, setCopyLabel] = useState('Copy Instruction');
-  const [drawerCopyLabel, setDrawerCopyLabel] = useState('Copy Instruction');
+  const [copyLabel, setCopyLabel] = useState('Copy VS Code MD');
+  const [figmaLabel, setFigmaLabel] = useState('Copy Figma Prompt');
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [showToast, setShowToast] = useState(false);
+  const [drawerTab, setDrawerTab] = useState<'figma' | 'vscode'>('figma');
   const copyTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-  const drawerCopyTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const figmaTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const handleChange = useCallback((key: string, value: string | boolean | number) => {
     setValues(prev => ({ ...prev, [key]: value }));
@@ -60,33 +69,33 @@ export default function ComponentPageLayout({
 
   const liveMd = useMemo(() => getResolvedMd(values), [getResolvedMd, values]);
 
+  const liveFigmaMd = useMemo(() => {
+    if (!figmaMarkdownContent) return '';
+    if (transformFigmaMarkdown) return transformFigmaMarkdown(figmaMarkdownContent, values);
+    return figmaMarkdownContent;
+  }, [figmaMarkdownContent, transformFigmaMarkdown, values]);
+
   const handleCopy = useCallback(() => {
     navigator.clipboard.writeText(liveMd).then(() => {
       setCopyLabel('Copied!');
       if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
-      copyTimerRef.current = setTimeout(() => setCopyLabel('Copy Instruction'), 1800);
+      copyTimerRef.current = setTimeout(() => setCopyLabel('Copy VS Code MD'), 1800);
     }).catch(() => {});
   }, [liveMd]);
 
-  const handleDrawerCopy = useCallback(() => {
-    navigator.clipboard.writeText(liveMd).then(() => {
-      setDrawerCopyLabel('Copied!');
-      if (drawerCopyTimerRef.current) clearTimeout(drawerCopyTimerRef.current);
-      drawerCopyTimerRef.current = setTimeout(() => setDrawerCopyLabel('Copy Instruction'), 1800);
+  const handleFigmaCopy = useCallback(() => {
+    navigator.clipboard.writeText(liveFigmaMd).then(() => {
+      setFigmaLabel('Copied!');
+      if (figmaTimerRef.current) clearTimeout(figmaTimerRef.current);
+      figmaTimerRef.current = setTimeout(() => setFigmaLabel('Copy Figma Prompt'), 1800);
     }).catch(() => {});
-  }, [liveMd]);
+  }, [liveFigmaMd]);
 
   useEffect(() => () => {
     if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
-    if (drawerCopyTimerRef.current) clearTimeout(drawerCopyTimerRef.current);
-    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    if (figmaTimerRef.current) clearTimeout(figmaTimerRef.current);
   }, []);
 
-  const handleUpdateMd = useCallback(() => {
-    setShowToast(true);
-    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
-    toastTimerRef.current = setTimeout(() => setShowToast(false), 2400);
-  }, []);
 
   const variantGroups = buildVariants(values);
 
@@ -105,11 +114,12 @@ export default function ComponentPageLayout({
               </svg>
               Preview
             </button>
+            <button className="cp-figma-btn" onClick={handleFigmaCopy}>
+              <img src="/figma-icon.svg" alt="" aria-hidden="true" width={16} height={16} />
+              {figmaLabel}
+            </button>
             <button className="cp-copy-btn" onClick={handleCopy}>
-              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <rect x="5.5" y="5.5" width="8" height="8" rx="1.2" stroke="currentColor" strokeWidth="1.4" />
-                <path d="M10.5 5.5V4A1.5 1.5 0 0 0 9 2.5H4A1.5 1.5 0 0 0 2.5 4v5A1.5 1.5 0 0 0 4 10.5h1.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-              </svg>
+              <img src={vscodeButtonIcon} alt="" aria-hidden="true" width={16} height={16} />
               {copyLabel}
             </button>
           </div>
@@ -129,11 +139,10 @@ export default function ComponentPageLayout({
           {/* Right — Customise */}
           <div className="cp-bottom-right">
             <InputPanel
-              config={inputConfig}
+              config={typeof inputConfig === 'function' ? inputConfig(values) : inputConfig}
               values={values}
               onChange={handleChange}
               onReset={handleReset}
-              onUpdateMd={handleUpdateMd}
             />
           </div>
 
@@ -148,13 +157,6 @@ export default function ComponentPageLayout({
         <div className="cp-drawer-hd">
           <span className="cp-drawer-title">Preview</span>
           <div className="cp-drawer-actions">
-            <button className="cp-copy-btn" onClick={handleDrawerCopy}>
-              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <rect x="5.5" y="5.5" width="8" height="8" rx="1.2" stroke="currentColor" strokeWidth="1.4" />
-                <path d="M10.5 5.5V4A1.5 1.5 0 0 0 9 2.5H4A1.5 1.5 0 0 0 2.5 4v5A1.5 1.5 0 0 0 4 10.5h1.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-              </svg>
-              {drawerCopyLabel}
-            </button>
             <button
               className="cp-close-btn"
               aria-label="Close preview"
@@ -166,26 +168,45 @@ export default function ComponentPageLayout({
             </button>
           </div>
         </div>
+        <div className="cp-drawer-tabs" role="tablist">
+          <button
+            role="tab"
+            aria-selected={drawerTab === 'figma'}
+            className={`cp-drawer-tab${drawerTab === 'figma' ? ' cp-drawer-tab--active' : ''}`}
+            onClick={() => setDrawerTab('figma')}
+          >
+            <img src="/figma-icon.svg" alt="" aria-hidden="true" width={14} height={14} />
+            Figma Prompt
+          </button>
+          <button
+            role="tab"
+            aria-selected={drawerTab === 'vscode'}
+            className={`cp-drawer-tab${drawerTab === 'vscode' ? ' cp-drawer-tab--active' : ''}`}
+            onClick={() => setDrawerTab('vscode')}
+          >
+            <img src={vscodeIcon} alt="" aria-hidden="true" width={14} height={14} />
+            VS Code MD
+          </button>
+        </div>
         <div className="cp-drawer-body">
-          <MarkdownViewer
-            fileName={markdownFileName}
-            rawContent={liveMd}
-            tokens={{}}
-            isStale={false}
-          />
+          {drawerTab === 'figma' ? (
+            <MarkdownViewer
+              fileName={`${markdownFileName}-figma`}
+              rawContent={liveFigmaMd || '_No Figma prompt available for this component yet._'}
+              tokens={{}}
+              isStale={false}
+            />
+          ) : (
+            <MarkdownViewer
+              fileName={markdownFileName}
+              rawContent={liveMd}
+              tokens={{}}
+              isStale={false}
+            />
+          )}
         </div>
       </div>
 
-      {/* ── Toast ──────────────────────────────────────────────── */}
-      <div className={`cp-toast${showToast ? ' cp-toast--visible' : ''}`}>
-        <span className="cp-toast-icon" aria-hidden="true">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" focusable="false">
-            <circle cx="10" cy="10" r="10" />
-            <path d="M5.8 10.3 8.4 12.9 14.4 7" />
-          </svg>
-        </span>
-        MD file updated successfully.
-      </div>
     </div>
   );
 }

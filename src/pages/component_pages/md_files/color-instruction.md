@@ -1,5 +1,3 @@
-# Instruction: Build `src/index.css` for a New React + Tailwind v4 Project
-
 ## OVERVIEW
 
 A fresh React + Vite project comes with a basic `src/index.css`. You need to **replace it entirely** with a structured design token file that powers the full design system. This file defines all primitive colors, semantic color aliases, typography scale, and dark mode overrides used across every component.

@@ -8,6 +8,7 @@ import ComponentPageLayout, {
   type VariantGroup,
 } from '../ComponentPageLayout';
 import filePickerMd from '../md_files/filePicker-instruction.md?raw';
+import filePickerFigmaMd from '../figma_prompt/file-picker-prompt.md?raw';
 
 /* ── Radius map ─────────────────────────────────────────── */
 const RADIUS_MAP: Record<string, string> = {
@@ -56,7 +57,7 @@ function buildVariants(vals: InputValues): VariantGroup[] {
   const acceptedTypes = (vals.acceptedTypes as string) || 'PDF, DOC, XLS or PPT';
   const radiusCls     = RADIUS_MAP[vals.cornerRadius as string] ?? 'rounded-xl';
 
-  const FILE_TYPES: FileTypeVariant[] = ['pdf', 'doc', 'csv', 'img', 'jpg', 'png'];
+  const FILE_TYPES: FileTypeVariant[] = ['pdf', 'doc', 'csv', 'jpg', 'png'];
 
   return [
     /* ── FilePicker ─────────────────────────────────────── */
@@ -292,6 +293,41 @@ function transformMarkdown(raw: string, vals: InputValues): string {
   return md;
 }
 
+/* ── Figma transform ────────────────────────────────────── */
+const FP_FIGMA_RADIUS: Record<string, string> = {
+  '4px': 'radius-xs', '8px': 'radius-md', '12px': 'radius-xl', '16px': 'radius-2xl',
+};
+
+function transformFilePickerFigmaMd(raw: string, vals: InputValues): string {
+  let md = raw;
+  const cornerRadius = vals.cornerRadius as string;
+  const showDate     = vals.showDate     as boolean;
+
+  // ── Corner radius ──────────────────────────────────────
+  const rr = FP_FIGMA_RADIUS[cornerRadius] ?? 'radius-xl';
+  if (rr !== 'radius-xl') {
+    md = md.replace(/(Outer frame \| Corner radius[^|]*\| )`radius-xl`/g, `$1\`${rr}\``);
+    md = md.replace(/(Tile frame \| Corner radius[^|]*\| )`radius-xl`/g, `$1\`${rr}\``);
+    md = md.replace(/(Radius:\s*)radius-xl/g, `$1${rr}`);
+    md = md.replace(/(Bind corner radius all 4 → )`radius-xl`/g, `$1\`${rr}\``);
+    md = md.replace(/(Bind corner radius[^`]*)`radius-xl`/g, `$1\`${rr}\``);
+  }
+
+  // ── Show Date default ──────────────────────────────────
+  md = md.replace(
+    /(`showDate`[^|]*\| `boolean` \| )`(?:true|false)`/,
+    `$1\`${showDate}\``,
+  );
+  if (!showDate) {
+    md = md.replace(
+      /Visible: Show Date boolean/g,
+      'Visible: Always hidden (showDate=false)',
+    );
+  }
+
+  return md;
+}
+
 /* ── Page ───────────────────────────────────────────────── */
 export default function FilePickerPage() {
   return (
@@ -302,8 +338,10 @@ export default function FilePickerPage() {
       variantTitle="Variants"
       markdownContent={filePickerMd}
       markdownFileName="filePicker"
+      figmaMarkdownContent={filePickerFigmaMd}
       resolveTokens={resolveTokens}
       transformMarkdown={transformMarkdown}
+      transformFigmaMarkdown={transformFilePickerFigmaMd}
     />
   );
 }

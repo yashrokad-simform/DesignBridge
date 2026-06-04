@@ -6,6 +6,7 @@ import ComponentPageLayout, {
   type VariantGroup,
 } from '../ComponentPageLayout';
 import radioMd from '../md_files/radioButton-instruction.md?raw';
+import radioFigmaMd from '../figma_prompt/radio-button-prompt.md?raw';
 
 const INPUT_CONFIG: InputConfig[] = [
   { key: 'div0', label: 'Options', type: 'divider' },
@@ -200,6 +201,50 @@ function resolveTokens(_vals: InputValues): Record<string, string> {
   return {};
 }
 
+/* ── Figma transform ────────────────────────────────────── */
+const RB_FIGMA_RADIUS: Record<string, string> = {
+  '8px': 'radius-md', '12px': 'radius-xl', '16px': 'radius-2xl',
+};
+const RB_FIGMA_TYPO: Record<string, { style: string; px: string; lh: string }> = {
+  '12px': { style: 'Label sm', px: '12px', lh: '16px' },
+  '14px': { style: 'Body sm',  px: '14px', lh: '18px' },
+  '16px': { style: 'Body md',  px: '16px', lh: '22px' },
+};
+
+function transformRadioFigmaMd(raw: string, vals: InputValues): string {
+  let md = raw;
+  const textSize    = vals.textSize    as string;
+  const cornerRadius = vals.cornerRadius as string;
+  const showCaption = vals.showCaption as boolean;
+
+  // ── Typography ─────────────────────────────────────────
+  const typo = RB_FIGMA_TYPO[textSize] ?? RB_FIGMA_TYPO['14px'];
+  if (textSize !== '14px') {
+    md = md.replace(/Body sm\/Medium/g,  `${typo.style}/Medium`);
+    md = md.replace(/Body sm\/Regular/g, `${typo.style}/Regular`);
+    md = md.replace(/Inter · Medium \(500\) · 14px · 18px LH/g,
+      `Inter · Medium (500) · ${typo.px} · ${typo.lh} LH`);
+    md = md.replace(/14px · 18px LH/g, `${typo.px} · ${typo.lh} LH`);
+  }
+
+  // ── Tile corner radius ─────────────────────────────────
+  const rr = RB_FIGMA_RADIUS[cornerRadius] ?? 'radius-xl';
+  if (rr !== 'radius-xl') {
+    md = md.replace(/(Tile corner radius[^|]*\| )`radius-xl`/g, `$1\`${rr}\``);
+    md = md.replace(/(Corner Radius: )radius-xl(?=.*(?:Tile|tile))/g, `$1${rr}`);
+    md = md.replace(/(Bind corner radius all 4 corners → )`radius-xl`/g, `$1\`${rr}\``);
+    md = md.replace(/(Tile frame \| Corner radius[^|]*\| )`radius-xl`/g, `$1\`${rr}\``);
+  }
+
+  // ── Show Caption default ───────────────────────────────
+  md = md.replace(
+    /(`Show Caption#[^`]+` \| BOOLEAN \| )`(?:true|false)`/,
+    `$1\`${showCaption}\``,
+  );
+
+  return md;
+}
+
 export default function RadioButtonPage() {
   return (
     <ComponentPageLayout
@@ -209,8 +254,10 @@ export default function RadioButtonPage() {
       variantTitle="Variants"
       markdownContent={radioMd}
       markdownFileName="radioButton"
+      figmaMarkdownContent={radioFigmaMd}
       resolveTokens={resolveTokens}
       transformMarkdown={transformMarkdown}
+      transformFigmaMarkdown={transformRadioFigmaMd}
     />
   );
 }

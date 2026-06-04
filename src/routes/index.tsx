@@ -23,6 +23,7 @@ const RadioButtonPage = lazy(() => import("@/pages/component_pages/comp_pages/ra
 const TablePage = lazy(() => import("@/pages/component_pages/comp_pages/table_page"));
 const ToggleButtonPage = lazy(() => import("@/pages/component_pages/comp_pages/toggleButton_page"));
 const TooltipPage = lazy(() => import("@/pages/component_pages/comp_pages/tooltip_page"));
+const TypographyPage = lazy(() => import("@/pages/component_pages/comp_pages/typography_page"));
 
 function lazyLoad(Component: ComponentType) {
   return (
@@ -42,7 +43,7 @@ export const routes: RouteObject[] = [
       { path: "introduction", element: lazyLoad(IntroductionPage) },
       { path: "figma-mcp", element: lazyLoad(IntroductionPage) },
       { path: "colors", element: lazyLoad(ColorsPage) },
-      { path: "typography", element: lazyLoad(IntroductionPage) },
+      { path: "typography", element: lazyLoad(TypographyPage) },
       { path: "spacing", element: lazyLoad(IntroductionPage) },
       { path: "badge", element: lazyLoad(BadgePage) },
       { path: "breadcrumb", element: lazyLoad(BreadcrumbPage) },

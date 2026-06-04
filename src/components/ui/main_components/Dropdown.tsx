@@ -209,7 +209,7 @@ export function Dropdown({
           TEXT_SIZE_CLASS[textSize],
           disabled
             ? 'text-input-text-disabled'
-            : displayValue ? 'text-input-text-enabled' : 'text-input-text-placeholder',
+            : (displayValue || (multiple && selectedValues.length > 0)) ? 'text-input-text-enabled' : 'text-input-text-placeholder',
         )}>
           {displayValue ?? (multiple && selectedValues.length > 0 ? `${selectedValues.length} selected` : placeholder)}
         </span>
@@ -283,7 +283,24 @@ export function Dropdown({
                 {multiple ? (
                   <Checkbox checked={isSelected} onChange={() => selectOption(opt.value)} />
                 ) : isSelected ? (
-                  <CheckIcon aria-hidden="true" className="size-5 flex-shrink-0 text-input-icon-enabled" />
+                  <svg
+                    aria-hidden="true"
+                    className="size-5 flex-shrink-0 text-icon-brand"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <circle cx="10" cy="10" r="10" fill="currentColor" />
+                    <path
+                      d="M5.5 10.5L8.5 13.5L14.5 7"
+                      stroke="white"
+                      strokeWidth="1.6"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
                 ) : null}
               </div>
             );

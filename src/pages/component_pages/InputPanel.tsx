@@ -59,7 +59,7 @@ export default function InputPanel({
 
       <div className="cp-ip-footer" style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem' }}>
         <button className="cp-btn cp-btn-ghost" onClick={onReset}>
-          Reset
+          Reset Component
         </button>
         {onUpdateMd && (
           <button className="cp-btn cp-btn-primary" onClick={onUpdateMd}>
