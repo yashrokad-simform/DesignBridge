@@ -28,6 +28,7 @@ Font/Weight/Bold        → "Bold"
 
 ### Font Size (Number)
 ```
+Font/Size/Caption       → 10
 Font/Size/Label sm      → 12
 Font/Size/Body sm       → 14
 Font/Size/Body md       → 16
@@ -43,6 +44,7 @@ Font/Size/Display xl    → 72
 
 ### Line Height (Number)
 ```
+Font/Line Height/Caption               → 12
 Font/Line Height/Label sm              → 16
 Font/Line Height/Label sm Paragraphgraph    → 20
 Font/Line Height/Body sm               → 18
@@ -60,6 +62,7 @@ Font/Line Height/Display xl            → 76
 
 ### Letter Spacing (Number)
 ```
+Font/Letter Spacing/Caption               → 0
 Font/Letter Spacing/Label sm              → 0
 Font/Letter Spacing/Label sm Paragraphgraph    → 0
 Font/Letter Spacing/Body sm               → 0
@@ -160,6 +163,14 @@ Create a new collection named **"Typography"** with variables that **alias** the
 | `Label sm/Font-height Paragraph` | `Font/Line Height/Label sm Paragraphgraph` |
 | `Label sm/Font-letter-spacing Paragraph` | `Font/Letter Spacing/Label sm Paragraphgraph` |
 
+### Caption Tier
+| Variable Name | Linked To |
+|---|---|
+| `Caption/Font-size` | `Font/Size/Caption` |
+| `Caption/Regular` | `Font/Weight/Regular` |
+| `Caption/Font-height` | `Font/Line Height/Caption` |
+| `Caption/Font-letter-spacing` | `Font/Letter Spacing/Caption` |
+
 ### Global
 ```
 Font Family → "Font/Family/Base"
@@ -201,6 +212,9 @@ Create text styles using the naming pattern **`Tier/Weight`**. Every property mu
 - `Label sm/Semi Bold`, `Label sm/Medium`, `Label sm/Regular`
 - `Label sm/Regular Paragraph`, `Label sm/Medium Paragraph` *(use `Font-height Paragraph` & `Font-letter-spacing Paragraph`)*
 
+**Caption Tier**
+- `Caption/Regular`
+
 ---
 
 ## ✅ Critical Requirements
@@ -208,5 +222,5 @@ Create text styles using the naming pattern **`Tier/Weight`**. Every property mu
 1. **Every text style property MUST be bound to a variable** — no hardcoded values.
 2. **Text Styles reference Typography variables only**, NOT primitives directly.
 3. **Typography variables alias primitives** — they are the middle layer.
-4. **Paragraphgraph variants** (`Body sm Paragraph`, `Label sm Paragraph`) use the `Paragraphgraph` line-height and letter-spacing variables for multi-line text contexts.
+4. **Paragraphgraph variants** (`Body sm Paragraph`, `Label sm Paragraph`) use the `Paragraph` line-height and letter-spacing variables for multi-line text contexts.
 5. Confirm completion with a summary count: `X primitives created, Y typography tokens created, Z text styles created`.

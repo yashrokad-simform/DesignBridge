@@ -79,7 +79,7 @@ function Connector({ state, size }: { state: StepState; size: StepSize }) {
   return (
     <div className={cn(
       'w-0.5 rounded-full flex-shrink-0',
-      size === 'regular' ? 'h-7' : 'h-16',
+      size === 'regular' ? 'h-7' : 'h-12',
       state === 'completed' ? 'bg-border-success' : 'bg-border-primary',
     )} />
   );
@@ -114,8 +114,8 @@ function StepItem({ title, caption, state, size, showConnector, showCaption = tr
   };
 
   const textPadding: Record<StepSize, string> = {
-    regular: 'pt-0.5 pb-6 gap-1',
-    large:   'pt-1 pb-8 gap-0.5',
+    regular: 'pt-0.5 pb-5 gap-1',
+    large:   'pt-1 pb-6 gap-0.5',
   };
 
   const itemGap: Record<StepSize, string> = {

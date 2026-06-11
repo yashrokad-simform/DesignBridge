@@ -14,6 +14,7 @@ import ComponentPageLayout, {
   type VariantGroup,
 } from '../ComponentPageLayout';
 import tableMd from '../md_files/table-instruction.md?raw';
+import tableFigmaMd from '../figma_prompt/table-prompt.md?raw';
 import { cn } from '../../../lib/utils';
 
 /* ── Controls ────────────────────────────────────────────── */
@@ -358,6 +359,62 @@ function resolveTokens(_vals: InputValues): Record<string, string> {
   return {};
 }
 
+const TYPE_MAP: Record<string, { marker: string; label: string }> = {
+  row_twoLine:  { marker: 'TWO_LINE',  label: 'Two line'  },
+  row_status:   { marker: 'STATUS',    label: 'Status'    },
+  row_toggle:   { marker: 'TOGGLE',    label: 'Toggle'    },
+  row_tooltip:  { marker: 'TOOLTIP',   label: 'Tooltip'   },
+  row_action:   { marker: 'ACTION',    label: 'Action'    },
+  row_editCell: { marker: 'EDIT_CELL', label: 'Edit Cell' },
+  row_default:  { marker: 'DEFAULT',   label: 'Default'   },
+};
+
+function transformFigmaMarkdown(raw: string, vals: InputValues): string {
+  let md = raw;
+
+  const disabled = Object.entries(TYPE_MAP).filter(([key]) => vals[key] === false);
+  const enabledCount = Object.keys(TYPE_MAP).length - disabled.length;
+
+  // Strip/unwrap type marker blocks
+  for (const [, { marker }] of Object.entries(TYPE_MAP)) {
+    const isDisabled = vals[ROW_VARIANT_TOGGLES.find(r => TYPE_MAP[r.key]?.marker === marker)?.key ?? ''] === false;
+    if (isDisabled) {
+      md = md.replace(new RegExp(`<!-- IF_${marker} -->\\n[\\s\\S]*?<!-- \\/${marker} -->\\n`, 'g'), '');
+    } else {
+      md = md.replace(new RegExp(`<!-- IF_${marker} -->\\n`, 'g'), '');
+      md = md.replace(new RegExp(`<!-- \\/${marker} -->\\n`, 'g'), '');
+    }
+  }
+
+  // Remove disabled type labels from the Type variant options cell
+  for (const [, { label }] of disabled) {
+    md = md.replace(new RegExp(`\`${label}\` · `, 'g'), '');
+    md = md.replace(new RegExp(` · \`${label}\``, 'g'), '');
+    md = md.replace(new RegExp(`\`${label}\`, `, 'g'), '');
+    md = md.replace(new RegExp(`, \`${label}\``, 'g'), '');
+    md = md.replace(new RegExp(`\`${label}\``, 'g'), '');
+  }
+
+  // Update variant count
+  if (enabledCount !== 7) {
+    md = md.replace(/\b7 type variants\b/g, `${enabledCount} type variant${enabledCount === 1 ? '' : 's'}`);
+    md = md.replace(/\b7\b(\s+(?:type )?variants?)/g, `${enabledCount}$1`);
+    md = md.replace(/Select all 7 type variants/g, `Select all ${enabledCount} type variant${enabledCount === 1 ? '' : 's'}`);
+  }
+
+  // Rows per page
+  const showRowsPerPage = vals.showRowsPerPage as boolean;
+  if (!showRowsPerPage) {
+    md = md.replace(/<!-- IF_ROWS_PER_PAGE -->\n[\s\S]*?<!-- \/IF_ROWS_PER_PAGE -->\n/g, '');
+    // Remove the No. Rows frame from within the Pagination code block (lines starting with │ that mention No. Rows / Input)
+    md = md.replace(/^[ \t]*│[ \t]*├── No\. Rows[^\n]*\n([ \t]*│[^\n]*\n)*/gm, '');
+  } else {
+    md = md.replace(/<!-- IF_ROWS_PER_PAGE -->\n/g, '').replace(/<!-- \/IF_ROWS_PER_PAGE -->\n/g, '');
+  }
+
+  return md;
+}
+
 function stripSection(src: string, headingPrefix: string): string {
   const startIdx = src.indexOf(headingPrefix);
   if (startIdx === -1) return src;
@@ -428,8 +485,10 @@ export default function TablePage() {
       variantTitle="Variants"
       markdownContent={tableMd}
       markdownFileName="table"
+      figmaMarkdownContent={tableFigmaMd}
       resolveTokens={resolveTokens}
       transformMarkdown={transformMarkdown}
+      transformFigmaMarkdown={transformFigmaMarkdown}
     />
   );
 }

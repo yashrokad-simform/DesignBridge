@@ -77,7 +77,7 @@ Checkbox                               [COMPONENT_SET]
   │     │     Radius: radius-xs (all corners)
   │     │
   │     └── text                       [TEXT · HUG × HUG]
-  │           Style:  Body md/Medium
+  │           Style:  Body sm/Medium
   │           Fill:   Text/text-primary
   │           Visible: Controlled by Label boolean property
   │
@@ -164,7 +164,7 @@ Checkbox Tile                          [COMPONENT_SET]
                     Gap: spacing-xs (4px)
                     │
                     ├── Text           [TEXT · FILL × FIXED · 18px height]
-                    │     Style: Body md/Medium
+                    │     Style: Body sm/Medium
                     │     Fill:  Text/text-primary (active) · input-text-disabled (disabled)
                     │
                     └── Supporting text [TEXT · FILL × HUG]
@@ -192,7 +192,7 @@ Checkbox Tile                          [COMPONENT_SET]
 | `Checkbox` | INSTANCE | Checkbox component instance. `Label=false` always. `Checked` set per type |
 | `Content` | FRAME | FILL × HUG. Contains Text and supporting text |
 | `Text and supporting text` | FRAME | Vertical Auto Layout. Contains title and caption |
-| `Text` | TEXT | Title. `Body md/Medium`. FILL × FIXED (18px) |
+| `Text` | TEXT | Title. `Body sm/Medium`. FILL × FIXED (18px) |
 | `Supporting text` | TEXT | Caption. `Label sm/Medium`. Toggleable via `Show Caption` |
 
 ### Component Properties
@@ -243,8 +243,8 @@ Checkbox Tile                          [COMPONENT_SET]
 
 | Component | Layer | Text Style | Font |
 |---|---|---|---|
-| Checkbox | `text` | `Body md/Medium` | Inter · Medium (500) · 14px · 18px LH |
-| Checkbox Tile | `Text` | `Body md/Medium` | Inter · Medium (500) · 14px · 18px LH |
+| Checkbox | `text` | `Body sm/Medium` | Inter · Medium (500) · 14px · 18px LH |
+| Checkbox Tile | `Text` | `Body sm/Medium` | Inter · Medium (500) · 14px · 18px LH |
 | Checkbox Tile | `Supporting text` | `Label sm/Medium` | Inter · Medium (500) · 12px · 16px LH |
 
 > Apply text styles directly on the text layers. Do not bind individual font variables.
@@ -362,7 +362,7 @@ This is a **dedicated check icon component**, separate from the vuesax icon libr
 #### text (Label)
 1. Add a **Text** layer. Name it `text`.
 2. Set default content to `Checkbox`.
-3. Apply text style **`Body md/Medium`**.
+3. Apply text style **`Body sm/Medium`**.
 4. Bind fill → `Text/text-primary`.
 5. Set sizing to **HUG** on both axes.
 6. Create a **Boolean component property**: `Label` (default: `true`). Link to layer visibility.
@@ -463,7 +463,7 @@ This is a **dedicated check icon component**, separate from the vuesax icon libr
 #### Text layer
 1. Add a **Text** layer. Name it `Text`.
 2. Set default content to `Help! Have a Fulfillment Emergency!`.
-3. Apply text style **`Body md/Medium`**.
+3. Apply text style **`Body sm/Medium`**.
 4. Bind fill → `Text/text-primary` (active types) · `Component/Input Field/input-text-disabled` (disabled types).
 5. Set sizing to **FILL × FIXED** (18px height).
 
@@ -501,7 +501,7 @@ This is a **dedicated check icon component**, separate from the vuesax icon libr
 | `Rectangle 1` | Stroke weight | 1px (hardcoded) |
 | `Rectangle 1` | Corner radius (all 4) | `radius-xs` |
 | `text` | Fill | See color table per state |
-| `text` | Text Style | `Body md/Medium` |
+| `text` | Text Style | `Body sm/Medium` |
 | `Line 1 (Stroke)` VECTOR | Fill | `Icon/icon-white` |
 | `Arrow/linear/Check` → inner Vector (Selected) | **Stroke** | White (no variable binding confirmed in file) |
 | `Arrow/linear/Check` → inner Vector (Disabled Checked) | **Stroke** | `Background/bg-gray_dark` |
@@ -518,7 +518,7 @@ This is a **dedicated check icon component**, separate from the vuesax icon libr
 | Tile frame | Corner radius (all 4) | `radius-xl` |
 | `Text and supporting text` frame | Gap | `spacing-xs` |
 | `Text` | Fill | See color table per type |
-| `Text` | Text Style | `Body md/Medium` |
+| `Text` | Text Style | `Body sm/Medium` |
 | `Supporting text` | Fill | See color table per type |
 | `Supporting text` | Text Style | `Label sm/Medium` |
 
@@ -613,7 +613,7 @@ The `Content` frame inside `Checkbox Tile` has its gap bound to an external libr
 |---|---|
 | Accent bar | Blue vertical bar on the left edge |
 | Section title | `Checkbox — All 6 States` |
-| Subtitle | `Checked property · Label Boolean · radius-xs box · Body md/Medium` |
+| Subtitle | `Checked property · Label Boolean · radius-xs box · Body sm/Medium` |
 | Content | Place the **actual `Checkbox` COMPONENT_SET** directly on the page |
 
 ### Section 2 — Checkbox Tile

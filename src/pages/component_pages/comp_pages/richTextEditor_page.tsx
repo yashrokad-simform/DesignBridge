@@ -6,6 +6,7 @@ import ComponentPageLayout, {
   type VariantGroup,
 } from '../ComponentPageLayout';
 import richTextEditorMd from '../md_files/richTextEditor-instruction.md?raw';
+import richTextEditorFigmaMd from '../figma_prompt/rich-text-editor-prompt.md?raw';
 
 /* ── Input config ───────────────────────────────────────── */
 const INPUT_CONFIG: InputConfig[] = [
@@ -228,6 +229,61 @@ function transformMarkdown(raw: string, vals: InputValues): string {
   return md;
 }
 
+/* ── Figma transform maps ───────────────────────────────── */
+const RTE_FIGMA_RADIUS: Record<string, string> = {
+  '4px': 'radius-xs', '8px': 'radius-md', '12px': 'radius-xl', '16px': 'radius-2xl',
+};
+const RTE_FIGMA_PAD: Record<string, { var: string; px: string }> = {
+  '12px': { var: 'spacing-xl',  px: '12px' },
+  '14px': { var: 'spacing-2xl', px: '14px' },
+  '16px': { var: 'spacing-3xl', px: '16px' },
+  '20px': { var: 'spacing-4xl', px: '20px' },
+};
+const RTE_FIGMA_TYPO: Record<string, { style: string; px: string; lh: string }> = {
+  '12px': { style: 'Label sm/Medium', px: '12px', lh: '16px' },
+  '14px': { style: 'Body sm/Medium',  px: '14px', lh: '18px' },
+  '16px': { style: 'Body md/Medium',  px: '16px', lh: '22px' },
+};
+
+/* ── transformFigmaMarkdown ─────────────────────────────── */
+function transformFigmaMarkdown(raw: string, vals: InputValues): string {
+  let md = raw;
+  const showLabel    = vals.showLabel    as boolean;
+  const showRequired = vals.showRequired as boolean;
+  const showHelper   = vals.showHelper   as boolean;
+  const cornerRadius = (vals.cornerRadius as RichTextEditorCornerRadius) ?? '12px';
+  const padding      = (vals.padding      as RichTextEditorPadding)      ?? '12px';
+  const textSize     = (vals.textSize     as RichTextEditorTextSize)     ?? '14px';
+
+  // Booleans
+  md = md.replace(/(Show Label[^|]*\| BOOLEAN \| )`(?:true|false)`/, `$1\`${showLabel}\``);
+  md = md.replace(/(Mandatory[^|]*\| BOOLEAN \| )`(?:true|false)`/,  `$1\`${showRequired}\``);
+  md = md.replace(/(Show Hint[^|]*\| BOOLEAN \| )`(?:true|false)`/,  `$1\`${showHelper}\``);
+
+  // Corner radius
+  const rr = RTE_FIGMA_RADIUS[cornerRadius] ?? 'radius-xl';
+  if (rr !== 'radius-xl') md = md.replace(/\bradius-xl\b/g, rr);
+
+  // Content padding (L/R)
+  const pad = RTE_FIGMA_PAD[padding] ?? RTE_FIGMA_PAD['12px'];
+  if (padding !== '12px') {
+    md = md.replace(/`spacing-xl` \(12px\)(?=.*(?:L\/R|Padding|Content))/g, `\`${pad.var}\` (${pad.px})`);
+    md = md.replace(/(Padding L\/R \| )`spacing-xl` \| 12px(?=.*Content)/g, `$1\`${pad.var}\` | ${pad.px}`);
+    md = md.replace(/Padding L\/R: spacing-xl \(12px\)/g, `Padding L/R: ${pad.var} (${pad.px})`);
+  }
+
+  // Text style
+  const typo = RTE_FIGMA_TYPO[textSize] ?? RTE_FIGMA_TYPO['14px'];
+  if (textSize !== '14px') {
+    md = md.replace(/Body sm\/Medium/g, typo.style);
+    md = md.replace(/Inter · Medium 500 · 14px · 18px LH/g, `Inter · Medium 500 · ${typo.px}px · ${typo.lh}px LH`);
+    md = md.replace(/14px · 500\)/g, `${typo.px} · 500)`);
+    md = md.replace(/\(14px · 500\)/g, `(${typo.px} · 500)`);
+  }
+
+  return md;
+}
+
 /* ── Page ───────────────────────────────────────────────── */
 export default function RichTextEditorPage() {
   return (
@@ -238,8 +294,10 @@ export default function RichTextEditorPage() {
       variantTitle="Variants"
       markdownContent={richTextEditorMd}
       markdownFileName="richTextEditor"
+      figmaMarkdownContent={richTextEditorFigmaMd}
       resolveTokens={resolveTokens}
       transformMarkdown={transformMarkdown}
+      transformFigmaMarkdown={transformFigmaMarkdown}
     />
   );
 }

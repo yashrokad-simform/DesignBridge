@@ -20,7 +20,7 @@
 
 | Figma Tier | Size | Tailwind Class |
 |---|---|---|
-| Label sm | 10px | `text-2xs` |
+| Caption | 10px | `text-2xs` |
 | Label sm | 12px | `text-xs` |
 | Body sm | 14px | `text-sm` |
 | Body md | 16px | `text-md` |

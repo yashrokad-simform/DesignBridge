@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { type NavSection } from './appnavigation';
 
 const NAV_CSS = `
@@ -48,51 +47,6 @@ const NAV_CSS = `
     flex-shrink: 0;
   }
 
-  .dsn-side.collapsed .dsn-brand {
-    justify-content: center;
-    padding: 6px 0 22px;
-    gap: 0;
-  }
-
-  .dsn-side.collapsed .dsn-brand-text {
-    display: none;
-  }
-
-  .dsn-side.collapsed .dsn-search-wrap,
-  .dsn-side.collapsed .dsn-body {
-    display: none;
-  }
-
-  .dsn-side.collapsed {
-    padding: 18px 10px 0;
-    width: 64px;
-    align-items: center;
-  }
-
-  .dsn-toggle {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 6px;
-    border-radius: 8px;
-    color: #7a8191;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 200ms, color 200ms;
-    margin-top: auto;
-    margin-bottom: 12px;
-    flex-shrink: 0;
-  }
-
-  .dsn-toggle:hover {
-    background: rgba(255,255,255,.08);
-    color: #fff;
-  }
-
-  .dsn-side.collapsed .dsn-toggle {
-    margin-top: 0;
-  }
 
   .dsn-brand-mark {
     width: 36px;
@@ -361,7 +315,6 @@ export function Navigation({
   onSideSearchChange,
   onNavigate,
 }: NavigationProps) {
-  const [collapsed, setCollapsed] = useState(false);
   const allItems = navSections.flatMap((s) => s.items);
 
   const renderNav = () => {
@@ -419,7 +372,7 @@ export function Navigation({
       <style dangerouslySetInnerHTML={{ __html: NAV_CSS }} />
 
       <aside
-        className={`dsn-side${collapsed ? ' collapsed' : ''}`}
+        className="dsn-side"
         aria-label="Documentation navigation"
       >
         {/* Brand */}
@@ -434,7 +387,7 @@ export function Navigation({
 
           <div className="dsn-brand-text">
             <div className="dsn-brand-name">DesignBridge</div>
-            <div className="dsn-brand-sub">Figma Component Docs</div>
+            <div className="dsn-brand-sub">Product Component Docs</div>
           </div>
         </div>
 
@@ -455,7 +408,7 @@ export function Navigation({
             </svg>
 
             <input
-              placeholder="Search components…"
+              placeholder="Search styles & components"
               value={sideSearch}
               onChange={(e) =>
                 onSideSearchChange(e.target.value)
@@ -469,21 +422,6 @@ export function Navigation({
           {renderNav()}
         </div>
 
-        {/* Footer */}
-        <div className="dsn-foot">
-          <button
-            className="dsn-toggle"
-            onClick={() => setCollapsed(c => !c)}
-            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              {collapsed
-                ? <><path d="M13 17l5-5-5-5"/><path d="M6 17l5-5-5-5"/></>
-                : <><path d="M11 17l-5-5 5-5"/><path d="M18 17l-5-5 5-5"/></>
-              }
-            </svg>
-          </button>
-        </div>
       </aside>
     </>
   );

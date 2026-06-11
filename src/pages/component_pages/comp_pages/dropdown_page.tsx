@@ -305,8 +305,8 @@ function transformDropdownFigmaMd(raw: string, vals: InputValues): string {
   // ── Typography ────────────────────────────────────────────
   const typo = DD_FIGMA_TYPO[textSize] ?? DD_FIGMA_TYPO['14px'];
   if (textSize !== '14px') {
-    md = md.replace(/Body md\/Medium/g,  `${typo.style}/Medium`);
-    md = md.replace(/Body md\/Regular/g, `${typo.style}/Regular`);
+    md = md.replace(/Body sm\/Medium/g,  `${typo.style}/Medium`);
+    md = md.replace(/Body sm\/Regular/g, `${typo.style}/Regular`);
     md = md.replace(/14px · 18px LH/g,  `${typo.px} · ${typo.lh} LH`);
     md = md.replace(/Inter · Medium \(500\) · 14px/g, `Inter · Medium (500) · ${typo.px}`);
   }

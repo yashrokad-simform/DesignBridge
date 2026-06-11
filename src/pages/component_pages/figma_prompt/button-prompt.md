@@ -84,7 +84,7 @@ Level 2 — Variants (Component Set)
 | **Padding V (Text · Link)** | **`spacing-none` (0px)** | **`spacing-none` (0px)** |
 | Gap (all other types) | `spacing-md` (8px) | `spacing-xs` (4px) |
 | Icon Size | 20px | 16px |
-| Text Style | `Body md/Medium` (14px) | `Label sm/Medium` (12px) |
+| Text Style | `Body sm/Medium` (14px) | `Label sm/Medium` (12px) |
 
 > **Icon Filled & Icon Secondary sizing rule:** Override padding Left/Right to match padding Top/Bottom (`spacing-xl` for Large, `spacing-lg` for Small). This makes the button **44×44px** (Large) or **36×36px** (Small) — a perfect square.
 >
@@ -123,7 +123,7 @@ _base Button — Size=Large                    [COMPONENT]
   │     Visible:   Controlled by Show Prefix property
   │
   ├── Button                                 [TEXT — HUG × HUG]
-  │     Style:     Body md/Medium (14px · 18px LH · 0 LS)
+  │     Style:     Body sm/Medium (14px · 18px LH · 0 LS)
   │     Fill:      btn-text-* variable per variant
   │
   └── Right Icon                             [INSTANCE — Icon component]
@@ -184,7 +184,7 @@ Button                                       [COMPONENT_SET]
 | Corner radius | `radius-xl` |
 | Icon size (Large) | 20px |
 | Icon size (Small) | 16px |
-| Typography | Text style `Body md/Medium` (Large) · `Label sm/Medium` (Small) applied on `Button` layer |
+| Typography | Text style `Body sm/Medium` (Large) · `Label sm/Medium` (Small) applied on `Button` layer |
 
 ### Layer Descriptions
 
@@ -192,7 +192,7 @@ Button                                       [COMPONENT_SET]
 |---|---|---|---|---|
 | `_base Button` | INSTANCE | Variant wrapper frame | Always | Only direct child of every variant |
 | `Left Icon` | INSTANCE | `_base Button` instance | Toggleable via `Show Prefix` | Icon component, Size=20px (Large) / 16px (Small) |
-| `Button` | TEXT | `_base Button` instance | Always visible | HUG sizing, text style applied (`Body md/Medium` Large · `Label sm/Medium` Small) |
+| `Button` | TEXT | `_base Button` instance | Always visible | HUG sizing, text style applied (`Body sm/Medium` Large · `Label sm/Medium` Small) |
 | `Right Icon` | INSTANCE | `_base Button` instance | Toggleable via `Show Suffix` | Icon component, Size=20px (Large) / 16px (Small). **Hidden for all icon-only types** (`Show Suffix = false`) |
 
 ### Component Properties
@@ -228,7 +228,7 @@ Button                                       [COMPONENT_SET]
 
 | Size | Text Layer | Text Style | Font |
 |---|---|---|---|
-| Large | `Button` | `Body md/Medium` | Inter · Medium (500) · 14px · 18px LH · 0 LS |
+| Large | `Button` | `Body sm/Medium` | Inter · Medium (500) · 14px · 18px LH · 0 LS |
 | Small | `Button` | `Label sm/Medium` | Inter · Medium (500) · 12px · 16px LH · 0 LS |
 
 > Apply the text style directly on the `Button` text layer. Do not bind individual font variables.
@@ -465,7 +465,7 @@ This structure is consistent across all icon sizes and all icon names. The depth
 #### Button (Label)
 1. Add a **Text** layer. Name it `Button`.
 2. Set default content to `Button`.
-3. Apply text style **`Body md/Medium`** on the layer.
+3. Apply text style **`Body sm/Medium`** on the layer.
 4. Bind fill color → `Component/Button/btn-text-primary`.
 5. Set sizing to **HUG** on both axes.
 6. Create a **Text component property**: `Text` (default: `Button`). Link to text content.
@@ -566,7 +566,7 @@ Do this for **all 48 variants**. You can select all variants at once and expose 
 | `_base Button` frame (Small) | Gap | `spacing-xs` |
 | `_base Button` frame (both) | All corner radii | `radius-xl` |
 | `Button` text layer | Fill | Text color variable per variant |
-| `Button` text layer (Large) | Text Style | `Body md/Medium` |
+| `Button` text layer (Large) | Text Style | `Body sm/Medium` |
 | `Button` text layer (Small) | Text Style | `Label sm/Medium` |
 | `Left Icon → [size]px → [icon-name] → Icon` | **Stroke** (VECTOR) | Icon color variable per variant — change STROKE not fill |
 | `Right Icon → [size]px → [icon-name] → Icon` | **Stroke** (VECTOR) | Icon color variable per variant — change STROKE not fill |

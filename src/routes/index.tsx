@@ -24,6 +24,7 @@ const TablePage = lazy(() => import("@/pages/component_pages/comp_pages/table_pa
 const ToggleButtonPage = lazy(() => import("@/pages/component_pages/comp_pages/toggleButton_page"));
 const TooltipPage = lazy(() => import("@/pages/component_pages/comp_pages/tooltip_page"));
 const TypographyPage = lazy(() => import("@/pages/component_pages/comp_pages/typography_page"));
+const SpacingRadiusPage = lazy(() => import("@/pages/component_pages/comp_pages/spacingRadius_page"));
 
 function lazyLoad(Component: ComponentType) {
   return (
@@ -44,6 +45,7 @@ export const routes: RouteObject[] = [
       { path: "figma-mcp", element: lazyLoad(IntroductionPage) },
       { path: "colors", element: lazyLoad(ColorsPage) },
       { path: "typography", element: lazyLoad(TypographyPage) },
+      { path: "spacing-radius", element: lazyLoad(SpacingRadiusPage) },
       { path: "spacing", element: lazyLoad(IntroductionPage) },
       { path: "badge", element: lazyLoad(BadgePage) },
       { path: "breadcrumb", element: lazyLoad(BreadcrumbPage) },

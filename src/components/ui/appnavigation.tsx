@@ -27,6 +27,7 @@ export const NAV_SECTIONS: NavSection[] = [
     items: [
       { id: 'colors', label: 'Colors' },
       { id: 'typography', label: 'Typography' },
+      { id: 'spacing-radius', label: 'Spacing & Radius' },
     ],
   },
   {
@@ -58,6 +59,7 @@ export const PAGE_INFO: Record<string, PageInfoEntry> = {
   'figma-mcp':     { eyebrow: 'Documentation', title: 'Figma MCP Basics', desc: '' },
   colors:          { eyebrow: 'Style Guide',   title: 'Colors',           desc: 'Our design system provides a curated set of color styles for consistency, readability, and accessibility. Figma color variables help manage reusable color values and simplify design updates across systems.' },
   typography:      { eyebrow: 'Style Guide',   title: 'Typography',       desc: 'Our design system includes a curated set of typographic styles designed for consistency, versatility, and accessibility across different projects and use cases.' },
+  'spacing-radius': { eyebrow: 'Style Guide',   title: 'Spacing & Radius', desc: 'Our design system defines a consistent spacing and border-radius scale to ensure visual harmony, alignment, and rhythm across all components and layouts.' },
   badge:           { eyebrow: 'Components',    title: 'Badge',            desc: 'Badges are small visual elements used to highlight important information, such as notifications, updates, or status indicators, helping users quickly notice key details.' },
   breadcrumb:      { eyebrow: 'Components',    title: 'Breadcrumb',       desc: 'Breadcrumbs are navigation elements that show a user’s current location within a website or app, helping them understand their path and easily move back to previous pages or sections.' },
   button:          { eyebrow: 'Components',    title: 'Button',           desc: 'Buttons are interactive elements that guide users through actions in an interface, helping them navigate, submit forms, confirm choices, and complete tasks efficiently.' },

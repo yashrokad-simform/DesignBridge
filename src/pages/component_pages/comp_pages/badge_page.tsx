@@ -417,6 +417,81 @@ function transformBadgeFigmaMd(raw: string, vals: InputValues): string {
   const newSep = Array(colCount).fill('---').map(s => `| ${s} `).join('') + '|';
   md = md.replace(/^\|---\|---\|---\|---\|$/m, newSep);
 
+  // ── 7. Remaining variant-name and count references ──────────────
+
+  const firstTypeName = selectedVariants.length > 0 ? typeNames[selectedVariants[0]] : 'Filled';
+  const typeListStr   = selectedVariants.map(v => typeNames[v]).join(' · ');
+  const typeOptionsStr = selectedVariants.map(v => `\`${typeNames[v]}\``).join(', ');
+  const typeWord = selectedVariants.length === 1 ? 'Type' : 'Types';
+
+  // 7a. Update all "36 variants/Variants" counts
+  md = md.replace(/\b36 (variants?|Variants?)\b/g, (_, noun) => `${totalVariants} ${noun}`);
+
+  // 7b. Step 4 naming example
+  md = md.replace(
+    /`Type=Filled, Color=Primary` \(adjust per variant\)/,
+    `\`Type=${firstTypeName}, Color=Primary\` (adjust per variant)`,
+  );
+
+  // 7c. Step 4 Type property options list
+  md = md.replace(
+    /- `Type` → options: `Filled`, `Bordered`, `Tertiary`/,
+    `- \`Type\` → options: ${typeOptionsStr}`,
+  );
+
+  // 7d. Grid layout rows — remove disabled types then renumber
+  for (const key of ['filled', 'bordered', 'tertiary']) {
+    if (!selectedVariants.includes(key)) {
+      const name = typeNames[key];
+      md = md.replace(new RegExp(`Row \\d+  →  ${name}:[^\\n]*\\n?`, 'g'), '');
+    }
+  }
+  let rowCounter = 0;
+  md = md.replace(/Row \d+  →  /g, () => `Row ${++rowCounter}  →  `);
+
+  // 7e. Naming conventions table variant option example
+  md = md.replace(
+    /(\| Variant option \| `PascalCase` \| )`[^`]+`( \|)/,
+    `$1\`${firstTypeName}\`, \`Primary\`$2`,
+  );
+
+  // 7f. "Filled · Bordered · Tertiary" type list — taglines, subtitles, step headings
+  md = md.replace(/Filled · Bordered · Tertiary/g, typeListStr);
+
+  // 7f2. Remove entire "### Border" section when Bordered is off
+  if (!selectedVariants.includes('bordered')) {
+    md = md.replace(
+      /\n### Border\n[\s\S]*?(?=\n### )/,
+      '\n',
+    );
+  }
+
+  // 7g. "3 Types × 12 Colors" in code block diagram
+  md = md.replace(/\b3 Types × 12 Colors\b/g, `${selectedVariants.length} ${typeWord} × 12 Colors`);
+
+  // 7h. "What changes" table — remove disabled type data cells from body rows
+  const disabledCellIndices = new Set<number>();
+  if (!selectedVariants.includes('filled'))   disabledCellIndices.add(2);
+  if (!selectedVariants.includes('bordered')) disabledCellIndices.add(3);
+  if (!selectedVariants.includes('tertiary')) disabledCellIndices.add(4);
+
+  if (disabledCellIndices.size > 0) {
+    md = md.replace(
+      /(\| What changes \|[^\n]+\n\|[^\n]+\n)((?:\|[^\n]+\n)+)/,
+      (_, headerAndSep, dataRows) => {
+        const processedRows = (dataRows as string)
+          .split('\n')
+          .filter(r => r.trim())
+          .map(row => {
+            const parts = row.split('|');
+            return parts.filter((_, i) => !disabledCellIndices.has(i)).join('|');
+          })
+          .join('\n') + '\n';
+        return headerAndSep + processedRows;
+      },
+    );
+  }
+
   return md;
 }
 

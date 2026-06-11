@@ -240,7 +240,7 @@ State=View / State=Uploaded        [COMPONENT · FILL × FIXED(64px) · Horizont
   │     (uses existing File Type Icon component — set File type per context)
   │
   ├── Text and supporting text      [FRAME · FILL × HUG · Vertical AL · gap spacing-xxs · layoutGrow=1]
-  │     ├── Text                    [TEXT · FILL × HUG · Body md/Medium · 1 line truncated]
+  │     ├── Text                    [TEXT · FILL × HUG · Body sm/Medium · 1 line truncated]
   │     │     Fill: Text/text-primary
   │     │     Content: "Tech requirements.pdf"
   │     │     Truncation: ENDING · maxLines: 1
@@ -277,7 +277,7 @@ State=Uploading                    [COMPONENT · FILL × HUG · Horizontal AL]
   └── Frame 3                       [FRAME · FILL × HUG · Vertical AL · gap spacing-md · layoutGrow=1]
         ├── Frame 1                 [FRAME · FILL × HUG · Horizontal AL · Center VA · gap spacing-3xl]
         │     ├── Text and supporting text  [FILL × HUG · Vertical AL · gap spacing-xxs · layoutGrow=1]
-        │     │     ├── Text        [Body md/Medium · Text/text-primary · truncated 1 line]
+        │     │     ├── Text        [Body sm/Medium · Text/text-primary · truncated 1 line]
         │     │     └── Supporting text [Label sm/Medium · Text/text-secondary · file size]
         │     └── Button (cancel)   [INSTANCE · Button · Size=Small · Type=Icon Secondary]
         │
@@ -306,7 +306,7 @@ State=Uploading                    [COMPONENT · FILL × HUG · Horizontal AL]
 | Tile frame | Corner radius (all 4) | `radius-xl` |
 | `Text and supporting text` | Gap | `spacing-xxs` |
 | `Text` (filename) | Fill | `Text/text-primary` |
-| `Text` (filename) | Text Style | `Body md/Medium` |
+| `Text` (filename) | Text Style | `Body sm/Medium` |
 | `Frame 2087325206` | Gap | `spacing-md` |
 | `Supporting text` (file size) | Fill | `Text/text-secondary` |
 | `Supporting text` (file size) | Text Style | `Label sm/Medium` |
@@ -374,7 +374,7 @@ The `Document Tile` uses `File Type Icon` instances for the leading file format 
 
 | Layer | Text Style | Font |
 |---|---|---|
-| Document Tile filename (`Text`) | `Body md/Medium` | Inter · Medium 500 · 14px · 18px LH · truncated 1 line |
+| Document Tile filename (`Text`) | `Body sm/Medium` | Inter · Medium 500 · 14px · 18px LH · truncated 1 line |
 | Document Tile file size/date (`Supporting text`) | `Label sm/Medium` | Inter · Medium 500 · 12px · 16px LH |
 | Document Tile progress `Percentage` | `Label sm/Medium` | Inter · Medium 500 · 12px · 16px LH |
 | File Picker `Action` → `Text` ("or drag and drop") | `Label sm/Regular` | Inter · Regular 400 · 12px · 16px LH |
@@ -519,7 +519,7 @@ The `Document Tile` uses `File Type Icon` instances for the leading file format 
 
 - **File Type Icon** instance (File type=PDF · 40×40px)
 - **Text and supporting text** frame (FILL × HUG · Vertical AL · gap spacing-xxs · layoutGrow=1):
-  - `Text` layer: Body md/Medium · Text/text-primary · FILL × HUG · truncation ENDING · maxLines=1
+  - `Text` layer: Body sm/Medium · Text/text-primary · FILL × HUG · truncation ENDING · maxLines=1
   - `Frame 2087325206` (FILL × HUG · Horizontal AL · Center VA · gap spacing-md):
     - `Supporting text` (file size): Label sm/Medium · Text/text-secondary · HUG
     - `Ellipse 302` (4×4px): fill `Text/text-secondary` — link visibility to `Show Date` Boolean

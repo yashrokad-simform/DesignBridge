@@ -187,11 +187,11 @@ export function RichTextEditor({
               onClick={btn.action}
               className={cn(
                 'size-6 rounded-[4.5px] flex items-center justify-center shrink-0 transition-colors',
-                btn.active ? 'bg-bg-brand-light' : '',
+                btn.active ? 'bg-bg-secondary' : '',
               )}
             >
               {React.cloneElement(btn.icon as React.ReactElement<{ className?: string }>, {
-                className: 'size-4 text-input-text-enabled',
+                className: cn('size-4', btn.active ? 'text-icon-primary' : 'text-icon-secondary'),
               })}
             </button>
           ))}

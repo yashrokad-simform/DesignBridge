@@ -101,7 +101,7 @@ _base dropdown list                    [COMPONENT_SET]
   │     Stroke:        Component/Input Field/input-border-enabled · **bottom only** · 1px
   │     │
   │     ├── Icon                       [INSTANCE — Icon component · 16px · Show Prefix boolean]
-  │     ├── Text                       [TEXT — FILL × HUG — Body md/Medium]
+  │     ├── Text                       [TEXT — FILL × HUG — Body sm/Medium]
   │     │     Fill: Component/Input Field/input-text-enable
   │     └── Checkbox                   [INSTANCE — Checkbox component · Checked=Enabled · Label=false]
   │
@@ -177,7 +177,7 @@ _base Dropdown                         [COMPONENT — Vertical AL · FIXED(320px
   │     │
   │     ├── Icon                       [INSTANCE — Icon component · 16px · Show Prefix boolean]
   │     ├── Content                    [FRAME — FILL × HUG · Horizontal AL · spacing-md gap]
-  │     │     └── Text                 [TEXT — "Select" — Body md/Medium · FILL × HUG]
+  │     │     └── Text                 [TEXT — "Select" — Body sm/Medium · FILL × HUG]
   │     │           Fill: `input-text-placeholder` (Enabled only)
   │     │                 `input-text-enabled` (Selected · Selected Options · Open · Error)
   │     │                 `input-text-disabled` (Disabled)
@@ -250,9 +250,9 @@ Dropdown                               [COMPONENT_SET]
 |---|---|---|
 | `Label` text | `Label sm/Medium` | Inter · Medium (500) · 12px · 16px LH |
 | `*` mandatory marker | `Label sm/Medium` | Inter · Medium (500) · 12px · 16px LH |
-| `Text` (Input placeholder/value) | `Body md/Medium` | Inter · Medium (500) · 14px · 18px LH |
+| `Text` (Input placeholder/value) | `Body sm/Medium` | Inter · Medium (500) · 14px · 18px LH |
 | `Hint text` | `Label sm/Medium` | Inter · Medium (500) · 12px · 16px LH |
-| `_base dropdown list` → `Text` | `Body md/Medium` | Inter · Medium (500) · 14px · 18px LH |
+| `_base dropdown list` → `Text` | `Body sm/Medium` | Inter · Medium (500) · 14px · 18px LH |
 
 > Apply text styles directly. Do not bind individual font variables.
 
@@ -410,7 +410,7 @@ This is the foundational row. Build it first as all other list item variants ext
 #### Text
 1. Add a **Text** layer. Name it `Text`. Set sizing to **FILL × HUG**.
 2. Set default content to `Select`.
-3. Apply text style **`Body md/Medium`**.
+3. Apply text style **`Body sm/Medium`**.
 4. Bind fill → `Component/Input Field/input-text-enable`.
 
 ### Step 2 — Build Remaining `_base dropdown list` Variants
@@ -513,7 +513,7 @@ Same outer container as Count=4, plus inside `Frame 3465903`:
 
 Inside `Input`:
 - **Prefix Icon**: Icon component instance (Size=16px). Create Instance Swap `Prefix Icon`. Create Boolean `Show Prefix` (default: `true`).
-- **Content frame**: FILL × HUG · Horizontal AL · `spacing-md` gap. Inside: `Text` layer (Body md/Medium · FILL × HUG · default fill = `input-text-placeholder`). Override per state: `input-text-enabled` for Selected/Selected Options/Open/Error · `input-text-disabled` for Disabled.
+- **Content frame**: FILL × HUG · Horizontal AL · `spacing-md` gap. Inside: `Text` layer (Body sm/Medium · FILL × HUG · default fill = `input-text-placeholder`). Override per state: `input-text-enabled` for Selected/Selected Options/Open/Error · `input-text-disabled` for Disabled.
 - **Suffix Icon**: Icon component instance (Size=16px) at trailing position. Default instance = `arrow-down`. Create Instance Swap `Suffix Icon`. Create Boolean `Show Suffix` (default: `true`).
 
 #### Hint text
@@ -588,7 +588,7 @@ Inside `Input`:
 | `*` (asterisk) | Fill | `Component/Input Field/input-text-critical` |
 | `*` (asterisk) | Text Style | `Label sm/Medium` |
 | `Text` (placeholder) | Fill | `Component/Input Field/input-text-placeholder` |
-| `Text` (placeholder) | Text Style | `Body md/Medium` |
+| `Text` (placeholder) | Text Style | `Body sm/Medium` |
 | `Hint text` | Fill | `Component/Input Field/input-text-helper` |
 | `Hint text` | Text Style | `Label sm/Medium` |
 | `Selected Options` | Gap (H + Wrap) | `spacing-sm` |
@@ -604,7 +604,7 @@ Inside `Input`:
 | Row frame | Padding Left/Right | `spacing-xl` |
 | Row frame | Gap | `spacing-md` |
 | `Text` | Fill | `Component/Input Field/input-text-enable` |
-| `Text` | Text Style | `Body md/Medium` |
+| `Text` | Text Style | `Body sm/Medium` |
 
 **`Dropdown list`:**
 

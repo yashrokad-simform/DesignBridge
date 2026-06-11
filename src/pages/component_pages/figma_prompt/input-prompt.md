@@ -81,7 +81,7 @@ _base Input Field                  [COMPONENT · FIXED(320px) × HUG · Vertical
   │     │
   │     ├── Content                [FRAME · FILL × HUG · Horizontal AL · Center VA · layoutGrow=1]
   │     │     Gap: spacing-md (8px)
-  │     │     └── Text             [TEXT · FILL × HUG · Body md/Medium · 1 line truncated]
+  │     │     └── Text             [TEXT · FILL × HUG · Body sm/Medium · 1 line truncated]
   │     │           Fill: Component/Input Field/input-text-placeholder (Enabled/Focused)
   │     │                 Component/Input Field/input-text-enable (Filled state)
   │     │           Content: "Text" (placeholder) or actual value
@@ -131,7 +131,7 @@ Input Field                        [COMPONENT_SET]
 | `Input` | FRAME | `_base Input Field` | FILL × FIXED(44px) · Horizontal AL · Center VA · clips content |
 | `Icon` (prefix) | INSTANCE | `Input` | Icon component · Size=16px · visibility = Show Prefix |
 | `Content` | FRAME | `Input` | FILL × HUG · Horizontal AL · Center VA · layoutGrow=1 |
-| `Text` | TEXT | `Content` | FILL × HUG · `Body md/Medium` · truncated · 1 line max |
+| `Text` | TEXT | `Content` | FILL × HUG · `Body sm/Medium` · truncated · 1 line max |
 | `Icon` (suffix) | INSTANCE | `Input` | Icon component · Size=16px · visibility = Show Suffix |
 | `Hint text` | TEXT | `_base Input Field` | FILL × HUG · `Label sm/Medium` · visibility = Show Hint |
 
@@ -165,7 +165,7 @@ Input Field                        [COMPONENT_SET]
 |---|---|---|
 | `Label` (text) | `Label sm/Medium` | Inter · Medium 500 · 12px · 16px LH |
 | `*` (asterisk) | `Label sm/Medium` | Inter · Medium 500 · 12px · 16px LH |
-| `Text` (input value/placeholder) | `Body md/Medium` | Inter · Medium 500 · 14px · 18px LH · truncated |
+| `Text` (input value/placeholder) | `Body sm/Medium` | Inter · Medium 500 · 14px · 18px LH · truncated |
 | `Hint text` | `Label sm/Medium` | Inter · Medium 500 · 12px · 16px LH |
 
 > Apply text styles directly. Do not bind individual font variables.
@@ -275,7 +275,7 @@ All variables are in the `Component/Input Field/` namespace inside the `Color St
 
 #### Text (placeholder/value)
 1. Add a **Text** layer inside `Content`. Name it `Text`.
-2. Content: "Text". Apply text style `Body md/Medium`.
+2. Content: "Text". Apply text style `Body sm/Medium`.
 3. Set sizing: **FILL × HUG**. Set text truncation: **ENDING**. Set maxLines: **1**.
 4. Bind fill → `Component/Input Field/input-text-placeholder` (default — Enabled/Focused state).
 5. `layoutGrow = 1`.
@@ -346,7 +346,7 @@ All variables are in the `Component/Input Field/` namespace inside the `Color St
 | `*` (asterisk) | Fill | `Component/Input Field/input-text-critical` |
 | `*` (asterisk) | Text Style | `Label sm/Medium` |
 | `Text` (placeholder/value) | Fill | `input-text-placeholder` (Enabled) · `input-text-enable` (Focused · Filled · Error) · `input-text-disabled` (Disabled) |
-| `Text` (placeholder/value) | Text Style | `Body md/Medium` |
+| `Text` (placeholder/value) | Text Style | `Body sm/Medium` |
 | `Hint text` | Fill | `input-text-helper` (default) · `input-text-critical` (Error) |
 | `Hint text` | Text Style | `Label sm/Medium` |
 | `Icon` (prefix) VECTOR | Stroke | `Icon/icon-secondary` |

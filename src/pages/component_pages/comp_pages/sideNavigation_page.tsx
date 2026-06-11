@@ -6,6 +6,7 @@ import ComponentPageLayout, {
   type VariantGroup,
 } from '../ComponentPageLayout';
 import sideNavMd from '../md_files/sideNavigation-instruction.md?raw';
+import navFigmaMd from '../figma_prompt/navigation-prompt.md?raw';
 import { DashboardIcon } from '../../../assets/icons/DashboardIcon';
 import { AnalyticsIcon } from '../../../assets/icons/AnalyticsIcon';
 import { UsersIcon } from '../../../assets/icons/UsersIcon';
@@ -35,6 +36,14 @@ const DEMO_LOGO = (
       <span className="text-white text-xs font-bold">DS</span>
     </div>
     <span className="text-white text-sm font-semibold whitespace-nowrap">Design System</span>
+  </div>
+);
+
+const DEMO_LOGO_COLLAPSED = (
+  <div className="flex items-center justify-center">
+    <div className="size-8 rounded bg-white/20 flex items-center justify-center shrink-0">
+      <span className="text-white text-xs font-bold">DS</span>
+    </div>
   </div>
 );
 
@@ -119,7 +128,7 @@ function buildVariants(vals: InputValues): VariantGroup[] {
           <SideNav
             collapsed={true}
             onToggle={() => {}}
-            logo={DEMO_LOGO}
+            logo={DEMO_LOGO_COLLAPSED}
             items={DEMO_ITEMS}
             showProfile={showProfile}
             profile={profile}
@@ -293,6 +302,346 @@ function transformMarkdown(raw: string, vals: InputValues): string {
   return md;
 }
 
+/* ── removeTableColumn ───────────────────────────────────── */
+function removeTableColumn(md: string, header: string): string {
+  const lines = md.split('\n');
+  let colIdx = -1;
+  return lines.map(line => {
+    if (!line.startsWith('|')) { colIdx = -1; return line; }
+    const cells = line.split('|');
+    if (colIdx === -1) {
+      colIdx = cells.findIndex((c, i) => i > 0 && c.trim() === header);
+    }
+    if (colIdx > 0) {
+      const updated = [...cells];
+      updated.splice(colIdx, 1);
+      return updated.join('|');
+    }
+    return line;
+  }).join('\n');
+}
+
+/* ── transformFigmaMarkdown ──────────────────────────────── */
+function transformFigmaMarkdown(raw: string, vals: InputValues): string {
+  let md = raw;
+
+  const showExpanded  = (vals.showExpanded  as boolean) || !(vals.showCollapsed as boolean);
+  const showCollapsed = (vals.showCollapsed as boolean) || !(vals.showExpanded  as boolean);
+  const showProfile   = vals.showProfile as boolean;
+
+  // ── 1. Block comment markers ───────────────────────────────
+  if (!showExpanded) {
+    md = md.replace(/<!-- IF_EXPANDED -->\n[\s\S]*?<!-- \/IF_EXPANDED -->\n/g, '');
+  } else {
+    md = md.replace(/<!-- IF_EXPANDED -->\n/g, '').replace(/<!-- \/IF_EXPANDED -->\n/g, '');
+  }
+
+  if (!showCollapsed) {
+    md = md.replace(/<!-- IF_COLLAPSED -->\n[\s\S]*?<!-- \/IF_COLLAPSED -->\n/g, '');
+  } else {
+    md = md.replace(/<!-- IF_COLLAPSED -->\n/g, '').replace(/<!-- \/IF_COLLAPSED -->\n/g, '');
+  }
+
+  if (!showProfile) {
+    md = md.replace(/<!-- IF_PROFILE -->\n[\s\S]*?<!-- \/IF_PROFILE -->\n/g, '');
+  } else {
+    md = md.replace(/<!-- IF_PROFILE -->\n/g, '').replace(/<!-- \/IF_PROFILE -->\n/g, '');
+  }
+
+  // ── 2. Overview table counts ───────────────────────────────
+  if (!showExpanded) {
+    md = md.replace(
+      /\| `_Nav item base` Variants \| 4 \(Active × Type\) \|/,
+      '| `_Nav item base` Variants | 2 (Active) |',
+    );
+    md = md.replace(
+      /\| `Navigation` Variants \| 2 \(State\) \|/,
+      '| `Navigation` Variants | 1 (State=Collapsed) |',
+    );
+  } else if (!showCollapsed) {
+    md = md.replace(
+      /\| `_Nav item base` Variants \| 4 \(Active × Type\) \|/,
+      '| `_Nav item base` Variants | 2 (Active) |',
+    );
+    md = md.replace(
+      /\| `Navigation` Variants \| 2 \(State\) \|/,
+      '| `Navigation` Variants | 1 (State=Expanded) |',
+    );
+  }
+
+  // ── 3. Intro paragraph ────────────────────────────────────
+  if (!showExpanded) {
+    md = md.replace(/Horizontal and Vertical layouts/, 'Vertical layouts');
+  } else if (!showCollapsed) {
+    md = md.replace(/Horizontal and Vertical layouts/, 'Horizontal layouts');
+  }
+  if (!showProfile) {
+    md = md.replace(/, optional Profile section at the bottom,/, '');
+  }
+
+  // ── 4. Component Hierarchy code block lines ───────────────
+  if (!showExpanded) {
+    md = md.replace(/  ├── Active=No,  Type=Horizontal\n/, '');
+    md = md.replace(/  ├── Active=Yes, Type=Horizontal\n/, '');
+    md = md.replace(/  ├── State=Expanded[^\n]*\n/, '');
+    md = md.replace(/  ├── State=Collapsed/, '  └── State=Collapsed');
+  }
+  if (!showCollapsed) {
+    md = md.replace(/  ├── Active=No,  Type=Vertical\n/, '');
+    md = md.replace(/  └── Active=Yes, Type=Vertical\n/, '');
+    md = md.replace(/  └── State=Collapsed[^\n]*\n/, '');
+    md = md.replace(/  ├── State=Expanded/, '  └── State=Expanded');
+    md = md.replace(/  ├── Active=Yes, Type=Horizontal/, '  └── Active=Yes, Type=Horizontal');
+  }
+
+  // ── 5. Variant Properties tables ─────────────────────────
+  if (!showExpanded) {
+    md = md.replace(/`Horizontal` · `Vertical`/, '`Vertical`');
+  } else if (!showCollapsed) {
+    md = md.replace(/`Horizontal` · `Vertical`/, '`Horizontal`');
+  }
+  if (!showExpanded) {
+    md = md.replace(/`Expanded` · `Collapsed`/, '`Collapsed`');
+  } else if (!showCollapsed) {
+    md = md.replace(/`Expanded` · `Collapsed`/, '`Expanded`');
+  }
+  if (!showProfile) {
+    md = md.replace(/\| `Show Profile#[^`]+` \| BOOLEAN \|[^\n]+\n/, '');
+  }
+
+  // ── 6. Toggle Icon Rules table rows ───────────────────────
+  if (!showExpanded) {
+    md = md.replace(/\| `State=Expanded` \| \*\*chevron-left\*\*[^\n]+\n/, '');
+  }
+  if (!showCollapsed) {
+    md = md.replace(/\| `State=Collapsed` \| \*\*chevron-right\*\*[^\n]+\n/, '');
+  }
+
+  // ── 7. Layer Descriptions — `_Nav item base` table ────────
+  if (!showCollapsed) {
+    md = md.replace(/\| `Container` \| FRAME \| Icon container for Vertical[^\n]+\n/, '');
+  }
+  if (!showExpanded && !showCollapsed) {
+    // both gone — impossible due to guard above, but be safe
+  }
+  // Simplify H/V notes if only one type shown
+  if (!showExpanded) {
+    md = md.replace(/FILL × FIXED\(44px\) \(H\) · FIXED\(44px\) × HUG \(V\)/, 'FIXED(44px) × HUG');
+    md = md.replace(/Horizontal AL \(H\) · Vertical AL \(V\)/, 'Vertical AL');
+    md = md.replace(/Body sm\/Medium \(inactive H\) · Body sm\/Semi Bold \(active H\) · Label sm\/Medium \(V\)/, 'Label sm/Medium');
+  } else if (!showCollapsed) {
+    md = md.replace(/FILL × FIXED\(44px\) \(H\) · FIXED\(44px\) × HUG \(V\)/, 'FILL × FIXED(44px)');
+    md = md.replace(/Horizontal AL \(H\) · Vertical AL \(V\)/, 'Horizontal AL');
+    md = md.replace(/Body sm\/Medium \(inactive H\) · Body sm\/Semi Bold \(active H\) · Label sm\/Medium \(V\)/, 'Body sm/Medium (inactive) · Body sm/Semi Bold (active)');
+  }
+
+  // ── 8. Layer Descriptions — `Navigation` table ────────────
+  if (!showProfile) {
+    md = md.replace(/\| `Profile_Container` \| FRAME \|[^\n]+\n/, '');
+    md = md.replace(/\| `Profile` \| FRAME \|[^\n]+\n/, '');
+    md = md.replace(/\| `Avatar Image` \| INSTANCE \|[^\n]+\n/, '');
+    md = md.replace(/\| `Contenet` \| FRAME \|[^\n]+\n/, '');
+  }
+  if (!showExpanded && !showCollapsed) {
+    md = md.replace(/FIXED\(240 or 96px\)/, 'FIXED(96px)');
+  } else if (!showExpanded) {
+    md = md.replace(/FIXED\(240 or 96px\)/, 'FIXED(96px)');
+  } else if (!showCollapsed) {
+    md = md.replace(/FIXED\(240 or 96px\)/, 'FIXED(240px)');
+  }
+
+  // ── 9. Spacing — `_Nav item base` table rows ──────────────
+  if (!showExpanded) {
+    md = md.replace(/\| Horizontal \|[^\n]+\n/g, '');
+  }
+  if (!showCollapsed) {
+    md = md.replace(/\| Vertical \|[^\n]+\n/g, '');
+  }
+
+  // ── 10. Radius — `_Nav item base` table rows ──────────────
+  if (!showCollapsed) {
+    md = md.replace(/\| `Container` \(V icon container\)[^\n]+\n/, '');
+    md = md.replace(/Outer item frame \(both types\)/, 'Outer item frame');
+  }
+
+  // ── 11. Spacing — `Navigation` table rows ─────────────────
+  if (!showExpanded) {
+    md = md.replace(/\| `Frame 1261153134` \(Expanded\)[^\n]+\n/g, '');
+    md = md.replace(/\| `Profile` \(Expanded\)[^\n]+\n/, '');
+  }
+  if (!showCollapsed) {
+    md = md.replace(/\| `Frame 1261153134` \(Collapsed\)[^\n]+\n/g, '');
+  }
+  if (!showProfile) {
+    md = md.replace(/\| `Profile_Container` \(both states\)[^\n]+\n/g, '');
+    md = md.replace(/\| `Profile` \(Expanded\)[^\n]+\n/, '');
+    md = md.replace(/\| `Contenet`[^\n]+\n/g, '');
+  }
+
+  // ── 12. Radius — `Navigation` table rows ──────────────────
+  if (!showProfile) {
+    md = md.replace(/\| `Profile_Container` \|[^\n]+\n/g, '');
+    md = md.replace(/\| `Avatar Image`[^\n]+\n/g, '');
+  }
+
+  // ── 13. Typography table rows ─────────────────────────────
+  if (!showExpanded) {
+    md = md.replace(/\| Horizontal inactive text[^\n]+\n/, '');
+    md = md.replace(/\| Horizontal active text[^\n]+\n/, '');
+  }
+  if (!showCollapsed) {
+    md = md.replace(/\| Vertical text \(both states\)[^\n]+\n/, '');
+  }
+  if (!showProfile) {
+    md = md.replace(/\| `Contenet` → Name `Text`[^\n]+\n/g, '');
+    md = md.replace(/\| `Contenet` → Role `Text`[^\n]+\n/g, '');
+  }
+
+  // ── 14. Color Variables table rows ────────────────────────
+  if (!showExpanded && !showProfile) {
+    md = md.replace(/\| `Navigation\/nav-text-active` \|[^\n]+\n/, '');
+  }
+  if (!showCollapsed && !showProfile) {
+    md = md.replace(/\| `Navigation\/nav-text-active-vertical` \|[^\n]+\n/, '');
+    md = md.replace(/\| `Navigation\/nav-icon-bg` \|[^\n]+\n/, '');
+  }
+
+  // ── 15. Color Per Variant — `_Nav item base` table ────────
+  if (!showCollapsed) {
+    md = removeTableColumn(md, 'Container fill (V)');
+    md = md.replace(/`nav-text-active` \(H\) · `nav-text-active-vertical` \(V\)/, '`nav-text-active`');
+  } else if (!showExpanded) {
+    md = md.replace(/`nav-text-active` \(H\) · `nav-text-active-vertical` \(V\)/, '`nav-text-active-vertical`');
+  }
+
+  // ── 16. Color Per Variant — `Navigation` Sidebar table ────
+  if (!showProfile) {
+    md = md.replace(/\| `Profile_Container` fill[^\n]+\n/, '');
+    md = md.replace(/\| `Contenet` → Name[^\n]+\n/g, '');
+    md = md.replace(/\| `Contenet` → Role[^\n]+\n/g, '');
+    md = md.replace(/\| `chevron-right` VECTOR stroke[^\n]+\n/, '');
+  }
+
+  // ── 17. Variable Attachment — `_Nav item base` table rows ─
+  if (!showExpanded) {
+    md = md.replace(/\| Outer frame \(H\)[^\n]+\n/g, '');
+    md = md.replace(/\| `Content` \(H\)[^\n]+\n/g, '');
+    md = md.replace(/\| `Text` H[^\n]+\n/g, '');
+    md = md.replace(/\| Outer frame Active=Yes[^\n]+\n/g, '');
+  }
+  if (!showCollapsed) {
+    md = md.replace(/\| Outer frame \(V\)[^\n]+\n/g, '');
+    md = md.replace(/\| `Content` \(V\)[^\n]+\n/g, '');
+    md = md.replace(/\| `Container` \(V\)[^\n]+\n/g, '');
+    md = md.replace(/\| `Container` Active=No[^\n]+\n/g, '');
+    md = md.replace(/\| `Container` Active=Yes[^\n]+\n/g, '');
+    md = md.replace(/\| `Text` V[^\n]+\n/g, '');
+  }
+
+  // ── 18. Variable Attachment — `Navigation` table rows ─────
+  if (!showExpanded) {
+    md = md.replace(/\| `Frame 1261153134` \(Expanded\)[^\n]+\n/g, '');
+    md = md.replace(/\| `Profile` \(Expanded\)[^\n]+\n/g, '');
+    md = md.replace(/\| Toggle `Icon` \(Expanded\)[^\n]+\n/g, '');
+  }
+  if (!showCollapsed) {
+    md = md.replace(/\| `Frame 1261153134` \(Collapsed\)[^\n]+\n/g, '');
+    md = md.replace(/\| Toggle `Icon` \(Collapsed\)[^\n]+\n/g, '');
+  }
+  if (!showProfile) {
+    md = md.replace(/\| `Profile_Container`[^\n]+\n/g, '');
+    md = md.replace(/\| `Profile` \(Expanded\)[^\n]+\n/g, '');
+    md = md.replace(/\| `Avatar Image`[^\n]+\n/g, '');
+    md = md.replace(/\| `Contenet`[^\n]+\n/g, '');
+    md = md.replace(/\| `Contenet` → Name[^\n]+\n/g, '');
+    md = md.replace(/\| `Contenet` → Role[^\n]+\n/g, '');
+    md = md.replace(/\| `chevron-right` VECTOR[^\n]+\n/g, '');
+  }
+
+  // ── 19. Construction Step 5 text ─────────────────────────
+  if (!showExpanded) {
+    md = md.replace(/Select all 4\. Combine/, 'Select all 2. Combine');
+    md = md.replace(/`Type` → `Horizontal`, `Vertical`\./, '`Type` → `Vertical`.');
+    md = md.replace(/on all 4 variants\./, 'on all 2 variants.');
+  } else if (!showCollapsed) {
+    md = md.replace(/Select all 4\. Combine/, 'Select all 2. Combine');
+    md = md.replace(/`Type` → `Horizontal`, `Vertical`\./, '`Type` → `Horizontal`.');
+    md = md.replace(/on all 4 variants\./, 'on all 2 variants.');
+  }
+
+  // ── 20. Construction Step 9 text ─────────────────────────
+  if (!showExpanded) {
+    md = md.replace(/Select both\. Combine into/, 'Select the variant. Combine into');
+    md = md.replace(/`State` → `Expanded`, `Collapsed`\./, '`State` → `Collapsed`.');
+    md = md.replace(/on both variants\./, 'on the variant.');
+  } else if (!showCollapsed) {
+    md = md.replace(/Select both\. Combine into/, 'Select the variant. Combine into');
+    md = md.replace(/`State` → `Expanded`, `Collapsed`\./, '`State` → `Expanded`.');
+    md = md.replace(/on both variants\./, 'on the variant.');
+  }
+  if (!showProfile) {
+    md = md.replace(/^3\. Boolean `Show Profile`[^\n]+\n/m, '');
+  }
+
+  // ── 21. Mandatory Rules list items ───────────────────────
+  if (!showProfile) {
+    md = md.replace(/^- \*\*`Profile_Container` wraps[^\n]+\n/m, '');
+    md = md.replace(/^- \*\*Layer name `Contenet`[^\n]+\n/m, '');
+    md = md.replace(/^- \*\*Profile in collapsed state:[^\n]+\n/m, '');
+    md = md.replace(/^- \*\*`Profile` is a plain frame[^\n]+\n/m, '');
+  }
+  if (!showCollapsed && showProfile) {
+    md = md.replace(/^- \*\*Profile in collapsed state:[^\n]+\n/m, '');
+  }
+  if (!showExpanded && !showCollapsed) {
+    // guard — can't happen
+  }
+  // Toggle rule — if only one state, simplify
+  if (!showExpanded) {
+    md = md.replace(
+      /\*\*Toggle icon is NOT optional[^*]+\*\* Expanded = `chevron-left`\. Collapsed = `chevron-right`\./,
+      '**Toggle icon is NOT optional — it must be set for the Collapsed state.** Use `chevron-right`. Swap via Instance Swap property, not by rotating the icon.',
+    );
+  } else if (!showCollapsed) {
+    md = md.replace(
+      /\*\*Toggle icon is NOT optional[^*]+\*\* Expanded = `chevron-left`\. Collapsed = `chevron-right`\./,
+      '**Toggle icon is NOT optional — it must be set for the Expanded state.** Use `chevron-left`. Swap via Instance Swap property, not by rotating the icon.',
+    );
+  }
+
+  // ── 22. Figma Arrangement section ────────────────────────
+  if (!showExpanded) {
+    md = md.replace(/_Nav item base: 4 variants · Active × Type/, '_Nav item base: 2 variants · Active');
+    md = md.replace(/Navigation: 2 states · Expanded \(240px\) · Collapsed \(96px\)/, 'Navigation: 1 state · Collapsed (96px)');
+    md = md.replace(/▌ _Nav item base — 4 Variants/, '▌ _Nav item base — 2 Variants');
+    md = md.replace(/Active=No\/Yes · Type=Horizontal\/Vertical/, 'Active=No/Yes · Type=Vertical');
+    md = md.replace(/▌ Navigation — 2 States/, '▌ Navigation — 1 State');
+    md = md.replace(/Expanded 240px · Collapsed 96px/, 'Collapsed 96px');
+    md = md.replace(/Toggle: chevron-left \(Expanded\) · chevron-right \(Collapsed\)/, 'Toggle: chevron-right');
+    md = md.replace(/\| `_Nav item base — 4 Variants`[^\n]+\n/, '| `_Nav item base — 2 Variants` | `Active=No · Active=Yes · Vertical (icon + label)` | Actual `_Nav item base` COMPONENT_SET |\n');
+    md = md.replace(/\| `Navigation — 2 States`[^\n]+\n/, '| `Navigation — 1 State` | `Collapsed 96px · Toggle chevron-right` | Actual `Navigation` COMPONENT_SET |\n');
+  } else if (!showCollapsed) {
+    md = md.replace(/_Nav item base: 4 variants · Active × Type/, '_Nav item base: 2 variants · Active');
+    md = md.replace(/Navigation: 2 states · Expanded \(240px\) · Collapsed \(96px\)/, 'Navigation: 1 state · Expanded (240px)');
+    md = md.replace(/▌ _Nav item base — 4 Variants/, '▌ _Nav item base — 2 Variants');
+    md = md.replace(/Active=No\/Yes · Type=Horizontal\/Vertical/, 'Active=No/Yes · Type=Horizontal');
+    md = md.replace(/▌ Navigation — 2 States/, '▌ Navigation — 1 State');
+    md = md.replace(/Expanded 240px · Collapsed 96px/, 'Expanded 240px');
+    md = md.replace(/Toggle: chevron-left \(Expanded\) · chevron-right \(Collapsed\)/, 'Toggle: chevron-left');
+    md = md.replace(/\| `_Nav item base — 4 Variants`[^\n]+\n/, '| `_Nav item base — 2 Variants` | `Active=No · Active=Yes · Horizontal (44px)` | Actual `_Nav item base` COMPONENT_SET |\n');
+    md = md.replace(/\| `Navigation — 2 States`[^\n]+\n/, '| `Navigation — 1 State` | `Expanded 240px · Toggle chevron-left` | Actual `Navigation` COMPONENT_SET |\n');
+  }
+  if (!showProfile) {
+    md = md.replace(/Dark sidebar · Profile_Container \(spacing-4xl\) → Profile/, 'Dark sidebar');
+    md = md.replace(/Contenet \+ Avatar Image \+ chevron-right · /g, '');
+    md = md.replace(/\| `Navigation — 2 States`[^\n]+Contenet[^\n]+\n/, (m) =>
+      m.replace(/Contenet \+ Avatar Image \+ chevron-right · /g, ''),
+    );
+  }
+
+  return md;
+}
+
 /* ── Page ────────────────────────────────────────────────── */
 export default function SideNavigationPage() {
   return (
@@ -303,8 +652,10 @@ export default function SideNavigationPage() {
       variantTitle="Variants"
       markdownContent={sideNavMd}
       markdownFileName="sideNavigation"
+      figmaMarkdownContent={navFigmaMd}
       resolveTokens={resolveTokens}
       transformMarkdown={transformMarkdown}
+      transformFigmaMarkdown={transformFigmaMarkdown}
     />
   );
 }

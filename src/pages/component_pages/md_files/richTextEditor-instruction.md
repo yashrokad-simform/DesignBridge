@@ -168,12 +168,14 @@ border-b border-input-border-enabled
 8 buttons in fixed order: **Bold · Italic · H1 · H2 · Quote · Link · List Bullet · List Numbers**
 
 - Import each icon from `src/assets/icons/`. Do not create inline SVG.
-- Each button: `size-6 rounded-[4.5px] flex items-center justify-center shrink-0 transition-colors`
+- Each button: `size-6 rounded-sm flex items-center justify-center shrink-0 transition-colors`
 
-  > `size-6` = 24×24px · `rounded-[4.5px]` = Figma-confirmed value
+  > `size-6` = 24×24px · `rounded-sm` = Figma-confirmed value
 
-- **Active state** (formatting is active at cursor): `bg-bg-brand-light`
+- **Active state** (formatting is active at cursor): `bg-bg-secondary`
 - **Inactive state**: no background
+- **Icon color active**: `text-icon-primary`
+- **Icon color inactive**: `text-icon-secondary`
 - **Disabled** (`disabled={true}`): `opacity-50 pointer-events-none`
 
 #### Active State Detection
@@ -328,4 +330,6 @@ While `isDragging`, add `ring-1 ring-input-border-selected` to the editor contai
 | `--color-input-border-selected` | `border-input-border-selected` | Border (focused) |
 | `--color-input-border-critical` | `border-input-border-critical` | Border (error) |
 | `--color-input-border-disabled` | `border-input-border-disabled` | Border (disabled) |
-| `--color-bg-brand-light` | `bg-bg-brand-light` | Toolbar button active background |
+| `--color-bg-secondary` | `bg-bg-secondary` | Toolbar button active background |
+| `--color-icon-primary` | `text-icon-primary` | Toolbar icon (active) |
+| `--color-icon-secondary` | `text-icon-secondary` | Toolbar icon (inactive) |

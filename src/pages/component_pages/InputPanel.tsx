@@ -1,6 +1,6 @@
 import React from 'react';
 
-export type InputType = 'text' | 'number' | 'color' | 'colorhex' | 'select' | 'toggle' | 'multicheck' | 'togglegroup' | 'togglelist' | 'divider' | 'colorswatches';
+export type InputType = 'text' | 'number' | 'color' | 'colorhex' | 'select' | 'toggle' | 'multicheck' | 'togglegroup' | 'togglelist' | 'divider' | 'colorswatches' | 'tokencontrol';
 
 export interface SelectOption {
   value: string;
@@ -45,6 +45,13 @@ export default function InputPanel({
             return (
               <div key={field.key} className="cp-field-divider">
                 {field.label && <span className="cp-field-divider-label">{field.label}</span>}
+              </div>
+            );
+          }
+          if (field.type === 'tokencontrol') {
+            return (
+              <div key={field.key} className="cp-field">
+                <Field field={field} value={values[field.key]} onChange={v => onChange(field.key, v)} />
               </div>
             );
           }
@@ -263,6 +270,43 @@ function Field({
               aria-label={color}
             />
           ))}
+        </div>
+      );
+    }
+
+    case 'tokencontrol': {
+      const s = String(value ?? 'true:0');
+      const colon = s.indexOf(':');
+      const enabled = colon === -1 ? true : s.slice(0, colon) !== 'false';
+      const numVal = colon === -1 ? Number(s) : Number(s.slice(colon + 1));
+      const update = (e: boolean, v: number) => onChange(`${e}:${v}`);
+      return (
+        <div className="cp-tokenctrl">
+          <div className="cp-tokenctrl-row">
+            <label className="cp-toggle">
+              <input
+                type="checkbox"
+                checked={enabled}
+                onChange={ev => update(ev.target.checked, numVal)}
+              />
+              <span className="cp-toggle-track" />
+              <span className="cp-toggle-thumb" />
+            </label>
+            <span className={`cp-tokenctrl-name${!enabled ? ' cp-tokenctrl-name--off' : ''}`}>
+              {field.label}
+            </span>
+          </div>
+          {enabled && (
+            <input
+              className="cp-tokenctrl-input"
+              type="number"
+              value={numVal}
+              min={field.min}
+              max={field.max}
+              step={field.step ?? 1}
+              onChange={ev => update(enabled, Number(ev.target.value))}
+            />
+          )}
         </div>
       );
     }

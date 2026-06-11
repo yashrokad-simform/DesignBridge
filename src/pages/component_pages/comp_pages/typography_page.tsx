@@ -23,7 +23,7 @@ interface Tier {
 }
 
 const TIERS: Tier[] = [
-  { key: '2xs', className: 'text-2xs', defaultPx: 10, figmaLabel: 'Label sm' },
+  { key: '2xs', className: 'text-2xs', defaultPx: 10, figmaLabel: 'Caption' },
   { key: 'xs',  className: 'text-xs',  defaultPx: 12, figmaLabel: 'Label sm' },
   { key: 'sm',  className: 'text-sm',  defaultPx: 14, figmaLabel: 'Body sm' },
   { key: 'md',  className: 'text-md',  defaultPx: 16, figmaLabel: 'Body md' },
@@ -37,48 +37,38 @@ const TIERS: Tier[] = [
   { key: '7xl', className: 'text-7xl', defaultPx: 72, figmaLabel: 'Display xl' },
 ];
 
-const ALL_TIER_KEYS = TIERS.map(t => t.key).join(',');
-const sizeKey = (k: TierKey) => `size_${k}`;
+const tierKey = (k: TierKey) => `tier_${k}`;
+
+function parseTier(val: string | boolean | number | undefined): { enabled: boolean; px: number } {
+  const s = String(val ?? 'true:0');
+  const colon = s.indexOf(':');
+  if (colon === -1) return { enabled: true, px: Number(s) || 0 };
+  return { enabled: s.slice(0, colon) !== 'false', px: Number(s.slice(colon + 1)) || 0 };
+}
 
 /* ────────────────────────────────────────────────────────────────
- * Customise panel
+ * Customise panel — one tokencontrol per tier
  * ──────────────────────────────────────────────────────────────── */
-const buildInputConfig = (vals: InputValues): InputConfig[] => {
-  const enabledSet = new Set((vals.enabled as string ?? '').split(',').filter(Boolean));
-  const fields: InputConfig[] = [
-    { key: 'div0',     label: 'Tiers',  type: 'divider' },
-    {
-      key: 'enabled', label: '', type: 'togglelist',
-      options: TIERS.map(t => ({ value: t.key, label: t.className })),
-    },
-  ];
-  const enabledTiers = TIERS.filter(t => enabledSet.has(t.key));
-  if (enabledTiers.length > 0) {
-    fields.push({ key: 'div1', label: 'Sizes', type: 'divider' });
-    for (const t of enabledTiers) {
-      fields.push({
-        key: sizeKey(t.key),
-        label: `${t.className} (px)`,
-        type: 'number',
-        min: 6,
-        max: 200,
-      });
-    }
-  }
-  return fields;
-};
+const INPUT_CONFIG: InputConfig[] = [
+  { key: 'div0', label: 'Tiers', type: 'divider' },
+  ...TIERS.map(t => ({
+    key: tierKey(t.key),
+    label: t.className,
+    type: 'tokencontrol' as const,
+    min: 6,
+    max: 200,
+  })),
+];
 
-const DEFAULT_VALUES: InputValues = {
-  enabled: ALL_TIER_KEYS,
-  ...Object.fromEntries(TIERS.map(t => [sizeKey(t.key), t.defaultPx])),
-};
+const DEFAULT_VALUES: InputValues = Object.fromEntries(
+  TIERS.map(t => [tierKey(t.key), `true:${t.defaultPx}`]),
+);
 
 /* ────────────────────────────────────────────────────────────────
  * Variants — one row per enabled tier, sample glyph + class + size.
  * ──────────────────────────────────────────────────────────────── */
 function getEnabled(vals: InputValues): Tier[] {
-  const set = new Set((vals.enabled as string ?? '').split(',').filter(Boolean));
-  return TIERS.filter(t => set.has(t.key));
+  return TIERS.filter(t => parseTier(vals[tierKey(t.key)]).enabled);
 }
 
 function buildVariants(vals: InputValues): VariantGroup[] {
@@ -93,11 +83,11 @@ function buildVariants(vals: InputValues): VariantGroup[] {
       label: '',
       accentColor: '#0056b8',
       rows: enabled.map(t => {
-        const px = Number(vals[sizeKey(t.key)]) || t.defaultPx;
+        const { px } = parseTier(vals[tierKey(t.key)]);
         return {
           cells: [{
             label: '',
-            node: <TypeRow key={t.key} className={t.className} px={px} />,
+            node: <TypeRow key={t.key} className={t.className} px={px || t.defaultPx} />,
           }],
         };
       }),
@@ -124,36 +114,27 @@ function TypeRow({ className, px }: { className: string; px: number }) {
  * only substitute sizes / drop disabled tiers.
  * ──────────────────────────────────────────────────────────────── */
 function transformMarkdown(raw: string, vals: InputValues): string {
-  const enabledSet = new Set((vals.enabled as string ?? '').split(',').filter(Boolean));
-
   const lines = raw.split('\n');
   const out: string[] = [];
 
   for (const line of lines) {
-    // CSS line e.g. `--text-2xs: 10px;`  (allow surrounding whitespace)
-    const cssMatch = line.match(/^(\s*)--text-([0-9a-z]+):\s*\d+px;\s*$/);
+    const cssMatch = line.match(/^(\s*--text-([0-9a-z]+):)(\s*)\d+px;\s*$/);
     if (cssMatch) {
-      const tierKey = cssMatch[2] as TierKey;
-      if (!enabledSet.has(tierKey)) continue;
-      const px = Number(vals[sizeKey(tierKey)]) || TIERS.find(t => t.key === tierKey)?.defaultPx;
-      // preserve indent and the original column alignment after the colon
-      const original = line.match(/^(\s*--text-[0-9a-z]+:)(\s*)\d+px;\s*$/);
-      if (original) {
-        out.push(`${original[1]}${original[2]}${px}px;`);
-      } else {
-        out.push(`${cssMatch[1]}--text-${tierKey}: ${px}px;`);
-      }
+      const k = cssMatch[2] as TierKey;
+      const { enabled, px } = parseTier(vals[tierKey(k)]);
+      if (!enabled) continue;
+      const fallback = TIERS.find(t => t.key === k)?.defaultPx;
+      out.push(`${cssMatch[1]}${cssMatch[3]}${px || fallback}px;`);
       continue;
     }
 
-    // Figma → Tailwind table row e.g. `| Label sm | 12px | \`text-xs\` |`
     const tableMatch = line.match(/^\|\s*[^|]+\|\s*\d+px\s*\|\s*`text-([0-9a-z]+)`\s*\|\s*$/);
     if (tableMatch) {
-      const tierKey = tableMatch[1] as TierKey;
-      if (!enabledSet.has(tierKey)) continue;
-      const tier = TIERS.find(t => t.key === tierKey);
-      const px = Number(vals[sizeKey(tierKey)]) || tier?.defaultPx;
-      out.push(`| ${tier?.figmaLabel ?? '—'} | ${px}px | \`text-${tierKey}\` |`);
+      const k = tableMatch[1] as TierKey;
+      const { enabled, px } = parseTier(vals[tierKey(k)]);
+      if (!enabled) continue;
+      const tier = TIERS.find(t => t.key === k);
+      out.push(`| ${tier?.figmaLabel ?? '—'} | ${px || tier?.defaultPx}px | \`text-${k}\` |`);
       continue;
     }
 
@@ -171,7 +152,6 @@ function transformMarkdown(raw: string, vals: InputValues): string {
  * sections are left untouched — the input panel doesn't customise them.
  */
 function transformFigmaMarkdown(raw: string, vals: InputValues): string {
-  const enabledSet = new Set((vals.enabled as string ?? '').split(',').filter(Boolean));
   const labelToTier = new Map<string, typeof TIERS[number]>();
   for (const t of TIERS) {
     if (t.figmaLabel && t.figmaLabel !== '—') labelToTier.set(t.figmaLabel, t);
@@ -181,12 +161,11 @@ function transformFigmaMarkdown(raw: string, vals: InputValues): string {
   for (const line of raw.split('\n')) {
     const m = line.match(/^(\s*Font\/Size\/)([A-Za-z ]+?)(\s*→\s*)\d+\s*$/);
     if (m) {
-      const figmaLabel = m[2].trim();
-      const tier = labelToTier.get(figmaLabel);
+      const tier = labelToTier.get(m[2].trim());
       if (tier) {
-        if (!enabledSet.has(tier.key)) continue;
-        const px = Number(vals[sizeKey(tier.key)]) || tier.defaultPx;
-        out.push(`${m[1]}${m[2]}${m[3]}${px}`);
+        const { enabled, px } = parseTier(vals[tierKey(tier.key)]);
+        if (!enabled) continue;
+        out.push(`${m[1]}${m[2]}${m[3]}${px || tier.defaultPx}`);
         continue;
       }
     }
@@ -205,7 +184,7 @@ export default function TypographyPage() {
     <>
       <style>{LOCAL_CSS}</style>
       <ComponentPageLayout
-        inputConfig={buildInputConfig}
+        inputConfig={INPUT_CONFIG}
         defaultInputValues={DEFAULT_VALUES}
         buildVariants={buildVariants}
         variantTitle="Variants"
@@ -238,13 +217,13 @@ const LOCAL_CSS = `
   }
   .tp-row-class {
     color: #051325;
-    font-weight: 600;
-    font-size: 12px;
+    font-weight: 500;
+    font-size: 14px;
     font-family: 'DM Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
   }
   .tp-row-size {
-    color: #4f5c6d;
-    font-size: 11px;
+    color: #6b7689;
+    font-size: 13px;
     font-family: 'DM Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
   }
   .tp-row-sample {

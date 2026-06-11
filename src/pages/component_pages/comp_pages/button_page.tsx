@@ -388,7 +388,7 @@ const FIGMA_SPACING_BTN: Record<number, string> = {
   40: 'spacing-7xl', 48: 'spacing-8xl',
 };
 const BTN_TEXT_FIGMA: Record<string, string> = {
-  '12px': 'Label sm/Medium', '14px': 'Body md/Medium', '16px': 'Body lg/Medium',
+  '12px': 'Label sm/Medium', '14px': 'Body sm/Medium', '16px': 'Body md/Medium',
 };
 
 /* ── transformFigmaMarkdown ─────────────────────────────── */
@@ -420,7 +420,7 @@ function transformFigmaMarkdown(raw: string, vals: InputValues): string {
   const rvLg = FIGMA_SPACING_BTN[pLg]  ?? `${pLg}px`;
   const rvSm = FIGMA_SPACING_BTN[pSm]  ?? `${pSm}px`;
   const rr   = FIGMA_RADIUS_BTN[cr]    ?? 'radius-xl';
-  const stLg = BTN_TEXT_FIGMA[tLg]     ?? 'Body md/Medium';
+  const stLg = BTN_TEXT_FIGMA[tLg]     ?? 'Body sm/Medium';
   const stSm = BTN_TEXT_FIGMA[tSm]     ?? 'Label sm/Medium';
 
   const enabledVariants = (vals.variants as string).split(',').filter(Boolean);
@@ -459,8 +459,8 @@ function transformFigmaMarkdown(raw: string, vals: InputValues): string {
   if (rr !== 'radius-xl') md = md.replace(/\bradius-xl\b/g, rr);
 
   // ── Large text style ─────────────────────────────────────
-  if (stLg !== 'Body md/Medium') {
-    md = md.replace(/Body md\/Medium/g, stLg);
+  if (stLg !== 'Body sm/Medium') {
+    md = md.replace(/Body sm\/Medium/g, stLg);
     if (tLg === '16px') {
       md = md.replace(/14px · 18px LH · 0 LS/g, '16px · 22px LH · 0 LS');
       md = md.replace(/Inter · Medium \(500\) · 14px/g, 'Inter · Medium (500) · 16px');

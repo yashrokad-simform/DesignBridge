@@ -324,7 +324,7 @@ function transformInputFigmaMd(raw: string, vals: InputValues): string {
 
   // ── Typography ─────────────────────────────────────────
   if (textSize === '16px') {
-    md = md.replace(/Body md\/Medium/g, 'Body lg/Medium');
+    md = md.replace(/Body sm\/Medium/g, 'Body md/Medium');
     md = md.replace(/Inter · Medium 500 · 14px · 18px LH/g, 'Inter · Medium 500 · 16px · 22px LH');
     md = md.replace(/14px · 18px LH · truncated/g, '16px · 22px LH · truncated');
   }
