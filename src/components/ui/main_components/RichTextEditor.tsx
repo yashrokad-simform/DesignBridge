@@ -43,12 +43,6 @@ const PADDING_MAP: Record<RichTextEditorPadding, string> = {
   '20px': 'px-5',
 };
 
-const TEXT_SIZE_MAP: Record<RichTextEditorTextSize, string> = {
-  '12px': 'text-xs leading-4',
-  '14px': 'text-sm leading-4.5',
-  '16px': 'text-base leading-5.5',
-};
-
 export interface RichTextEditorProps {
   label?: string;
   required?: boolean;

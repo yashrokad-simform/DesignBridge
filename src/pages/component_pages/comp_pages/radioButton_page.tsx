@@ -1,4 +1,3 @@
-import React from 'react';
 import { RadioButton, RadioTile, RadioGroup } from '../../../components/ui/main_components/RadioButton';
 import ComponentPageLayout, {
   type InputConfig,

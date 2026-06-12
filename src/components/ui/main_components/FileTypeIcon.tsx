@@ -1,4 +1,3 @@
-import React from 'react';
 import { cn } from '@/lib/utils';
 
 import PageImgSrc  from '@/assets/icons/file-type/PageImg.svg';

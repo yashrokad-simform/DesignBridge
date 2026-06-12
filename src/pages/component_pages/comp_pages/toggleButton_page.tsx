@@ -1,4 +1,3 @@
-import React from 'react';
 import { ToggleButton, ToggleButtonTile } from '../../../components/ui/main_components/ToggleButton';
 import ComponentPageLayout, {
   type InputConfig,

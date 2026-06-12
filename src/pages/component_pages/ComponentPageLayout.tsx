@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import vscodeIcon from '../../assets/vscodeicon.svg';
 import vscodeButtonIcon from '../../assets/VS code-icon.svg';
 import './component_pages.css';

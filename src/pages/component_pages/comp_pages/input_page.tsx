@@ -1,4 +1,3 @@
-import React from 'react';
 import { Input, type InputCornerRadius, type InputPadding, type InputTextSize } from '../../../components/ui/main_components/Input';
 import { SearchIcon } from '../../../assets/icons/SearchIcon';
 import { CloseIcon } from '../../../assets/icons/CloseIcon';

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Checkbox, CheckboxTile } from '../../../components/ui/main_components/Checkbox';
 import ComponentPageLayout, {
   type InputConfig,

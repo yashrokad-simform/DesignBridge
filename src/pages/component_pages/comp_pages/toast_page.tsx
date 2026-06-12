@@ -1,4 +1,3 @@
-import React from 'react';
 import { Toast, type ToastVariant, type ToastCornerRadius } from '../../../components/ui/main_components/Toast';
 import ComponentPageLayout, {
   type InputConfig,

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Tooltip, type TooltipPlacement } from '../../../components/ui/main_components/Tooltip';
 import ComponentPageLayout, {
   type InputConfig,

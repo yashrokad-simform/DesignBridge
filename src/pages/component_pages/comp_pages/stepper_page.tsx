@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stepper, type StepItemData, type StepSize } from '../../../components/ui/main_components/Stepper';
+import { Stepper, type StepItemData } from '../../../components/ui/main_components/Stepper';
 import ComponentPageLayout, {
   type InputConfig,
   type InputValues,

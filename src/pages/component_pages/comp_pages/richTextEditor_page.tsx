@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { RichTextEditor, type RichTextEditorCornerRadius, type RichTextEditorPadding, type RichTextEditorTextSize } from '../../../components/ui/main_components/RichTextEditor';
 import ComponentPageLayout, {
   type InputConfig,

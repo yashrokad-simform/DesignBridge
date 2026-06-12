@@ -1,4 +1,3 @@
-import React from 'react';
 
 export type InputType = 'text' | 'number' | 'color' | 'colorhex' | 'select' | 'toggle' | 'multicheck' | 'togglegroup' | 'togglelist' | 'divider' | 'colorswatches' | 'tokencontrol';
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import { FilePicker } from '../../../components/ui/main_components/FilePicker';
 import { DocumentTile } from '../../../components/ui/main_components/DocumentTile';
 import { FileTypeIcon, type FileTypeVariant } from '../../../components/ui/main_components/FileTypeIcon';

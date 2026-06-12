@@ -1,4 +1,3 @@
-import React from 'react';
 import { cn } from '@/lib/utils';
 import { Checkbox } from '@/components/ui/main_components/Checkbox';
 import { Badge, type BadgeColor, type BadgeVariant } from '@/components/ui/main_components/Badge';
@@ -151,7 +150,6 @@ export function TableCell({
   badges = [],
   primaryText = 'Cell content',
   secondaryText = 'Secondary text',
-  showTooltip = false,
   height,
   className,
 }: TableCellProps) {

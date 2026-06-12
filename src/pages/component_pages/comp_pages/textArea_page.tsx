@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { TextArea, type TextAreaCornerRadius, type TextAreaPadding, type TextAreaTextSize } from '../../../components/ui/main_components/TextArea';
 import ComponentPageLayout, {
   type InputConfig,

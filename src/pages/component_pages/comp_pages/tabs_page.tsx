@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Tabs, TabList, TabItem, TabPanel } from '../../../components/ui/main_components/Tabs';
 import ComponentPageLayout, {
   type InputConfig,

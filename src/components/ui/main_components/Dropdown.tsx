@@ -3,7 +3,6 @@ import { cva } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 import { Checkbox } from './Checkbox';
 import { Badge } from './Badge';
-import { CheckIcon } from '@/assets/icons/CheckIcon';
 import { ChevronDownIcon } from '@/assets/icons/ChevronDownIcon';
 import { ChevronUpIcon } from '@/assets/icons/ChevronUpIcon';
 import { SearchIcon } from '@/assets/icons/SearchIcon';

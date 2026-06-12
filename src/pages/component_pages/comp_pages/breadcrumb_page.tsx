@@ -1,4 +1,3 @@
-import React from 'react';
 import { Breadcrumb, BreadcrumbItem } from '../../../components/ui/main_components/Breadcrumb';
 import ComponentPageLayout, {
   type InputConfig,
