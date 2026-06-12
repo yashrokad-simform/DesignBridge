@@ -5,6 +5,7 @@ import './component_pages.css';
 import InputPanel, { type InputConfig, type InputValues } from './InputPanel';
 import VariantSection, { type VariantGroup } from './VariantSection';
 import MarkdownViewer from './MarkdownViewer';
+import { useDrawerAnimation } from '../../hooks/useGsapAnimations';
 
 export type { InputConfig, InputValues, InputType, SelectOption } from './InputPanel';
 export type { VariantGroup, VariantStyleGroup, VariantRow, VariantCell } from './VariantSection';
@@ -53,6 +54,10 @@ export default function ComponentPageLayout({
   const [drawerTab, setDrawerTab] = useState<'figma' | 'vscode'>('figma');
   const copyTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const figmaTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const drawerRef = useRef<HTMLDivElement | null>(null);
+  const backdropRef = useRef<HTMLDivElement | null>(null);
+
+  useDrawerAnimation(drawerRef, backdropRef, drawerOpen);
 
   const handleChange = useCallback((key: string, value: string | boolean | number) => {
     setValues(prev => ({ ...prev, [key]: value }));
@@ -150,10 +155,12 @@ export default function ComponentPageLayout({
       </div>
 
       {/* ── Preview Drawer ─────────────────────────────────────── */}
-      {drawerOpen && (
-        <div className="cp-drawer-backdrop" onClick={() => setDrawerOpen(false)} />
-      )}
-      <div className={`cp-drawer${drawerOpen ? ' cp-drawer--open' : ''}`}>
+      <div
+        ref={backdropRef}
+        className="cp-drawer-backdrop"
+        onClick={() => setDrawerOpen(false)}
+      />
+      <div ref={drawerRef} className={`cp-drawer${drawerOpen ? ' cp-drawer--open' : ''}`}>
         <div className="cp-drawer-hd">
           <span className="cp-drawer-title">Preview</span>
           <div className="cp-drawer-actions">

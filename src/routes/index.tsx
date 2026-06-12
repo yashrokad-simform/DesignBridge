@@ -42,7 +42,6 @@ export const routes: RouteObject[] = [
     children: [
       { index: true, element: <Navigate to="/introduction" replace /> },
       { path: "introduction", element: lazyLoad(IntroductionPage) },
-      { path: "figma-mcp", element: lazyLoad(IntroductionPage) },
       { path: "colors", element: lazyLoad(ColorsPage) },
       { path: "typography", element: lazyLoad(TypographyPage) },
       { path: "spacing-radius", element: lazyLoad(SpacingRadiusPage) },

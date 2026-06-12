@@ -19,7 +19,6 @@ export const NAV_SECTIONS: NavSection[] = [
     label: 'Documentation',
     items: [
       { id: 'introduction', label: 'Introduction' },
-      { id: 'figma-mcp', label: 'Figma MCP Basics' },
     ],
   },
   {
@@ -56,7 +55,6 @@ export const NAV_SECTIONS: NavSection[] = [
 
 export const PAGE_INFO: Record<string, PageInfoEntry> = {
   introduction:    { eyebrow: 'Documentation', title: 'Introduction',     desc: 'DS Storybook is a Storybook-style documentation system built around Figma components and their Markdown specification files. It bridges the gap between design intent and code implementation for both designers and front-end developers.' },
-  'figma-mcp':     { eyebrow: 'Documentation', title: 'Figma MCP Basics', desc: '' },
   colors:          { eyebrow: 'Style Guide',   title: 'Colors',           desc: 'Our design system provides a curated set of color styles for consistency, readability, and accessibility. Figma color variables help manage reusable color values and simplify design updates across systems.' },
   typography:      { eyebrow: 'Style Guide',   title: 'Typography',       desc: 'Our design system includes a curated set of typographic styles designed for consistency, versatility, and accessibility across different projects and use cases.' },
   'spacing-radius': { eyebrow: 'Style Guide',   title: 'Spacing & Radius', desc: 'Our design system defines a consistent spacing and border-radius scale to ensure visual harmony, alignment, and rhythm across all components and layouts.' },

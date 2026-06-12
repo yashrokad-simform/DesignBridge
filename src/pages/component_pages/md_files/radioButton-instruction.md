@@ -6,8 +6,7 @@ Use shared instructions:
 - `shadcn-implementation.instructions.md`
 - `tailwind-implementation.instructions.md`
 - `react-implementation.instructions.md`
-- `code-review-shadcn.instructions.md`
-- `code-review-structure.instructions.md`
+- `code-review.instructions.md`
 
 ---
 

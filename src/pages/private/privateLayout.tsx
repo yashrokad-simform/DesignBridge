@@ -1,8 +1,9 @@
 import { Outlet, Navigate, useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Header } from "../../components/ui/header";
 import { Navigation } from "../../components/ui/navigation";
 import { NAV_SECTIONS, PAGE_INFO } from "../../components/ui/appnavigation";
+import { useLayoutEntrance, usePageTransition } from "../../hooks/useGsapAnimations";
 
 const LAYOUT_CSS = `
   * {
@@ -56,7 +57,7 @@ const LAYOUT_CSS = `
     min-width: 0;
     height: 100vh;
     overflow: hidden;
-    background: #ffffff;
+    background: #FFFFFF;
   }
 
   /* Sticky Header */
@@ -152,8 +153,14 @@ export default function PrivateLayout() {
 
   const [sideSearch, setSideSearch] = useState("");
 
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
+
   const navigate = useNavigate();
   const location = useLocation();
+
+  useLayoutEntrance(rootRef);
+  usePageTransition(contentRef, location.pathname);
 
   const pathSegment =
     location.pathname.replace(/^\//, "") || "introduction";
@@ -195,7 +202,7 @@ export default function PrivateLayout() {
   };
 
   return (
-    <div className="pl-root">
+    <div className="pl-root" ref={rootRef}>
       <style dangerouslySetInnerHTML={{ __html: LAYOUT_CSS }} />
 
       <div className="pl-shell">
@@ -222,15 +229,19 @@ export default function PrivateLayout() {
           </div>
 
           {/* Scrollable Page Content */}
-          <div className="pl-content">
-            <h1 className="pl-page-title">
-              {selectedSection}
-            </h1>
+          <div className="pl-content" ref={contentRef}>
+            {activePage !== 'introduction' && (
+              <>
+                <h1 className="pl-page-title">
+                  {selectedSection}
+                </h1>
 
-            {page.desc && (
-              <p className="pl-page-desc">
-                {page.desc}
-              </p>
+                {page.desc && (
+                  <p className="pl-page-desc">
+                    {page.desc}
+                  </p>
+                )}
+              </>
             )}
 
             <Outlet />
