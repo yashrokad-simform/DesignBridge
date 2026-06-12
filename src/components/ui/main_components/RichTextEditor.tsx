@@ -46,7 +46,7 @@ const PADDING_MAP: Record<RichTextEditorPadding, string> = {
 const TEXT_SIZE_MAP: Record<RichTextEditorTextSize, string> = {
   '12px': 'text-xs leading-4',
   '14px': 'text-sm leading-4.5',
-  '16px': 'text-md leading-5.5',
+  '16px': 'text-base leading-5.5',
 };
 
 export interface RichTextEditorProps {
@@ -202,7 +202,7 @@ export function RichTextEditor({
           <EditorContent
             editor={editor}
             className={cn(
-              textSize === '12px' ? '[&_.ProseMirror]:text-xs'  : textSize === '16px' ? '[&_.ProseMirror]:text-md'  : '[&_.ProseMirror]:text-sm',
+              textSize === '12px' ? '[&_.ProseMirror]:text-xs'  : textSize === '16px' ? '[&_.ProseMirror]:text-base'  : '[&_.ProseMirror]:text-sm',
               '[&_.ProseMirror]:font-medium',
               textSize === '12px' ? '[&_.ProseMirror]:leading-4' : textSize === '16px' ? '[&_.ProseMirror]:leading-5.5' : '[&_.ProseMirror]:leading-4.5',
               '[&_.ProseMirror]:text-input-text-enabled',

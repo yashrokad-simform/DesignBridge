@@ -511,7 +511,7 @@ These rules are **permanent and apply to every future task** in this project:
 - Use `text-btn-*`, `bg-btn-*`, `border-btn-*` for button states
 - Use `text-input-*`, `bg-input-*`, `border-input-*` for form fields
 - Use `bg-nav-*`, `text-nav-*` for navigation elements
-- Use `text-xs`, `text-sm`, `text-md`, etc. for font sizes (from the typography scale)
+- Use `text-xs`, `text-sm`, `text-base`, etc. for font sizes (from the typography scale)
 
 ### ❌ NEVER DO
 - Never hardcode a hex color in a component (e.g. `style={{ color: '#0056b8' }}`)

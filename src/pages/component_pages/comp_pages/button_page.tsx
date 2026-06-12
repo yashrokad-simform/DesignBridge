@@ -127,7 +127,7 @@ const RADIUS_MAP: Record<string, string> = {
 const TEXT_MAP: Record<string, { cls: string; leading: string }> = {
   '12px': { cls: 'text-xs', leading: 'leading-4' },
   '14px': { cls: 'text-sm', leading: 'leading-4.5' },
-  '16px': { cls: 'text-md', leading: 'leading-5.5' },
+  '16px': { cls: 'text-base', leading: 'leading-5.5' },
 };
 
 /* ── buildVariants ──────────────────────────────────────── */

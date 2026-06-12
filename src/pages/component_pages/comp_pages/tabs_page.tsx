@@ -41,7 +41,7 @@ type TabTextSize = '12px' | '14px' | '16px';
 const TEXT_CLS: Record<TabTextSize, { cls: string; leading: string; px: string }> = {
   '12px': { cls: 'text-xs', leading: 'leading-4',   px: '12px' },
   '14px': { cls: 'text-sm', leading: 'leading-4.5', px: '14px' },
-  '16px': { cls: 'text-md', leading: 'leading-5.5', px: '16px' },
+  '16px': { cls: 'text-base', leading: 'leading-5.5', px: '16px' },
 };
 
 const FIGMA_STD_INACTIVE: Record<TabTextSize, string> = {
@@ -163,18 +163,18 @@ function transformMarkdown(raw: string, vals: InputValues): string {
 
   // Standard label class in code block
   md = md.replace(
-    /(text-sm|text-xs|text-md) (leading-4\.5|leading-4|leading-5\.5) (whitespace-nowrap text-center)/,
+    /(text-sm|text-xs|text-base) (leading-4\.5|leading-4|leading-5\.5) (whitespace-nowrap text-center)/,
     `${std.cls} ${std.leading} $3`,
   );
   // Standard size note
   md = md.replace(
-    /> `(text-sm|text-xs|text-md)` = \d+px · `(leading-4\.5|leading-4|leading-5\.5)` = \d+px/,
+    /> `(text-sm|text-xs|text-base)` = \d+px · `(leading-4\.5|leading-4|leading-5\.5)` = \d+px/,
     `> \`${std.cls}\` = ${std.px} · \`${std.leading}\``,
   );
 
   // Capsule label class in code block
   md = md.replace(
-    /(text-sm|text-xs|text-md) (font-medium) (leading-4\.5|leading-4|leading-5\.5) (text-text-primary text-center whitespace-nowrap)/,
+    /(text-sm|text-xs|text-base) (font-medium) (leading-4\.5|leading-4|leading-5\.5) (text-text-primary text-center whitespace-nowrap)/,
     `${cap.cls} $2 ${cap.leading} $4`,
   );
 

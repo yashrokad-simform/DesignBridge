@@ -168,7 +168,7 @@ function hClass(h: number): string {
 const TEXT_SIZE_MAP: Record<string, { cls: string; leading: string; px: string; leadingPx: string }> = {
   '12px': { cls: 'text-xs', leading: 'leading-4',   px: '12px', leadingPx: '16px' },
   '14px': { cls: 'text-sm', leading: 'leading-4.5', px: '14px', leadingPx: '18px' },
-  '16px': { cls: 'text-md', leading: 'leading-5.5', px: '16px', leadingPx: '22px' },
+  '16px': { cls: 'text-base', leading: 'leading-5.5', px: '16px', leadingPx: '22px' },
 };
 
 /* ── resolveTokens ───────────────────────────────────────── */

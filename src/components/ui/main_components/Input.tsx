@@ -9,7 +9,7 @@ export type InputTextSize = '14px' | '16px';
 
 const TEXT_SIZE_CLASS: Record<InputTextSize, string> = {
   '14px': 'text-sm leading-4.5',
-  '16px': 'text-md leading-5.5',
+  '16px': 'text-base leading-5.5',
 };
 
 const RADIUS_CLASS: Record<InputCornerRadius, string> = {

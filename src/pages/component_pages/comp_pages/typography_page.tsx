@@ -12,7 +12,7 @@ import typographyFigmaMd from '../figma_prompt/typography.md?raw';
  * regenerates it per the user's choices.
  * ──────────────────────────────────────────────────────────────── */
 type TierKey =
-  | '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+  | '2xs' | 'xs' | 'sm' | 'base' | 'lg' | 'xl'
   | '2xl' | '3xl' | '4xl' | '5xl' | '6xl' | '7xl';
 
 interface Tier {
@@ -26,7 +26,7 @@ const TIERS: Tier[] = [
   { key: '2xs', className: 'text-2xs', defaultPx: 10, figmaLabel: 'Caption' },
   { key: 'xs',  className: 'text-xs',  defaultPx: 12, figmaLabel: 'Label sm' },
   { key: 'sm',  className: 'text-sm',  defaultPx: 14, figmaLabel: 'Body sm' },
-  { key: 'md',  className: 'text-md',  defaultPx: 16, figmaLabel: 'Body md' },
+  { key: 'base',  className: 'text-base',  defaultPx: 16, figmaLabel: 'Body md' },
   { key: 'lg',  className: 'text-lg',  defaultPx: 18, figmaLabel: 'Body lg' },
   { key: 'xl',  className: 'text-xl',  defaultPx: 20, figmaLabel: 'Heading md' },
   { key: '2xl', className: 'text-2xl', defaultPx: 24, figmaLabel: 'Heading lg' },

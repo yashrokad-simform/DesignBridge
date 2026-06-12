@@ -230,7 +230,7 @@ const PADDING_MD: Record<InputPadding, string> = {
 
 const TEXT_SIZE_MD: Record<InputTextSize, string> = {
   '14px': 'text-sm',
-  '16px': 'text-md',
+  '16px': 'text-base',
 };
 
 function hClass(h: number): string {

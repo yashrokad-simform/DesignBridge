@@ -208,7 +208,7 @@ const PADDING_MD: Record<DropdownPadding, string> = {
 
 const TEXT_SIZE_MD: Record<DropdownTextSize, string> = {
   '14px': 'text-sm',
-  '16px': 'text-md',
+  '16px': 'text-base',
 };
 
 function hClass(h: number): string {

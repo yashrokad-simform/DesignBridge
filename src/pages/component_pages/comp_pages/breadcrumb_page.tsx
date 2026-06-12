@@ -178,7 +178,7 @@ function resolveTokens(vals: InputValues): Record<string, string> {
     pxSize = '12px';
     pxLeading = '16px';
   } else if (tSize === '16px') {
-    textSizeClass = 'text-md';
+    textSizeClass = 'text-base';
     leadingClass = 'leading-5.5';
     pxSize = '16px';
     pxLeading = '22px';

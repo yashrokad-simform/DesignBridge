@@ -16,7 +16,7 @@ Use shared instructions:
 - `text-2xs` → `leading-3`
 - `text-xs` → `leading-4`
 - `text-sm` → `leading-4.5`
-- `text-md` → `leading-5.5`
+- `text-base` → `leading-5.5`
 - `text-lg` → `leading-6.5`
 - `text-xl` → `leading-7`
 - `text-2xl` → `leading-8`

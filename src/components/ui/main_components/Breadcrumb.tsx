@@ -15,7 +15,7 @@ const breadcrumbItemVariants = cva(
       size: {
         '12px': 'text-xs leading-4',
         '14px': 'text-sm leading-4.5',
-        '16px': 'text-md leading-5.5',
+        '16px': 'text-base leading-5.5',
       },
     },
     defaultVariants: {

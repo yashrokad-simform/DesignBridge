@@ -5,7 +5,7 @@
 --text-2xs: 10px;
 --text-xs:  12px;
 --text-sm:  14px;
---text-md:  16px;
+--text-base:  16px;
 --text-lg:  18px;
 --text-xl:  20px;
 --text-2xl: 24px;
@@ -23,7 +23,7 @@
 | Caption | 10px | `text-2xs` |
 | Label sm | 12px | `text-xs` |
 | Body sm | 14px | `text-sm` |
-| Body md | 16px | `text-md` |
+| Body md | 16px | `text-base` |
 | Body lg | 18px | `text-lg` |
 | Heading md | 20px | `text-xl` |
 | Heading lg | 24px | `text-2xl` |

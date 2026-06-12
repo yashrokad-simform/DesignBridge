@@ -8,7 +8,7 @@ type TabTextSize = '12px' | '14px' | '16px';
 const TEXT_SIZE_MAP: Record<TabTextSize, string> = {
   '12px': 'text-xs leading-4',
   '14px': 'text-sm leading-4.5',
-  '16px': 'text-md leading-5.5',
+  '16px': 'text-base leading-5.5',
 };
 
 /* ── Context ─────────────────────────────────────────────── */
