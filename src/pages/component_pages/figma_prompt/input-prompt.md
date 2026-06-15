@@ -12,6 +12,10 @@
 | Total Variants | 5 (`State`) |
 | Has States | Yes — Enabled · Focused · Filled · Disabled · Error |
 
+> ### ⚠️ Critical Requirement — Expose Nested Instance Properties
+>
+> The main **`Input Field`** component (every variant) **MUST** have **all** properties from its nested **`_base Input Field`** instance exposed onto it. In Figma: select the main component/variant → **Properties** panel → **"Expose properties from → Nested instances"**. Without this, the `_base Input Field` properties stay buried inside the nested instance and designers cannot access them from the main component. This applies to **every** variant — see the dedicated "Expose Nested Instance Properties" step below for details.
+
 A single-line text input with optional label, mandatory marker, prefix icon, suffix icon, and hint text. Follows the same wrapper pattern as Badge, Button, and File Picker.
 
 ---

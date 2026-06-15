@@ -13,6 +13,12 @@
 | `_base Step` Variants | 6 (Size × State) |
 | `Stepper` Variants | 2 (Size) |
 
+> ### ⚠️ Critical Requirement — Expose Nested Instance Properties
+>
+> The main **`Stepper`** component (every variant) **MUST** have **all** properties from its nested **`_base Step`** instance exposed onto it. In Figma: select the main component/variant → **Properties** panel → **"Expose properties from → Nested instances"**. Without this, the `_base Step` properties stay buried inside the nested instance and designers cannot access them from the main component. This applies to **every** variant — see the dedicated "Expose Nested Instance Properties" step below for details.
+>
+> Likewise, the **`_base Step`** component (every variant) **MUST** expose **all** properties from its nested **`_base Step Icon`** instance, so the full chain (`_base Step Icon` → `_base Step` → `Stepper`) remains accessible from the top.
+
 A three-level vertical step progress indicator. `_base Step Icon` renders the state circle. `_base Step` composes the icon with label text and a connector line. `Stepper` assembles a complete 5-step sequence.
 
 ---

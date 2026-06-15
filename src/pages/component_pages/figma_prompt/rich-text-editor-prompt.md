@@ -14,6 +14,10 @@
 
 A three-level system for multi-line formatted text input. `_WYSIWYG Editor Icons` provides individual formatting toolbar buttons. `_base Rich Text Editor` composes the label, toolbar, content area, resize handle, and hint text. `Rich Text Editor` wraps the base with 5 interactive states.
 
+> ### ⚠️ Critical Requirement — Expose Nested Instance Properties
+>
+> The main **`Rich Text Editor`** component (every variant) **MUST** have **all** properties from its nested **`_base Rich Text Editor`** instance exposed onto it. In Figma: select the main component/variant → **Properties** panel → **"Expose properties from → Nested instances"**. Without this, the `_base Rich Text Editor` properties stay buried inside the nested instance and designers cannot access them from the main component. This applies to **every** variant — see the dedicated "Expose Nested Instance Properties" step below for details.
+
 ---
 
 ## Component Hierarchy & Build Order

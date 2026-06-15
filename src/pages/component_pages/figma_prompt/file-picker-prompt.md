@@ -14,6 +14,10 @@
 | File Picker Variants | 3 (`Property 1`) |
 | Document Tile Variants | 3 (`State`) |
 
+> ### ⚠️ Critical Requirement — Expose Nested Instance Properties
+>
+> The main **`File Picker`** component (every variant) **MUST** have **all** properties from its nested **`_base File Picker`** instance exposed onto it. In Figma: select the main component/variant → **Properties** panel → **"Expose properties from → Nested instances"**. Without this, the `_base File Picker` properties stay buried inside the nested instance and designers cannot access them from the main component. This applies to **every** variant — see the dedicated "Expose Nested Instance Properties" step below for details.
+
 A four-component system for file upload interactions. `File Type Icon` renders a format badge. `_base File Picker` is the base upload zone. `File Picker` wraps it with state overrides. `Document Tile` displays an uploaded file with metadata and action buttons.
 
 ---

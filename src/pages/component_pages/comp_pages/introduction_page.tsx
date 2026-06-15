@@ -1,7 +1,17 @@
 import { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import figmaIcon from '../../../assets/figma-icon.svg';
 import vscodeButtonIcon from '../../../assets/VS code-icon.svg';
 import vscodeIcon from '../../../assets/vscodeicon.svg';
+import colorsIcon from '../../../assets/Colors.svg';
+import toggleIcon from '../../../assets/Toggle.svg';
+import typographyIcon from '../../../assets/Typography tiers.svg';
+import sizesIcon from '../../../assets/Sizes & dimensions.svg';
+import spacingIcon from '../../../assets/spacing.svg';
+import appearanceIcon from '../../../assets/Appreance.svg';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const INTRO_CSS = `
 /* ── tokens ── */
@@ -263,12 +273,13 @@ const INTRO_CSS = `
 /* vignette 1 - browse */
 .db-intro .vig-browse { display: flex; gap: 12px; align-items: center; }
 .db-intro .vig-nav { display: flex; flex-direction: column; gap: 5px; }
-.db-intro .vig-nav i { display: block; width: 74px; height: 13px; border-radius: 4px; background: #dde5ef; }
-.db-intro .vig-nav i.on { background: var(--blue-500); position: relative; }
-.db-intro .vig-nav i.on::after {
-  content: "Button"; position: absolute; inset: 0; display: flex; align-items: center; padding-left: 7px;
-  color: #fff; font-size: 8.5px; font-weight: 700; font-family: 'DM Sans', sans-serif;
+.db-intro .vig-nav i {
+  display: flex; align-items: center; padding-left: 7px;
+  width: 74px; height: 18px; border-radius: 4px; background: #dde5ef;
+  font-size: 8.5px; font-weight: 600; font-style: normal;
+  font-family: 'DM Sans', sans-serif; color: #8a96a8;
 }
+.db-intro .vig-nav i.on { background: var(--blue-500); color: #fff; }
 .db-intro .vig-matrix { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
 .db-intro .vig-matrix i { display: block; width: 30px; height: 14px; border-radius: 99px; }
 .db-intro .vig-matrix i:nth-child(1) { background: var(--blue-500); }
@@ -538,6 +549,8 @@ export default function IntroductionPage() {
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
+
+    // ── scroll-reveal (keep existing .reveal behaviour) ──────────────────
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -550,7 +563,187 @@ export default function IntroductionPage() {
       { threshold: 0.08 },
     );
     root.querySelectorAll('.reveal').forEach((el) => io.observe(el));
-    return () => io.disconnect();
+
+    // ── reduced-motion guard ──────────────────────────────────────────────
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) return () => io.disconnect();
+
+    // ── find the real scroll container (.pl-content wraps the Outlet) ─────
+    const scroller = document.querySelector('.pl-content') ?? window;
+
+    // configure ScrollTrigger once so all subsequent triggers inherit it
+    ScrollTrigger.defaults({ scroller });
+
+    // ── 1 · Drift cards — stagger slide-in ───────────────────────────────
+    gsap.fromTo(
+      root.querySelectorAll('.drift-card'),
+      { opacity: 0, y: 40 },
+      {
+        opacity: 1, y: 0, duration: 0.7, stagger: 0.18, ease: 'power3.out',
+        scrollTrigger: { trigger: root.querySelector('.drift'), start: 'top 80%', once: true },
+      },
+    );
+
+    // ── 2 · Drift arrows — dash pulse on "bad" card ───────────────────────
+    const badArrows = root.querySelectorAll('.drift-card.bad .arrow.broken');
+    badArrows.forEach((arrow) => {
+      gsap.fromTo(
+        arrow,
+        { opacity: 0.3 },
+        {
+          opacity: 1, duration: 0.8, repeat: -1, yoyo: true, ease: 'sine.inOut',
+          scrollTrigger: { trigger: root.querySelector('.drift'), start: 'top 75%', once: false },
+        },
+      );
+    });
+
+    // ── 3 · "Good" card arrows — draw-in ────────────────────────────────
+    const goodArrows = root.querySelectorAll('.drift-card.good .arrow.solid');
+    goodArrows.forEach((arrow, i) => {
+      gsap.fromTo(
+        arrow,
+        { scaleX: 0, transformOrigin: i === 0 ? 'right center' : 'left center' },
+        {
+          scaleX: 1, duration: 0.6, ease: 'power2.out', delay: 0.3 + i * 0.15,
+          scrollTrigger: { trigger: root.querySelector('.drift-card.good'), start: 'top 80%', once: true },
+        },
+      );
+    });
+
+    // ── 4 · Step cards — cascade in ──────────────────────────────────────
+    gsap.fromTo(
+      root.querySelectorAll('.step'),
+      { opacity: 0, y: 36 },
+      {
+        opacity: 1, y: 0, duration: 0.65, stagger: 0.16, ease: 'power3.out',
+        scrollTrigger: { trigger: root.querySelector('.steps'), start: 'top 78%', once: true },
+      },
+    );
+
+    // ── 5 · Step vignettes — subtle scale-in ─────────────────────────────
+    gsap.fromTo(
+      root.querySelectorAll('.vig'),
+      { opacity: 0, scale: 0.93 },
+      {
+        opacity: 1, scale: 1, duration: 0.55, stagger: 0.16, ease: 'back.out(1.4)',
+        scrollTrigger: { trigger: root.querySelector('.steps'), start: 'top 78%', once: true },
+      },
+    );
+
+    // ── 6 · Flow-arrow badges between steps — pop in ─────────────────────
+    gsap.fromTo(
+      root.querySelectorAll('.flow-arrow'),
+      { opacity: 0, scale: 0 },
+      {
+        opacity: 1, scale: 1, duration: 0.4, stagger: 0.15, ease: 'back.out(2)',
+        delay: 0.5,
+        scrollTrigger: { trigger: root.querySelector('.steps'), start: 'top 78%', once: true },
+      },
+    );
+
+    // ── 7 · "handoff gap" pill — shake on enter ──────────────────────────
+    const gapPill = root.querySelector('.mid.bad');
+    if (gapPill) {
+      ScrollTrigger.create({
+        trigger: gapPill,
+        start: 'top 85%',
+        once: true,
+        onEnter: () => {
+          gsap.fromTo(
+            gapPill,
+            { x: 0 },
+            { x: 5, duration: 0.08, repeat: 5, yoyo: true, ease: 'power1.inOut' },
+          );
+        },
+      });
+    }
+
+    // ── 8 · Vignette 1 (Browse) — nav item cycles + matrix highlight ────────
+    const navItems = root.querySelectorAll('.vig-nav i');
+    const matrixItems = root.querySelectorAll('.vig-matrix i');
+    let navIdx = 1;
+    const browseLoop = () => {
+      navItems.forEach((el, i) => {
+        gsap.to(el, {
+          background: i === navIdx ? '#0056b8' : '#dde5ef',
+          duration: 0.25, ease: 'power1.inOut',
+        });
+      });
+      // highlight two random matrix cells
+      const picks = new Set<number>();
+      while (picks.size < 2) picks.add(Math.floor(Math.random() * matrixItems.length));
+      matrixItems.forEach((el, i) => {
+        gsap.to(el, {
+          opacity: picks.has(i) ? 1 : 0.4,
+          duration: 0.3, ease: 'power1.inOut',
+        });
+      });
+      navIdx = (navIdx + 1) % navItems.length;
+    };
+    browseLoop();
+    const browseTimer = gsap.delayedCall(0, () => {});
+    const browseInterval = setInterval(browseLoop, 1200);
+
+    // ── 9 · Vignette 2 (Customise) — toggles flip continuously ──────────
+    const toggles = root.querySelectorAll('.tg');
+    let togIdx = 0;
+    const customiseLoop = () => {
+      const tg = toggles[togIdx % toggles.length] as HTMLElement;
+      const isOff = tg.classList.contains('off');
+      gsap.to(tg, {
+        background: isOff ? '#0056b8' : '#cdd7e4',
+        duration: 0.3, ease: 'power2.inOut',
+        onComplete: () => {
+          tg.classList.toggle('off');
+          // move thumb
+          gsap.to(tg.querySelector('::after') as Element, { duration: 0 });
+        },
+      });
+      // also highlight the label bar next to it
+      const rows = root.querySelectorAll('.vig-row');
+      rows.forEach((row, ri) => {
+        gsap.to(row.querySelector('i'), {
+          opacity: ri === togIdx % toggles.length ? 1 : 0.5,
+          duration: 0.3,
+        });
+      });
+      togIdx++;
+    };
+    customiseLoop();
+    const customInterval = setInterval(customiseLoop, 1100);
+
+    // ── 10 · Vignette 3 (Copy) — buttons flash + toast cycles ─────────────
+    const vigBtns = root.querySelectorAll('.vig-btn');
+    const toast = root.querySelector('.vig-toast') as HTMLElement | null;
+    if (toast) gsap.set(toast, { opacity: 0, y: -6, scale: 0.88 });
+    let copyIdx = 0;
+    const copyLoop = () => {
+      const btn = vigBtns[copyIdx % vigBtns.length] as HTMLElement;
+      // press flash
+      gsap.timeline()
+        .to(btn, { scale: 0.94, duration: 0.1, ease: 'power2.in' })
+        .to(btn, { scale: 1, duration: 0.2, ease: 'back.out(2)' })
+        .add(() => {
+          if (toast) {
+            gsap.timeline()
+              .to(toast, { opacity: 1, y: 0, scale: 1, duration: 0.25, ease: 'back.out(1.6)' })
+              .to(toast, { opacity: 0, y: -4, scale: 0.9, duration: 0.2, ease: 'power2.in', delay: 0.7 });
+          }
+        });
+      copyIdx++;
+    };
+    copyLoop();
+    const copyInterval = setInterval(copyLoop, 2200);
+
+    return () => {
+      io.disconnect();
+      ScrollTrigger.getAll().forEach((t) => t.kill());
+      ScrollTrigger.defaults({ scroller: window });
+      clearInterval(browseInterval);
+      clearInterval(customInterval);
+      clearInterval(copyInterval);
+      browseTimer.kill();
+    };
   }, []);
 
   return (
@@ -713,7 +906,7 @@ export default function IntroductionPage() {
             <div className="step">
               <div className="vig" aria-hidden="true">
                 <div className="vig-browse">
-                  <div className="vig-nav"><i /><i className="on" /><i /><i /></div>
+                  <div className="vig-nav"><i>Button</i><i className="on">Button</i><i>Button</i><i>Button</i></div>
                   <div className="vig-matrix"><i /><i /><i /><i /><i /><i /></div>
                 </div>
               </div>
@@ -947,10 +1140,7 @@ export default function IntroductionPage() {
               </div>
               <div className="scope-row">
                 <div className="scope-glyph">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                    <circle cx="6"  cy="6"  r="3.5" fill="#0056b8" opacity=".85" />
-                    <circle cx="10" cy="10" r="3.5" fill="#c65910" opacity=".75" />
-                  </svg>
+                  <img src={colorsIcon} alt="" aria-hidden="true" width={20} height={20} />
                 </div>
                 <div>
                   <b>Color anchors</b>
@@ -959,10 +1149,7 @@ export default function IntroductionPage() {
               </div>
               <div className="scope-row">
                 <div className="scope-glyph">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                    <path d="M3 12.5 6.5 3.5h.8l3.5 9M4.3 9.5h5.2" stroke="#51607a" strokeWidth="1.4" strokeLinecap="round" />
-                    <path d="M13 7v5.5" stroke="#51607a" strokeWidth="1.4" strokeLinecap="round" />
-                  </svg>
+                  <img src={typographyIcon} alt="" aria-hidden="true" width={20} height={20} />
                 </div>
                 <div>
                   <b>Typography tiers</b>
@@ -971,10 +1158,7 @@ export default function IntroductionPage() {
               </div>
               <div className="scope-row">
                 <div className="scope-glyph">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                    <rect x="2.5" y="2.5" width="11" height="11" rx="3" stroke="#51607a" strokeWidth="1.4" />
-                    <path d="M2.5 8h11M8 2.5v11" stroke="#51607a" strokeWidth="1.2" strokeDasharray="2 2" />
-                  </svg>
+                  <img src={spacingIcon} alt="" aria-hidden="true" width={20} height={20} />
                 </div>
                 <div>
                   <b>Spacing &amp; radius scale</b>
@@ -990,10 +1174,7 @@ export default function IntroductionPage() {
               </div>
               <div className="scope-row">
                 <div className="scope-glyph">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                    <rect x="2" y="4.5" width="12" height="7" rx="3.5" fill="#0056b8" />
-                    <circle cx="10.5" cy="8" r="2.4" fill="#fff" />
-                  </svg>
+                  <img src={toggleIcon} alt="" aria-hidden="true" width={20} height={20} />
                 </div>
                 <div>
                   <b>Variant toggles</b>
@@ -1002,9 +1183,7 @@ export default function IntroductionPage() {
               </div>
               <div className="scope-row">
                 <div className="scope-glyph">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                    <path d="M2.5 11.5h11M5 11.5V8m3 3.5V5.5m3 6V7" stroke="#51607a" strokeWidth="1.4" strokeLinecap="round" />
-                  </svg>
+                  <img src={sizesIcon} alt="" aria-hidden="true" width={20} height={20} />
                 </div>
                 <div>
                   <b>Sizes &amp; dimensions</b>
@@ -1013,10 +1192,7 @@ export default function IntroductionPage() {
               </div>
               <div className="scope-row">
                 <div className="scope-glyph">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                    <circle cx="8" cy="8" r="5.5" stroke="#51607a" strokeWidth="1.4" />
-                    <path d="M8 2.5A5.5 5.5 0 0 1 8 13.5" fill="#51607a" opacity=".25" />
-                  </svg>
+                  <img src={appearanceIcon} alt="" aria-hidden="true" width={20} height={20} />
                 </div>
                 <div>
                   <b>Appearance</b>
@@ -1030,9 +1206,9 @@ export default function IntroductionPage() {
         {/* ─── 7 · OUTPUTS ─── */}
         <section id="outputs" className="reveal">
           <div className="sec-head"><span className="kicker">Outputs</span></div>
-          <h2>Three exports, one spec</h2>
+          <h2>Two exports, one spec</h2>
           <p className="sec-sub">
-            Every page offers the same three actions. They all read from the live state of the
+            Every page offers the same two actions. Both read from the live state of the
             Customise panel — what you see is what you copy.
           </p>
 
@@ -1079,28 +1255,6 @@ export default function IntroductionPage() {
               </div>
             </div>
 
-            <div className="out">
-              <div>
-                <span className="out-btn all">
-                  <svg width="11" height="11" viewBox="0 0 16 16" fill="none">
-                    <path d="M8 2v8m0 0L5 7m3 3 3-3M3 13h10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                  Download All MD Files
-                </span>
-                <div className="out-for">For the whole project</div>
-              </div>
-              <div className="desc">
-                <h3>The complete system in one archive</h3>
-                <p>
-                  Every style set and component spec as individual markdown files — the fastest way
-                  to seed a new project, a knowledge base, or a team-wide AI workflow.
-                </p>
-              </div>
-              <div className="dest">
-                <b>Drop into</b>
-                Your repository, so the documentation ships and versions with the code.
-              </div>
-            </div>
           </div>
 
         </section>

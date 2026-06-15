@@ -12,6 +12,10 @@
 | Total Variants | 36 (3 Types × 12 Colors) |
 | Has States | No — static, non-interactive component |
 
+> ### ⚠️ Critical Requirement — Expose Nested Instance Properties
+>
+> The main **`Badge`** component (every variant) **MUST** have **all** properties from its nested **`_base Badge`** instance exposed onto it. In Figma: select the main component/variant → **Properties** panel → **"Expose properties from → Nested instances"**. Without this, the `_base Badge` properties stay buried inside the nested instance and designers cannot access them from the main component. This applies to **every** variant — see the dedicated "Expose Nested Instance Properties" step below for details.
+
 Badge is a compact, non-interactive label used to communicate status, category, or contextual metadata. It is always read-only and carries no hover, focus, pressed, or disabled states.
 
 ---

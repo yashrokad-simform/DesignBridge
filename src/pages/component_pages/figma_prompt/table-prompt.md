@@ -13,6 +13,10 @@
 
 A four-component table system covering column headers, data row cells (7 content types), pagination controls, and the complete pagination bar.
 
+> ### ⚠️ Critical Requirement — Expose Nested Instance Properties
+>
+> The main **`Pagination`** component (every variant) **MUST** have **all** properties from its nested **`_base Pagination`** instance exposed onto it. In Figma: select the main component/variant → **Properties** panel → **"Expose properties from → Nested instances"**. Without this, the `_base Pagination` properties stay buried inside the nested instance and designers cannot access them from the main component. This applies to **every** variant — see the dedicated "Expose Nested Instance Properties" step below for details.
+
 ---
 
 ## ⚠️ Critical Rule — Always Use Existing Components

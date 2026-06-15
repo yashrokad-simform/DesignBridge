@@ -15,6 +15,10 @@
 
 `Checkbox` is a standalone boolean form control. `Checkbox Tile` is a larger selection card that embeds a `Checkbox` instance alongside a title and optional caption. Unlike previous components, **there is no separate `_base` component** — `Checkbox` is the foundational unit and `Checkbox Tile` consumes it directly.
 
+> ### ⚠️ Critical Requirement — Expose Nested Instance Properties
+>
+> The main **`Checkbox Tile`** component (every variant) **MUST** have **all** properties from its nested **`Checkbox`** instance exposed onto it. In Figma: select the main component/variant → **Properties** panel → **"Expose properties from → Nested instances"**. Without this, the `Checkbox` properties stay buried inside the nested instance and designers cannot access them from the main component. This applies to **every** variant — see the dedicated "Expose Nested Instance Properties" step below for details.
+
 ---
 
 ## Component Hierarchy

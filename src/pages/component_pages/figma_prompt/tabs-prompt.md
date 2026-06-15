@@ -18,6 +18,12 @@
 | `Capsule Tabs` Variants | 5 (Tabs count) |
 <!-- CAPS_E -->
 
+> ### ⚠️ Critical Requirement — Expose Nested Instance Properties
+>
+> The main **`Tabs`** component (every variant) **MUST** have **all** properties from its nested **`_base Tab`** instance exposed onto it. In Figma: select the main component/variant → **Properties** panel → **"Expose properties from → Nested instances"**. Without this, the `_base Tab` properties stay buried inside the nested instance and designers cannot access them from the main component. This applies to **every** variant and **every** component-set level.
+>
+> The same applies to the main **`Capsule Tabs`** component (every variant): it **MUST** have **all** properties from its nested **`_base Capsule Tabs`** instance exposed onto it via **"Expose properties from → Nested instances"**. Without this, the `_base Capsule Tabs` properties stay buried inside the nested instance and designers cannot access them from the main component. This applies to **every** variant and **every** component-set level.
+
 ---
 
 ## Component Page Inputs → Figma Properties

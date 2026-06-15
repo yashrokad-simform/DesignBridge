@@ -11,6 +11,10 @@
 | Node — `Toast` | `8093:83046` |
 | Toast Variants | 4 (State) |
 
+> ### ⚠️ Critical Requirement — Expose Nested Instance Properties
+>
+> The main **`Toast`** component (every variant) **MUST** have **all** properties from its nested **`_base Toast`** instance exposed onto it. In Figma: select the main component/variant → **Properties** panel → **"Expose properties from → Nested instances"**. Without this, the `_base Toast` properties stay buried inside the nested instance and designers cannot access them from the main component. This applies to **every** variant — see the dedicated "Expose Nested Instance Properties" step below for details.
+
 A brief notification overlay used to communicate status feedback — Success, Warning, Critical, or Info. Always dark-themed with white text. The only visual difference between states is the leading icon.
 
 ---

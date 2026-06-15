@@ -12,6 +12,10 @@
 | Total Variants | 48 |
 | Has States | Yes — Enabled · Hover · Disabled |
 
+> ### ⚠️ Critical Requirement — Expose Nested Instance Properties
+>
+> The main **`Button`** component (every variant) **MUST** have **all** properties from its nested **`_base Button`** instance exposed onto it. In Figma: select the main component/variant → **Properties** panel → **"Expose properties from → Nested instances"**. Without this, the `_base Button` properties stay buried inside the nested instance and designers cannot access them from the main component. This applies to **every** variant — see the dedicated "Expose Nested Instance Properties" step below for details.
+
 Button is the primary interactive action trigger in the design system. It supports a text label, a prefix icon, and a suffix icon. It comes in two sizes, three states, and ten type styles including destructive (Critical) variants.
 
 ---

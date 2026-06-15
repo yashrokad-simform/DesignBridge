@@ -15,6 +15,10 @@
 
 `Radio Button` is a single-select form control. `Radio Button Tile` is a larger selection card that embeds a `Radio Button` instance alongside a title and optional caption. Architecture mirrors `Checkbox` and `Checkbox Tile` with key structural differences.
 
+> ### ⚠️ Critical Requirement — Expose Nested Instance Properties
+>
+> The main **`Radio Button Tile`** component (every variant) **MUST** have **all** properties from its nested **`Radio Button`** instance exposed onto it. In Figma: select the main component/variant → **Properties** panel → **"Expose properties from → Nested instances"**. Without this, the `Radio Button` properties stay buried inside the nested instance and designers cannot access them from the main component. This applies to **every** variant — see the dedicated "Expose Nested Instance Properties" step below for details.
+
 ---
 
 ## Component Hierarchy

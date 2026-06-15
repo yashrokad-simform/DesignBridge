@@ -12,6 +12,10 @@
 | `_Nav item base` Variants | 4 (Active × Type) |
 | `Navigation` Variants | 2 (State) |
 
+> ### ⚠️ Critical Requirement — Expose Nested Instance Properties
+>
+> The main **`Navigation`** component (every variant) **MUST** have **all** properties from its nested **`_Nav item base`** instance exposed onto it. In Figma: select the main component/variant → **Properties** panel → **"Expose properties from → Nested instances"**. Without this, the `_Nav item base` properties stay buried inside the nested instance and designers cannot access them from the main component. This applies to **every** variant — see the dedicated "Expose Nested Properties" step below for details.
+
 A sidebar navigation system with collapsible state. `_Nav item base` defines individual nav items in Horizontal and Vertical layouts. `Navigation` assembles the full sidebar with a Header area, scrollable nav item list, optional Profile section at the bottom, and an Expand/Collapse toggle button.
 
 ---

@@ -11,6 +11,10 @@
 | Node — Component Set | `8090:65082` |
 | Total Variants | 5 (`State`) |
 
+> ### ⚠️ Critical Requirement — Expose Nested Instance Properties
+>
+> The main **`Text Area Field`** component (every variant) **MUST** have **all** properties from its nested **`_base Textarea Field`** instance exposed onto it. In Figma: select the main component/variant → **Properties** panel → **"Expose properties from → Nested instances"**. Without this, the `_base Textarea Field` properties stay buried inside the nested instance and designers cannot access them from the main component. This applies to **every** variant — see the dedicated "Expose Nested Instance Properties" step below for details.
+
 A multi-line text input with optional label, mandatory marker, resizable text area, and hint text. Follows the same wrapper pattern as Input Field with three key structural differences: FIXED height Input frame (93px), all-sides padding on the Input frame, and no prefix/suffix icon slots.
 
 ---

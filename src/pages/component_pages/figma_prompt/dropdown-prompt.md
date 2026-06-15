@@ -14,6 +14,10 @@
 | Dropdown list Variants | 5 (Count) |
 | `_base dropdown list` Variants | 4 (With checkbox) |
 
+> ### ⚠️ Critical Requirement — Expose Nested Instance Properties
+>
+> The main **`Dropdown`** component (every variant) **MUST** have **all** properties from its nested **`_base Dropdown`** instance exposed onto it. In Figma: select the main component/variant → **Properties** panel → **"Expose properties from → Nested instances"**. Without this, the `_base Dropdown` properties stay buried inside the nested instance and designers cannot access them from the main component. This applies to **every** variant — see the dedicated "Expose Nested Instance Properties" step below for details.
+
 The Dropdown is a four-component system. Build order must be followed: `_base dropdown list` first, then `Dropdown list`, then `_base Dropdown`, then `Dropdown`.
 
 ---

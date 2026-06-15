@@ -12,6 +12,10 @@
 | Total Variants | 5 (Step: 2 · 3 · 4 · 5 · 6) |
 | Has States | Yes — on `_base Breadcrumb` only |
 
+> ### ⚠️ Critical Requirement — Expose Nested Instance Properties
+>
+> The main **`Breadcrumb`** component (every variant) **MUST** have **all** properties from its nested **`_base Breadcrumb`** instance exposed onto it. In Figma: select the main component/variant → **Properties** panel → **"Expose properties from → Nested instances"**. Without this, the `_base Breadcrumb` properties stay buried inside the nested instance and designers cannot access them from the main component. This applies to **every** variant — see the dedicated "Expose Nested Instance Properties" step below for details.
+
 Breadcrumb is a horizontal navigation trail showing the user's location in a page hierarchy. It is a purely presentational component — states (Default, Current, Hover) live on the base item, not on the overall trail.
 
 ---
