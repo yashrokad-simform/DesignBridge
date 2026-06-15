@@ -96,6 +96,121 @@ const LAYOUT_CSS = `
     max-width: none;
   }
 
+  .pl-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .pl-req-indicator {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    cursor: default;
+  }
+
+  .pl-req-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 9px 3px 7px;
+    border-radius: 100px;
+    background: #fff5ee;
+    border: 1px solid #f4c09a;
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #c65910;
+    letter-spacing: 0.01em;
+    line-height: 1;
+    user-select: none;
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  .pl-req-badge:hover {
+    background: #ffeadb;
+    border-color: #e8935a;
+  }
+
+  .pl-req-icon {
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #c65910;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-style: normal;
+  }
+
+  .pl-req-tooltip {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    min-width: 190px;
+    background: #1a2233;
+    color: #f0f4fa;
+    border-radius: 10px;
+    padding: 12px 14px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.22);
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: 12px;
+    line-height: 1.5;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 0.18s, transform 0.18s;
+    z-index: 100;
+    white-space: nowrap;
+  }
+
+  .pl-req-indicator:hover .pl-req-tooltip {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .pl-req-tooltip-title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: #8fa3c0;
+    margin-bottom: 7px;
+  }
+
+  .pl-req-tooltip-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .pl-req-tooltip-list li {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: #e8eef7;
+  }
+
+  .pl-req-tooltip-list li::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #c65910;
+    flex-shrink: 0;
+  }
+
   @media (max-width: 860px) {
     html,
     body,
@@ -232,9 +347,28 @@ export default function PrivateLayout() {
           <div className="pl-content" ref={contentRef}>
             {activePage !== 'introduction' && (
               <>
-                <h1 className="pl-page-title">
-                  {selectedSection}
-                </h1>
+                <div className="pl-title-row">
+                  <h1 className="pl-page-title">
+                    {selectedSection}
+                  </h1>
+
+                  {page.requiredComponents && page.requiredComponents.length > 0 && (
+                    <span className="pl-req-indicator">
+                      <span className="pl-req-badge">
+                        <i className="pl-req-icon">i</i>
+                        Required Components
+                      </span>
+                      <span className="pl-req-tooltip" role="tooltip">
+                        <div className="pl-req-tooltip-title">Required Components</div>
+                        <ul className="pl-req-tooltip-list">
+                          {page.requiredComponents.map(c => (
+                            <li key={c}>{c}</li>
+                          ))}
+                        </ul>
+                      </span>
+                    </span>
+                  )}
+                </div>
 
                 {page.desc && (
                   <p className="pl-page-desc">

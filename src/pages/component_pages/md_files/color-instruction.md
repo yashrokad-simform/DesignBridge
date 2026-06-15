@@ -52,40 +52,40 @@ Delete all existing content and replace with the following file, exactly as writ
    * ========================================================== */
 
   /* ── Primary ─────────────────────────────────────────────── */
-  --color-primary-50:  #e6eef8;
-  --color-primary-100: #b0cbe9;
-  --color-primary-200: #8ab1de;
-  --color-primary-300: #548ecf;
-  --color-primary-400: #3378c6;
+  --color-primary-50:  #edf6ff;
+  --color-primary-100: #d9e9ff;
+  --color-primary-200: #b8d6ff;
+  --color-primary-300: #93c0ff;
+  --color-primary-400: #6ba6f9;
   --color-primary-500: #0056b8;   /* ← USER CONFIGURABLE (Color Generator) */
-  --color-primary-600: #004ea7;
-  --color-primary-700: #003d83;
-  --color-primary-800: #002f65;
-  --color-primary-900: #00244d;
+  --color-primary-600: #00419e;
+  --color-primary-700: #002a81;
+  --color-primary-800: #001468;
+  --color-primary-900: #00004d;
 
   /* ── Secondary ───────────────────────────────────────────── */
-  --color-secondary-50:  #f9eee7;
-  --color-secondary-100: #edccb5;
-  --color-secondary-200: #e5b391;
-  --color-secondary-300: #d9905f;
-  --color-secondary-400: #d17a40;
+  --color-secondary-50:  #fff1ea;
+  --color-secondary-100: #fde1d4;
+  --color-secondary-200: #fac8b0;
+  --color-secondary-300: #f2ab88;
+  --color-secondary-400: #e58a5c;
   --color-secondary-500: #c65910;  /* ← USER CONFIGURABLE (Color Generator) */
-  --color-secondary-600: #b4510f;
-  --color-secondary-700: #8d3f0b;
-  --color-secondary-800: #6d3109;
-  --color-secondary-900: #532507;
+  --color-secondary-600: #ac4500;
+  --color-secondary-700: #8f2f00;
+  --color-secondary-800: #761b00;
+  --color-secondary-900: #5b0000;
 
   /* ── Neutrals (Gray) ─────────────────────────────────────── */
-  --color-gray-50:  #f4f5f7;
-  --color-gray-100: #dde3eb;
-  --color-gray-200: #aeb4bc;
-  --color-gray-300: #89919d;
-  --color-gray-400: #727c8a;
+  --color-gray-50:  #ecf6ff;
+  --color-gray-100: #dfe9f6;
+  --color-gray-200: #cad5e4;
+  --color-gray-300: #b3bfcf;
+  --color-gray-400: #99a6b7;
   --color-gray-500: #4f5c6d;       /* ← USER CONFIGURABLE (Color Generator) */
-  --color-gray-600: #485363;
-  --color-gray-700: #29384d;
-  --color-gray-800: #19283c;
-  --color-gray-900: #131e2e;
+  --color-gray-600: #3d4958;
+  --color-gray-700: #293442;
+  --color-gray-800: #18222f;
+  --color-gray-900: #07101b;
   --color-white:    #ffffff;
   --color-black:    #051325;
 

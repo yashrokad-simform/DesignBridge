@@ -121,7 +121,7 @@ bg-input-bg-primary transition-colors
 | Helper text | `text-xs font-medium leading-4 text-input-text-helper` |
 | Error text | `text-xs font-medium leading-4 text-input-text-critical` |
 
-> `text-xs` = 12px · `text-sm` = 14px · `leading-4` = 16px · `leading-4.5` = 18px
+> `text-xs` = 12px · `text-sm` = 14px · `leading-4` = 16px · `leading-4.5` ≈ 18px
 
 Apply editor content typography on the TipTap `<EditorContent>` wrapper element. TipTap renders a `div[contenteditable]` inside — style it via:
 
@@ -129,7 +129,7 @@ Apply editor content typography on the TipTap `<EditorContent>` wrapper element.
 [&_.ProseMirror]:text-sm
 [&_.ProseMirror]:font-medium
 [&_.ProseMirror]:leading-4.5
-[&_.ProseMirror]:text-input-text-enabled
+[&_.ProseMirror]:text-sm
 [&_.ProseMirror]:outline-none
 [&_.ProseMirror]:min-h-[80px]
 [&_.ProseMirror_p.is-editor-empty:first-child::before]:text-input-text-placeholder

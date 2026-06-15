@@ -2,6 +2,7 @@ import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import spacingRadiusMd from '../figma_prompt/spacing_radius.md?raw';
 import MarkdownViewer from '../MarkdownViewer';
 import '../component_pages.css';
+import { useDrawerAnimation } from '../../../hooks/useGsapAnimations';
 
 const SPACING_TOKENS = [
   { key: 'none',  name: 'spacing-none',  defaultValue: 0 },
@@ -92,6 +93,10 @@ export default function SpacingRadiusPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [copyLabel, setCopyLabel] = useState('Copy Figma Prompt');
   const copyTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const drawerRef = useRef<HTMLDivElement | null>(null);
+  const backdropRef = useRef<HTMLDivElement | null>(null);
+
+  useDrawerAnimation(drawerRef, backdropRef, drawerOpen);
 
   const liveMd = useMemo(
     () => transformMd(spacingRadiusMd, spacingState, radiusState),
@@ -322,10 +327,12 @@ export default function SpacingRadiusPage() {
         </div>
 
         {/* Preview Drawer — Figma only, no VS Code tab */}
-        {drawerOpen && (
-          <div className="cp-drawer-backdrop" onClick={() => setDrawerOpen(false)} />
-        )}
-        <div className={`cp-drawer${drawerOpen ? ' cp-drawer--open' : ''}`}>
+        <div
+          ref={backdropRef}
+          className="cp-drawer-backdrop"
+          onClick={() => setDrawerOpen(false)}
+        />
+        <div ref={drawerRef} className="cp-drawer">
           <div className="cp-drawer-hd">
             <span className="cp-drawer-title">Preview</span>
             <div className="cp-drawer-actions">
@@ -434,7 +441,7 @@ const LOCAL_CSS = `
   }
   .sr-bar {
     height: 100%;
-    background: #6089c2;
+    background: #3464a8;
     border-radius: 5px;
     transition: width 200ms ease;
     min-width: 2px;
@@ -455,7 +462,7 @@ const LOCAL_CSS = `
   .sr-radius-box {
     width: 100px;
     height: 44px;
-    background: #6089c2;
+    background: #3464a8;
     flex-shrink: 0;
     margin-bottom: 6px;
   }

@@ -58,7 +58,6 @@ Level 2 — Navigation              [COMPONENT_SET]
 
 ### Level 1 — `_Nav item base`
 
-<!-- IF_EXPANDED -->
 #### `Active=No, Type=Horizontal`
 
 ```
@@ -77,8 +76,6 @@ Active=No, Type=Horizontal         [COMPONENT · FILL × FIXED(44px) · Horizont
               Fill: Navigation/nav-text-inactive
 ```
 
-<!-- /IF_EXPANDED -->
-<!-- IF_EXPANDED -->
 #### `Active=Yes, Type=Horizontal`
 
 ```
@@ -92,8 +89,6 @@ Active=Yes, Type=Horizontal        [COMPONENT · same sizing]
               Fill: Navigation/nav-text-active
 ```
 
-<!-- /IF_EXPANDED -->
-<!-- IF_COLLAPSED -->
 #### `Active=No, Type=Vertical`
 
 ```
@@ -114,8 +109,6 @@ Active=No, Type=Vertical           [COMPONENT · FIXED(44px) × HUG · Horizonta
               Fill: Navigation/nav-text-inactive
 ```
 
-<!-- /IF_COLLAPSED -->
-<!-- IF_COLLAPSED -->
 #### `Active=Yes, Type=Vertical`
 
 ```
@@ -125,13 +118,11 @@ Active=Yes, Type=Vertical          [same structure as Active=No]
   Icon VECTOR:    stroke → Navigation/nav-icon-active
 ```
 
-<!-- /IF_COLLAPSED -->
 
 ---
 
 ### Level 2 — `Navigation`
 
-<!-- IF_EXPANDED -->
 #### `State=Expanded`
 
 ```
@@ -188,8 +179,6 @@ State=Expanded                     [COMPONENT · HUG × FIXED(1024px) · Horizon
               Color: override Icon VECTOR stroke → Navigation/nav-icon-inactive
 ```
 
-<!-- /IF_EXPANDED -->
-<!-- IF_COLLAPSED -->
 #### `State=Collapsed`
 
 ```
@@ -218,7 +207,6 @@ State=Collapsed                    [COMPONENT · 96px × FIXED(1024px)]
         All other toggle properties identical to Expanded
 ```
 
-<!-- /IF_COLLAPSED -->
 
 ---
 
@@ -231,35 +219,29 @@ State=Collapsed                    [COMPONENT · 96px × FIXED(1024px)]
 | `State=Expanded` | **chevron-left** | `chevron-left` | Points left — clicking collapses the sidebar |
 | `State=Collapsed` | **chevron-right** | `chevron-right` | Points right — clicking expands the sidebar |
 
-<!-- IF_EXPANDED -->
 **Steps to set the toggle icon for State=Expanded:**
 1. Select the `State=Expanded` variant
 2. Enter the `Container` toggle button
 3. Select the `Icon` instance inside
 4. In Properties panel → Icon swap property → set to `chevron-left`
 
-<!-- /IF_EXPANDED -->
-<!-- IF_COLLAPSED -->
 **Steps to set the toggle icon for State=Collapsed:**
 1. Select the `State=Collapsed` variant
 2. Enter the `Container` toggle button
 3. Select the `Icon` instance inside
 4. In Properties panel → Icon swap property → set to `chevron-right`
 
-<!-- /IF_COLLAPSED -->
 
 The toggle is ABSOLUTE positioned and sits at the right edge of the sidebar, vertically centred with the Header frame.
 
 ---
 
-<!-- IF_PROFILE -->
 ## Profile Section — Structure Detail
 
 `Profile_Container` is the outer wrapper frame at the bottom of `Sidebar navigation`. Its visibility is controlled by the `Show Profile` Boolean property. Inside it sits the `Profile` frame which holds the actual content.
 
 > ⚠️ **Layer name note:** The text content frame is named `Contenet` in the Figma file (typo preserved intentionally). Use this exact name when building.
 
-<!-- IF_EXPANDED -->
 ### Expanded state — Full profile
 
 ```
@@ -286,8 +268,6 @@ Profile_Container                  [FRAME · FILL × HUG]
               Color: override Icon VECTOR stroke → Navigation/nav-icon-inactive
 ```
 
-<!-- /IF_EXPANDED -->
-<!-- IF_COLLAPSED -->
 ### Collapsed state — Avatar only
 
 ```
@@ -304,11 +284,9 @@ Profile_Container                  [FRAME · FILL × HUG]
         └── Avatar Image           [INSTANCE · 48×48px · FIXED · radius-full · IMAGE fill]
 ```
 
-<!-- /IF_COLLAPSED -->
 
 ---
 
-<!-- /IF_PROFILE -->
 ## Layer Descriptions
 
 ### `_Nav item base`
@@ -450,7 +428,6 @@ Override the **Stroke** variable — never the fill.
 
 ## Figma Construction Guide
 
-<!-- IF_EXPANDED -->
 ### Step 1 — Build `Active=No, Type=Horizontal`
 
 1. Create a **Frame**. Name it `Active=No, Type=Horizontal`.
@@ -462,8 +439,6 @@ Override the **Stroke** variable — never the fill.
 7. Place **Icon component** (Size=20px) as first child of Content. Override VECTOR stroke → `Navigation/nav-icon-inactive`. Create Instance Swap property: `Nav Icon`.
 8. Add `Text` layer: content "Text" · style `Body sm/Medium` · fill `Navigation/nav-text-inactive` · FILL × HUG · layoutGrow=1.
 
-<!-- /IF_EXPANDED -->
-<!-- IF_EXPANDED -->
 ### Step 2 — Build `Active=Yes, Type=Horizontal`
 
 1. Duplicate `Active=No, Type=Horizontal`. Rename to `Active=Yes, Type=Horizontal`.
@@ -471,8 +446,6 @@ Override the **Stroke** variable — never the fill.
 3. On `Text`: change style → `Body sm/Semi Bold` · change fill → `Navigation/nav-text-active`.
 4. On `Icon` VECTOR: change stroke → `Navigation/nav-icon-active`.
 
-<!-- /IF_EXPANDED -->
-<!-- IF_COLLAPSED -->
 ### Step 3 — Build `Active=No, Type=Vertical`
 
 1. Create a **Frame**. Name it `Active=No, Type=Vertical`.
@@ -484,8 +457,6 @@ Override the **Stroke** variable — never the fill.
 7. Place **Icon** (Size=20px) inside Container. Override VECTOR stroke → `Navigation/nav-icon-inactive`.
 8. Add `Text` below Container: style `Label sm/Medium` · fill `Navigation/nav-text-inactive` · FILL × HUG · Center text align.
 
-<!-- /IF_COLLAPSED -->
-<!-- IF_COLLAPSED -->
 ### Step 4 — Build `Active=Yes, Type=Vertical`
 
 1. Duplicate `Active=No, Type=Vertical`. Rename to `Active=Yes, Type=Vertical`.
@@ -493,7 +464,6 @@ Override the **Stroke** variable — never the fill.
 3. On `Text`: change fill → `Navigation/nav-text-active-vertical`.
 4. On `Icon` VECTOR: change stroke → `Navigation/nav-icon-active`.
 
-<!-- /IF_COLLAPSED -->
 ### Step 5 — Combine into `_Nav item base` Component Set
 
 1. Select all 4. Combine into **Component Set**. Name it `_Nav item base`.
@@ -505,7 +475,6 @@ Override the **Stroke** variable — never the fill.
 
 Properties panel → **"Expose properties from Nested instances"** on all 4 variants.
 
-<!-- IF_EXPANDED -->
 ### Step 7 — Build `Navigation` — `State=Expanded`
 
 1. Create a **Frame**. Name it `State=Expanded`. **Horizontal AL · HUG × FIXED(1024px) · Center VA**. Fill `Background/bg-primary`. Convert to **Component**.
@@ -523,7 +492,6 @@ Properties panel → **"Expose properties from Nested instances"** on all 4 vari
 1. Frame inside Navigation. Name `Frame 1261153134`. **Vertical AL · FILL × FILL · layoutGrow=1**. Bind padding all → `spacing-4xl`. Bind gap → `spacing-xs`.
 2. Place `_Nav item base` instances (Type=Horizontal) inside for preview.
 
-<!-- IF_PROFILE -->
 #### Profile_Container
 1. Frame inside `Sidebar navigation` (below `Navigation` inner frame, not inside it). Name `Profile_Container`.
 2. Set sizing to **FILL × HUG**. No Auto Layout on the container itself.
@@ -542,7 +510,6 @@ Inside `Profile` (Expanded):
   - Second `Text` layer: style `Label sm/Medium` · fill `Navigation/nav-text-inactive` (user role).
 - **chevron-right**: Icon instance (Size=16px). Name `chevron-right`. Override VECTOR stroke → `Navigation/nav-icon-inactive`.
 
-<!-- /IF_PROFILE -->
 #### Container (Toggle button)
 1. Frame inside the outer `State=Expanded` wrapper. Name `Container`.
 2. Set **layoutPositioning = ABSOLUTE**.
@@ -559,22 +526,18 @@ Inside `Profile` (Expanded):
 
 7. Position toggle at the **right edge of the sidebar** (x = sidebar right edge), **vertically centred with the Header frame**.
 
-<!-- /IF_EXPANDED -->
-<!-- IF_COLLAPSED -->
 ### Step 8 — Build `Navigation` — `State=Collapsed`
 
 1. Duplicate `State=Expanded`. Rename to `State=Collapsed`.
 2. Change `Sidebar navigation` width → **96px**.
 3. On `Frame 1261153134`: padding L/R → `spacing-xs` · padding T/B → `spacing-md` · gap → `spacing-xl`.
 4. Replace `_Nav item base` instances with **Type=Vertical** variants.
-<!-- IF_PROFILE -->
 5. Update Profile_Container for collapsed state:
    - `Profile_Container` keeps identical padding and fill (no change).
    - Inside `Profile`: change layout to **Center both axes · HUG × HUG**.
    - Hide `Contenet` frame — it is not shown in collapsed state.
    - Hide `chevron-right` instance — not shown in collapsed state.
    - Only `Avatar Image` remains visible and centered.
-<!-- /IF_PROFILE -->
 6. On the toggle `Container`:
 
 > ⚠️ **CRITICAL — Toggle icon for Collapsed state:**
@@ -583,7 +546,6 @@ Inside `Profile` (Expanded):
 > Path to override: `Icon [INSTANCE] → 16px [COMPONENT] → chevron-right [COMPONENT] → Icon [VECTOR]`
 > Override VECTOR stroke → `Navigation/nav-icon-inactive`
 
-<!-- /IF_COLLAPSED -->
 ### Step 9 — Combine into `Navigation` Component Set
 
 1. Select both. Combine into **Component Set** named `Navigation`.

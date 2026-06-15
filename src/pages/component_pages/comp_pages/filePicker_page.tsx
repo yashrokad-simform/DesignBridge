@@ -158,7 +158,7 @@ function buildVariants(vals: InputValues): VariantGroup[] {
                     <div className="w-[340px]">
                       <DocumentTile
                         state="uploading"
-                        fileName="Presentation.pptx"
+                        fileName="Scope of Work.doc"
                         fileSize="5.1 MB"
                         fileType="doc"
                         progress={64}

@@ -145,11 +145,10 @@ function transformMarkdown(raw: string, vals: InputValues): string {
 }
 
 /**
- * Figma transform — substitutes the `Font/Size/{figmaLabel} → N` lines
- * from the user-supplied tier sizes. Disabled tiers are skipped (line
- * dropped). The 2xs tier has no Figma equivalent, so it is never
- * emitted on this side. Line-height, letter-spacing, and font-weight
- * sections are left untouched — the input panel doesn't customise them.
+ * Figma transform — substitutes Font/Size lines and removes ALL references
+ * to disabled tiers: Font/Size, Font/Line Height, Font/Letter Spacing entries
+ * in code blocks, Typography Collection table rows, and Step 3 text style
+ * bullet points. Orphaned table headers and empty code blocks are pruned.
  */
 function transformFigmaMarkdown(raw: string, vals: InputValues): string {
   const labelToTier = new Map<string, typeof TIERS[number]>();
@@ -157,20 +156,144 @@ function transformFigmaMarkdown(raw: string, vals: InputValues): string {
     if (t.figmaLabel && t.figmaLabel !== '—') labelToTier.set(t.figmaLabel, t);
   }
 
+  const enabledLabels = new Set<string>();
+  for (const t of TIERS) {
+    if (parseTier(vals[tierKey(t.key)]).enabled) enabledLabels.add(t.figmaLabel);
+  }
+
+  const enabledGroups = new Set<string>();
+  for (const lbl of enabledLabels) enabledGroups.add(lbl.split(' ')[0]);
+
+  function isLabelEnabled(label: string): boolean {
+    const t = label.trim();
+    if (enabledLabels.has(t)) return true;
+    return enabledLabels.has(t.replace(/\s+Paragraphgraph?\s*$/i, '').trim());
+  }
+
+  const lines = raw.split('\n');
   const out: string[] = [];
-  for (const line of raw.split('\n')) {
-    const m = line.match(/^(\s*Font\/Size\/)([A-Za-z ]+?)(\s*→\s*)\d+\s*$/);
-    if (m) {
-      const tier = labelToTier.get(m[2].trim());
-      if (tier) {
-        const { enabled, px } = parseTier(vals[tierKey(tier.key)]);
-        if (!enabled) continue;
-        out.push(`${m[1]}${m[2]}${m[3]}${px || tier.defaultPx}`);
-        continue;
+  let inCodeBlock = false;
+  let codeBlockStart = -1;
+
+  // Pending buffers for deferred structural elements
+  let pendingSection: string | null = null;
+  let pendingTableHeader: string[] = [];
+
+  function flushSection() {
+    if (pendingSection !== null) { out.push(pendingSection); pendingSection = null; }
+  }
+  function flushTableHeader() {
+    if (pendingTableHeader.length > 0) { out.push(...pendingTableHeader); pendingTableHeader = []; }
+  }
+  function discardTableHeader() { pendingTableHeader = []; }
+
+  for (const line of lines) {
+    // ── Code block fence ──────────────────────────────────────────────────
+    if (line.trim() === '```') {
+      if (!inCodeBlock) {
+        inCodeBlock = true;
+        codeBlockStart = out.length;
+        out.push(line);
+      } else {
+        inCodeBlock = false;
+        if (out.length === codeBlockStart + 1) {
+          // Empty code block — remove the opening fence
+          out.pop();
+          // Also remove the preceding subsection header if it's now dangling
+          while (out.length > 0 && /^###/.test(out[out.length - 1])) {
+            out.pop();
+            if (out.length > 0 && out[out.length - 1].trim() === '') out.pop();
+          }
+        } else {
+          out.push(line);
+        }
       }
+      continue;
     }
+
+    // ── Inside code block ─────────────────────────────────────────────────
+    if (inCodeBlock) {
+      // Font/Size/
+      const sm = line.match(/^(\s*Font\/Size\/)([A-Za-z ]+?)(\s*→\s*)\d+\s*$/);
+      if (sm) {
+        const tier = labelToTier.get(sm[2].trim());
+        if (tier) {
+          const { enabled, px } = parseTier(vals[tierKey(tier.key)]);
+          if (!enabled) continue;
+          out.push(`${sm[1]}${sm[2]}${sm[3]}${px || tier.defaultPx}`);
+          continue;
+        }
+      }
+      // Font/Line Height/
+      const lh = line.match(/^(\s*Font\/Line Height\/)(.+?)(\s*→\s*[\-\d]+)\s*$/);
+      if (lh) { if (!isLabelEnabled(lh[2])) continue; out.push(line); continue; }
+      // Font/Letter Spacing/
+      const ls = line.match(/^(\s*Font\/Letter Spacing\/)(.+?)(\s*→\s*[\-\d]+)\s*$/);
+      if (ls) { if (!isLabelEnabled(ls[2])) continue; out.push(line); continue; }
+
+      out.push(line);
+      continue;
+    }
+
+    // ── Outside code block ────────────────────────────────────────────────
+
+    // ### {Group} Tier — defer; emit only when content follows
+    const shm = line.match(/^###\s+(Caption|Label|Body|Heading|Display)\s+Tier\s*$/);
+    if (shm) {
+      discardTableHeader();
+      pendingSection = enabledGroups.has(shm[1]) ? line : null;
+      continue;
+    }
+
+    // **{Group} Tier** bold header (Step 3)
+    const bthm = line.match(/^\*\*(Caption|Label|Body|Heading|Display)\s+Tier\*\*/);
+    if (bthm) {
+      discardTableHeader();
+      if (!enabledGroups.has(bthm[1])) continue;
+      flushSection();
+      out.push(line);
+      continue;
+    }
+
+    // Table column header row
+    if (line.includes('| Variable Name | Linked To |')) {
+      pendingTableHeader = [line];
+      continue;
+    }
+    // Table separator row
+    if (/^\|---/.test(line) && pendingTableHeader.length > 0) {
+      pendingTableHeader.push(line);
+      continue;
+    }
+
+    // Table data rows: | `TierLabel/...` |
+    const trm = line.match(/^\|\s*`([^`/]+)\//);
+    if (trm) {
+      const tierName = trm[1].trim();
+      if (!isLabelEnabled(tierName)) { continue; }
+      flushSection();
+      flushTableHeader();
+      out.push(line);
+      continue;
+    }
+
+    // Text style bullet points: - `TierLabel/...`
+    const blm = line.match(/^(\s*-\s+)`([^`/]+)\//);
+    if (blm) {
+      const tierName = blm[2].trim();
+      if (!isLabelEnabled(tierName)) continue;
+      flushSection();
+      out.push(line);
+      continue;
+    }
+
+    // Any other non-blank line discards pending table header
+    if (line.trim() !== '') discardTableHeader();
+
+    // Blank lines: only flush section if followed by real content (handled lazily)
     out.push(line);
   }
+
   return out.join('\n');
 }
 

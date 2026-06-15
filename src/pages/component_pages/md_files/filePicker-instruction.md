@@ -153,7 +153,7 @@ text-xs font-normal leading-4 text-center w-full
 | `enabled` / `drag-file` | `text-text-secondary` |
 | `disabled` | `text-text-secondary` |
 
-Content: `"{acceptedTypes} (max. {maxSize})"` — dynamic from props.
+Content: `"PDF, DOC, XLS or PPT (max. {maxSize})"` — dynamic from props.
 
 ---
 

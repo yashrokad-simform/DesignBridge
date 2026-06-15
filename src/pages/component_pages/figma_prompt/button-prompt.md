@@ -515,7 +515,7 @@ Duplicate `Size=Large` and apply every adjustment below. **All of these are requ
 7. Add **Variant properties**:
    - `Size` → `Large`, `Small`
    - `State` → `Enabled`, `Hover`, `Disabled`
-   - `Type` → `Primary`, `Bordered`, `Text`, `Link`, `Icon Only`, `Icon Secondary`, `Icon Filled`, `Critical Primary`, `Critical Bordered`, `Critical Text`
+   - `Type` → `Primary`, `Bordered`, `Text`, `Link`, `Icon Filled`, `Icon Secondary`, `Icon Only`, `Critical Primary`, `Critical Bordered`, `Critical Text`
 
 **For each variant, select the `_base Button` instance inside and override:**
 

@@ -99,7 +99,7 @@ state: 'default'
 | Helper text | `text-xs font-medium leading-4 text-input-text-helper` |
 | Error text | `text-xs font-medium leading-4 text-input-text-critical` |
 
-> `text-xs` = 12px · `text-sm` = 14px · `leading-4` = 16px · `leading-4.5` = 18px
+> `text-xs` = 12px · `text-sm` = 14px · `leading-4` = 16px · `leading-4.5` ≈ 18px
 
 ---
 

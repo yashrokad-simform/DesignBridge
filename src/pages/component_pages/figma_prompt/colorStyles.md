@@ -30,46 +30,46 @@ Create the following variables exactly as listed. The name before the `/` is the
 
 | Variable Name | Hex Value |
 |---|---|
-| `Primary/primary 50` | `#e6eef8` |
-| `Primary/primary 100` | `#b0cbe9` |
-| `Primary/primary 200` | `#8ab1de` |
-| `Primary/primary 300` | `#548ecf` |
-| `Primary/primary 400` | `#3378c6` |
+| `Primary/primary 50` | `#edf6ff` |
+| `Primary/primary 100` | `#d9e9ff` |
+| `Primary/primary 200` | `#b8d6ff` |
+| `Primary/primary 300` | `#93c0ff` |
+| `Primary/primary 400` | `#6ba6f9` |
 | `Primary/primary 500` | `#0056b8` |
-| `Primary/primary 600` | `#004ea7` |
-| `Primary/primary 700` | `#003d83` |
-| `Primary/primary 800` | `#002f65` |
-| `Primary/primary 900` | `#00244d` |
+| `Primary/primary 600` | `#00419e` |
+| `Primary/primary 700` | `#002a81` |
+| `Primary/primary 800` | `#001468` |
+| `Primary/primary 900` | `#00004d` |
 
 #### GROUP: Secondary
 
 | Variable Name | Hex Value |
 |---|---|
-| `Secondary/secondary 50` | `#f9eee7` |
-| `Secondary/secondary 100` | `#edccb5` |
-| `Secondary/secondary 200` | `#e5b391` |
-| `Secondary/secondary 300` | `#d9905f` |
-| `Secondary/secondary 400` | `#d17a40` |
+| `Secondary/secondary 50` | `#fff1ea` |
+| `Secondary/secondary 100` | `#fde1d4` |
+| `Secondary/secondary 200` | `#fac8b0` |
+| `Secondary/secondary 300` | `#f2ab88` |
+| `Secondary/secondary 400` | `#e58a5c` |
 | `Secondary/secondary 500` | `#c65910` |
-| `Secondary/secondary 600` | `#b4510f` |
-| `Secondary/secondary 700` | `#8d3f0b` |
-| `Secondary/secondary 800` | `#6d3109` |
-| `Secondary/secondary 900` | `#532507` |
+| `Secondary/secondary 600` | `#ac4500` |
+| `Secondary/secondary 700` | `#8f2f00` |
+| `Secondary/secondary 800` | `#761b00` |
+| `Secondary/secondary 900` | `#5b0000` |
 
 #### GROUP: Neutrals
 
 | Variable Name | Hex Value |
 |---|---|
-| `Neutrals/gray 50` | `#f4f5f7` |
-| `Neutrals/gray 100` | `#dde3eb` |
-| `Neutrals/gray 200` | `#aeb4bc` |
-| `Neutrals/gray 300` | `#89919d` |
-| `Neutrals/gray 400` | `#727c8a` |
+| `Neutrals/gray 50` | `#ecf6ff` |
+| `Neutrals/gray 100` | `#dfe9f6` |
+| `Neutrals/gray 200` | `#cad5e4` |
+| `Neutrals/gray 300` | `#b3bfcf` |
+| `Neutrals/gray 400` | `#99a6b7` |
 | `Neutrals/gray 500` | `#4f5c6d` |
-| `Neutrals/gray 600` | `#485363` |
-| `Neutrals/gray 700` | `#29384d` |
-| `Neutrals/gray 800` | `#19283c` |
-| `Neutrals/gray 900` | `#131e2e` |
+| `Neutrals/gray 600` | `#3d4958` |
+| `Neutrals/gray 700` | `#293442` |
+| `Neutrals/gray 800` | `#18222f` |
+| `Neutrals/gray 900` | `#07101b` |
 | `Neutrals/white` | `#ffffff` |
 | `Neutrals/black` | `#051325` |
 

@@ -51,10 +51,10 @@ Navigation component that shows the user's current location within a hierarchy. 
 ### Layout
 
 ```
-inline-flex items-center {{{gapClass}}}
+inline-flex items-center gap-1
 ```
 
-> `{{{gapClass}}}` = {{{gapPx}}} · Between every child pair the wrapper automatically injects an `ArrowRightIcon` separator.
+> `gap-1` = 4px · Between every child pair the wrapper automatically injects an `ArrowRightIcon` separator.
 
 ### Separator Injection
 
@@ -91,10 +91,10 @@ Apply CVA to the **text element** inside `BreadcrumbItem`.
 ### Base Classes
 
 ```
-{{{textSizeClass}}} {{{leadingClass}}} whitespace-nowrap transition-colors
+text-sm leading-4.5 whitespace-nowrap transition-colors
 ```
 
-> `{{{textSizeClass}}}` = {{{pxSize}}} · `{{{leadingClass}}}` = {{{pxLeading}}}
+> `text-sm` = 14px · `leading-4.5` = 18px
 
 ### `state` Variant
 
@@ -140,7 +140,7 @@ Never use `<button>` for breadcrumb items. If `href` is absent for a `default` i
 Between every pair of breadcrumb items, render an `ArrowRightIcon`.
 
 - Import from `src/assets/icons/`. Do not create inline SVG.
-- Size: `{{{separatorClass}}}` ({{{separatorPx}}}).
+- Size: `size-3` (12×12px).
 - Color: `text-text-secondary` — always, regardless of adjacent item state.
 - `aria-hidden="true"`.
 - The separator is rendered by `Breadcrumb` wrapper — never inside `BreadcrumbItem`.
@@ -151,11 +151,11 @@ Between every pair of breadcrumb items, render an `ArrowRightIcon`.
 
 | State | Classes |
 |---|---|
-| Default | `{{{textSizeClass}}} font-normal {{{leadingClass}}} text-text-secondary` |
-| Hover | `{{{textSizeClass}}} font-normal {{{leadingClass}}} text-text-brand underline` |
-| Current | `{{{textSizeClass}}} font-medium {{{leadingClass}}} text-text-primary` |
+| Default | `text-sm font-normal leading-4.5 text-text-secondary` |
+| Hover | `text-sm font-normal leading-4.5 text-text-brand underline` |
+| Current | `text-sm font-medium leading-4.5 text-text-primary` |
 
-> `{{{textSizeClass}}}` = {{{pxSize}}} · `{{{leadingClass}}}` = {{{pxLeading}}} · `font-normal` = 400 · `font-medium` = 500
+> `text-sm` = 14px · `leading-4.5` = 18px · `font-normal` = 400 · `font-medium` = 500
 
 ---
 

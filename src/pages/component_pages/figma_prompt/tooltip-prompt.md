@@ -157,7 +157,6 @@ Inside `body`:
     - Add Caption TEXT layer. Link visibility to `Caption` Boolean.
     - (Set text styles after inspecting `Frame 4` children directly in Figma)
 
-
 #### tooltip-arrow frame (Top↑ — arrow below body)
 1. Add a **Frame** below `body`. Name it `tooltip-arrow`.
 2. **Horizontal AL · FILL × FIXED(5px) · Center cross-axis · clipsContent=true**. No fill.
@@ -274,8 +273,6 @@ Both are expected to use `Text/text-white` given the dark-themed background.
 
 ### ⚠️ `VariableID:67:5885` — unconfirmed variable name
 Same dark navy variable used by Toast (`#051325`). Confirm the exact semantic variable name from the Figma variable panel.
-
-
 
 ---
 

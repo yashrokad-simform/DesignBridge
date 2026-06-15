@@ -5,10 +5,10 @@ import ComponentPageLayout, {
   type VariantGroup,
 } from '../ComponentPageLayout';
 import toggleMd from '../md_files/toggleButton-instruction.md?raw';
+import toggleFigmaMd from '../figma_prompt/toggle-prompt.md?raw';
 
 const INPUT_CONFIG: InputConfig[] = [
   { key: 'div0', label: 'Options', type: 'divider' },
-  { key: 'showLabel', label: 'Label', type: 'toggle' },
   { key: 'showCaption', label: 'Caption (Tile)', type: 'toggle' },
   { key: 'div1', label: 'Appearance', type: 'divider' },
   {
@@ -24,7 +24,6 @@ const INPUT_CONFIG: InputConfig[] = [
 ];
 
 const DEFAULT_VALUES: InputValues = {
-  showLabel:   true,
   showCaption: true,
   textSize:    '14px',
 };
@@ -40,7 +39,7 @@ const DEMO_TITLE   = 'Option title';
 const DEMO_CAPTION = 'Optional caption text';
 
 function buildVariants(vals: InputValues): VariantGroup[] {
-  const label   = (vals.showLabel   as boolean) ? DEMO_LABEL   : undefined;
+  const label   = DEMO_LABEL;
   const caption = (vals.showCaption as boolean) ? DEMO_CAPTION : undefined;
   const sizeCls = SIZE_MAP[vals.textSize as string] ?? 'text-sm';
 
@@ -110,6 +109,64 @@ function resolveTokens(_vals: InputValues): Record<string, string> {
   return {};
 }
 
+/* ── Figma prompt transform ─────────────────────────────────────────────────
+ * Mirrors the live input controls into the Figma prompt. Text Size maps to a
+ * text-style tier: 12px → Label sm, 14px → Body sm, 16px → Body md. The Toggle
+ * label + Tile title use the `Body sm/Medium` style, so changing the size swaps
+ * that style name (and its px · line-height) everywhere it appears. */
+const TEXT_STYLE: Record<string, { name: string; px: string; lh: string }> = {
+  '12px': { name: 'Label sm/Medium', px: '12px', lh: '16px' },
+  '14px': { name: 'Body sm/Medium',  px: '14px', lh: '18px' },
+  '16px': { name: 'Body md/Medium',  px: '16px', lh: '22px' },
+};
+
+function transformToggleFigmaMd(raw: string, vals: InputValues): string {
+  let md = raw;
+  const showCaption = (vals.showCaption as boolean) ?? true;
+  const textSize    = (vals.textSize    as string)  || '14px';
+  const style       = TEXT_STYLE[textSize] ?? TEXT_STYLE['14px'];
+
+  // ── Customised Settings summary — injected right after the title ──
+  const summary =
+    `## Customised Settings\n\n` +
+    `> Reflects the current Customise panel selections for this export.\n\n` +
+    `| Setting | Value |\n|---|---|\n` +
+    `| Text Size (Toggle label / Tile title) | \`${style.name}\` · ${style.px} · ${style.lh} LH |\n` +
+    `| Caption (Tile \`Supporting text\`) | ${showCaption ? '`Shown`' : '`Hidden`'} |\n\n`;
+  md = md.replace(
+    /^(# Toggle, Toggle & Toggle Button Tile\n)/,
+    `$1\n${summary}`,
+  );
+
+  // ── Text Size — swap the `Body sm/Medium` style tier everywhere it appears ──
+  // (the caption uses `Label sm/Medium`, a distinct style, so it is untouched)
+  if (textSize !== '14px') {
+    md = md.split('Body sm/Medium').join(style.name);
+    md = md.split('14px · 18px LH').join(`${style.px} · ${style.lh} LH`);
+  }
+
+  // ── Caption — mark the Tile "Supporting text" layer hidden everywhere ──
+  if (!showCaption) {
+    // Component Structure hierarchy
+    md = md.replace(
+      '└── Supporting text [TEXT · FILL × HUG]',
+      '└── Supporting text [TEXT · FILL × HUG · HIDDEN — caption off]',
+    );
+    // Layer Descriptions table
+    md = md.replace(
+      '| `Supporting text` | TEXT | Caption. `Label sm/Medium`. FILL × HUG |',
+      '| `Supporting text` | TEXT | Caption. `Label sm/Medium`. FILL × HUG · **Hidden (caption off)** |',
+    );
+    // Construction step
+    md = md.replace(
+      '2. Default content: `Caption`.',
+      '2. Default content: `Caption`. _(Hidden — caption is turned off; omit this layer.)_',
+    );
+  }
+
+  return md;
+}
+
 export default function ToggleButtonPage() {
   return (
     <ComponentPageLayout
@@ -119,6 +176,8 @@ export default function ToggleButtonPage() {
       variantTitle="Variants"
       markdownContent={toggleMd}
       markdownFileName="toggleButton"
+      figmaMarkdownContent={toggleFigmaMd}
+      transformFigmaMarkdown={transformToggleFigmaMd}
       resolveTokens={resolveTokens}
     />
   );

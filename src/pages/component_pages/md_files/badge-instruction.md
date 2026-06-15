@@ -36,7 +36,7 @@ Compact pill-shaped label for status, tags, and metadata. Non-interactive except
 | `label` | `string` | required |
 | `variant` | `'filled' \| 'bordered' \| 'tertiary'` | `'filled'` |
 | `color` | `BadgeColor` | `'primary'` |
-| `showPrefix` | `boolean` | `false` |
+| `showPrefix` | `boolean` | `true` |
 | `showSuffix` | `boolean` | `false` |
 | `onRemove` | `() => void` | `undefined` |
 
@@ -48,11 +48,11 @@ Compact pill-shaped label for status, tags, and metadata. Non-interactive except
 
 ```
 <Badge
-  label="{{{label}}}"
-  variant="{{{variant}}}"
-  color="{{{color}}}"
-  showPrefix={{{showPrefix}}}
-  showSuffix={{{showSuffix}}}
+  label="Badge"
+  variant="filled"
+  color="primary"
+  showPrefix=true
+  showSuffix=false
 />
 ```
 
@@ -74,7 +74,8 @@ rounded-full px-2 py-1 gap-1.5
 
 > **Variant exception:** `bordered` uses `py-0.75` (3px) instead of `py-1` to account for the 1px border.
 
-Height is content-driven. Never set an explicit height or width.
+Height is explicitly set. `filled` and `tertiary` use `h-6`. `bordered` uses a reduced height `h-[22px]` to account for its 1px border.
+
 
 ---
 

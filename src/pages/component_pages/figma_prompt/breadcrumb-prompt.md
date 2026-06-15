@@ -114,7 +114,7 @@ Breadcrumb                         [COMPONENT_SET]
   └── Step=2                       [COMPONENT]
         Auto Layout:   Horizontal · HUG × HUG
         Alignment:     Center (cross-axis)
-        Gap:           spacing-xs (2px)
+        Gap:           spacing-xs (4px)
         Fill:          None
         Padding:       None
         │
@@ -161,7 +161,7 @@ Breadcrumb                         [COMPONENT_SET]
 
 | Property | Variable | Value | Applied on |
 |---|---|---|---|
-| Gap between items | `spacing-xs` | 2px | `Step` variant COMPONENT frame |
+| Gap between items | `spacing-xs` | 4px | `Step` variant COMPONENT frame |
 | Padding | None | 0 | No padding on any layer |
 
 ### Radius
@@ -306,7 +306,7 @@ States exist only on `_base Breadcrumb`. The `Breadcrumb` Component Set has no s
 **For `Step=2`:**
 1. Create a new **Frame**. Name it `Step=2`.
 2. Apply **Horizontal Auto Layout**, HUG × HUG, Center cross-axis alignment.
-3. Bind **Gap** → `spacing-xs` (2px). No padding.
+3. Bind **Gap** → `spacing-xs` (4px). No padding.
 4. Place children in this exact order:
    - `_base Breadcrumb` instance → set `State = Default`
    - `Icon` instance → Size=12px, arrow-right, stroke = `Icon/icon-secondary`

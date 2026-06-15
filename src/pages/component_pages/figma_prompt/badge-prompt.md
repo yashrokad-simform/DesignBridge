@@ -157,7 +157,7 @@ Badge                                   [COMPONENT_SET]
 **What changes between variants** — only the variable overrides on the `_base Badge` instance:
 
 | What changes | Filled | Bordered | Tertiary |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | Frame fill | Solid bg variable | Light tint bg variable | Light tint bg variable |
 | Stroke | None | 1px · semantic border variable | None |
 | `Label` fill | `Status/text-white` | Semantic text variable | Semantic text variable |

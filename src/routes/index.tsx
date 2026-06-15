@@ -25,6 +25,7 @@ const ToggleButtonPage = lazy(() => import("@/pages/component_pages/comp_pages/t
 const TooltipPage = lazy(() => import("@/pages/component_pages/comp_pages/tooltip_page"));
 const TypographyPage = lazy(() => import("@/pages/component_pages/comp_pages/typography_page"));
 const SpacingRadiusPage = lazy(() => import("@/pages/component_pages/comp_pages/spacingRadius_page"));
+const ResourcesPage = lazy(() => import("@/pages/component_pages/comp_pages/resources_page"));
 
 function lazyLoad(Component: ComponentType) {
   return (
@@ -63,6 +64,7 @@ export const routes: RouteObject[] = [
       { path: "toast", element: lazyLoad(ToastPage) },
       { path: "toggle", element: lazyLoad(ToggleButtonPage) },
       { path: "tooltip", element: lazyLoad(TooltipPage) },
+      { path: "resources", element: lazyLoad(ResourcesPage) },
     ],
   },
 

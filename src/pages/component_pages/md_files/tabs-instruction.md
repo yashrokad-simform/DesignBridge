@@ -137,7 +137,7 @@ text-sm leading-4.5 whitespace-nowrap text-center
 | Inactive | `font-medium` | `text-text-primary` |
 | Active | `font-semibold` | `text-text-brand-secondary` |
 
-> `text-sm` = 14px · `leading-4.5` = 18px
+> `text-sm` = 14px · `leading-4.5`
 
 ### Indicator Bar
 

@@ -12,6 +12,7 @@ export interface PageInfoEntry {
   eyebrow: string;
   title: string;
   desc: string;
+  requiredComponents?: string[];
 }
 
 export const NAV_SECTIONS: NavSection[] = [
@@ -19,6 +20,7 @@ export const NAV_SECTIONS: NavSection[] = [
     label: 'Documentation',
     items: [
       { id: 'introduction', label: 'Introduction' },
+      { id: 'resources', label: 'Resources' },
     ],
   },
   {
@@ -62,17 +64,18 @@ export const PAGE_INFO: Record<string, PageInfoEntry> = {
   breadcrumb:      { eyebrow: 'Components',    title: 'Breadcrumb',       desc: 'Breadcrumbs are navigation elements that show a user’s current location within a website or app, helping them understand their path and easily move back to previous pages or sections.' },
   button:          { eyebrow: 'Components',    title: 'Button',           desc: 'Buttons are interactive elements that guide users through actions in an interface, helping them navigate, submit forms, confirm choices, and complete tasks efficiently.' },
   checkbox:        { eyebrow: 'Components',    title: 'Checkbox',         desc: 'Checkboxes allow users to select one or multiple options from a list, while radio buttons limit selection to a single choice within a group. They also help users toggle options on or off.' },
-  dropdown:        { eyebrow: 'Components',    title: 'Dropdown',         desc: 'Dropdowns organize related actions into a compact menu, helping keep the interface clean and reducing clutter when multiple options would take up too much space.' },
-  'file-picker':   { eyebrow: 'Components',    title: 'File Picker',      desc: 'File components are UI elements used to upload, display, and manage files, helping users handle file-related tasks efficiently with a clear and organized experience.' },
+  dropdown:        { eyebrow: 'Components',    title: 'Dropdown',         desc: 'Dropdowns organize related actions into a compact menu, helping keep the interface clean and reducing clutter when multiple options would take up too much space.', requiredComponents: ['Badge', 'Input', 'Checkbox'] },
+  'file-picker':   { eyebrow: 'Components',    title: 'File Picker',      desc: 'File components are UI elements used to upload, display, and manage files, helping users handle file-related tasks efficiently with a clear and organized experience.', requiredComponents: ['Button'] },
   input:           { eyebrow: 'Components',    title: 'Input',            desc: 'Input fields allow users to enter text in forms and interfaces, helping capture information while ensuring a smooth and user-friendly experience.' },
   navigation:      { eyebrow: 'Components',    title: 'Navigation',       desc: 'Navigation helps users move through different sections or pages of a website or app, making it easier to find and access content efficiently.' },
   'progress-step': { eyebrow: 'Components',    title: 'Progress Step',    desc: 'Progress steps help users understand their position in a multi-step process, making workflows like forms or checkouts easier to follow and complete.' },
   'radio-button':  { eyebrow: 'Components',    title: 'Radio Button',     desc: 'Radio buttons allow users to select a single option from a group of choices, providing a simple and clear way to make one selection.' },
   'rich-text-editor': { eyebrow: 'Components', title: 'Rich Text Editor',  desc: 'Rich text editors allow users to format and edit text with various styles, making it easy to create and modify content within an interface.' },
   tabs:            { eyebrow: 'Components',    title: 'Tabs',             desc: 'Tabs are navigation elements that allow users to switch between different sections of content within the same page or view.' },
-  table:           { eyebrow: 'Components',    title: 'Table',            desc: 'Tables display structured data in rows and columns, supporting sorting, pagination, and various cell types to help users scan and interact with information efficiently.' },
+  table:           { eyebrow: 'Components',    title: 'Table',            desc: 'Tables display structured data in rows and columns, supporting sorting, pagination, and various cell types to help users scan and interact with information efficiently.', requiredComponents: ['Checkbox', 'Page', 'Toggle', 'Tooltip', 'Button', 'Input'] },
   'text-area':     { eyebrow: 'Components',    title: 'Text Area',        desc: 'Text area fields allow users to enter multiple lines of text, making them useful for longer responses or detailed information in forms and interfaces.' },
   toast:           { eyebrow: 'Components',    title: 'Toast',            desc: 'Toasts are temporary notifications that appear on screen to provide feedback or information to the user without interrupting their workflow.' },
   toggle:          { eyebrow: 'Components',    title: 'Toggle',           desc: 'Toggles are switch-like controls that allow users to turn features on or off, providing a simple way to enable or disable options.' },
   tooltip:         { eyebrow: 'Components',    title: 'Tooltip',          desc: 'Tooltips are small pop-up messages that appear when a user hovers over an element, providing additional information or context about that element.' },
+  resources:       { eyebrow: 'Resources',     title: 'Resources',        desc: 'Recommended design resources, instruction files, and downloadable component documentation for both Figma and VS Code workflows. Grab the icon library and instruction files to get set up, then download a per-component spec for whichever side you’re building on.' },
 };
