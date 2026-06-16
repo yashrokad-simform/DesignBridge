@@ -93,14 +93,14 @@ export function ToggleButton({
   return (
     <label
       className={cn(
-        'inline-flex flex-row items-center gap-2 cursor-pointer select-none font-inter',
+        'relative inline-flex flex-row items-center gap-2 cursor-pointer select-none font-inter',
         disabled && 'cursor-not-allowed pointer-events-none',
         className,
       )}
     >
       <input
         type="checkbox"
-        className="sr-only"
+        className="absolute inset-0 m-0 h-full w-full cursor-pointer opacity-0"
         role="switch"
         checked={checked}
         disabled={disabled}
