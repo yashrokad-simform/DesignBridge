@@ -639,6 +639,79 @@ function transformFigmaMarkdown(raw: string, vals: InputValues): string {
     );
   }
 
+  // ── 23. Text size — update Figma text styles ──────────────
+  const textSize = (vals.textSize as string) ?? '14px';
+  const FIGMA_STYLE: Record<string, { inactive: string; active: string }> = {
+    '12px': { inactive: 'Label sm/Medium',  active: 'Label sm/Semi Bold' },
+    '14px': { inactive: 'Body sm/Medium',   active: 'Body sm/Semi Bold'  },
+    '16px': { inactive: 'Body md/Medium',   active: 'Body md/Semi Bold'  },
+  };
+  const { inactive: figmaInactive, active: figmaActive } =
+    FIGMA_STYLE[textSize] ?? FIGMA_STYLE['14px'];
+  if (textSize !== '14px') {
+    md = md.replace(/Body sm\/Medium/g, figmaInactive);
+    md = md.replace(/Body sm\/Semi Bold/g, figmaActive);
+  }
+
+  // ── 24. Profile — remove sections not handled by granular replacements ──
+  if (!showProfile) {
+    // Remove entire "Profile Section — Structure Detail" section
+    md = md.replace(
+      /\n---\n\n## Profile Section — Structure Detail[\s\S]*?(?=\n---\n\n## Layer Descriptions)/,
+      '',
+    );
+    // Remove Profile_Container and Profile (inner frame) construction steps in Step 7
+    md = md.replace(
+      /\n#### Profile_Container\n[\s\S]*?(?=\n#### Container \(Toggle button\))/,
+      '',
+    );
+    md = md.replace(
+      /\n#### Profile \(inner frame[^)]+\)\n[\s\S]*?(?=\n#### Container \(Toggle button\))/,
+      '',
+    );
+    // Remove Step 8 profile-update substep and renumber subsequent step
+    md = md.replace(
+      /\n5\. Update Profile_Container for collapsed state:[\s\S]*?\n6\. On the toggle `Container`:/,
+      '\n5. On the toggle `Container`:',
+    );
+  }
+
+  // ── 25. Expand/Collapse — remove component structure blocks and construction steps ──
+  if (!showExpanded) {
+    // Remove State=Expanded component structure code block
+    md = md.replace(
+      /\n#### `State=Expanded`\n\n```[\s\S]*?```\n/,
+      '',
+    );
+    // Remove "Steps to set toggle icon for State=Expanded" subsection
+    md = md.replace(
+      /\n\*\*Steps to set the toggle icon for State=Expanded:\*\*\n[\s\S]*?(?=\n\*\*Steps to set the toggle icon for State=Collapsed:\*\*)/,
+      '',
+    );
+    // Remove Step 7 (build State=Expanded) from construction guide
+    md = md.replace(
+      /\n### Step 7 — Build `Navigation` — `State=Expanded`[\s\S]*?(?=\n### Step 8 — Build)/,
+      '',
+    );
+  }
+  if (!showCollapsed) {
+    // Remove State=Collapsed component structure code block
+    md = md.replace(
+      /\n#### `State=Collapsed`\n\n```[\s\S]*?```\n/,
+      '',
+    );
+    // Remove "Steps to set toggle icon for State=Collapsed" subsection
+    md = md.replace(
+      /\n\*\*Steps to set the toggle icon for State=Collapsed:\*\*\n[\s\S]*?(?=\n\nThe toggle is ABSOLUTE)/,
+      '',
+    );
+    // Remove Step 8 (build State=Collapsed) from construction guide
+    md = md.replace(
+      /\n### Step 8 — Build `Navigation` — `State=Collapsed`[\s\S]*?(?=\n### Step 9)/,
+      '',
+    );
+  }
+
   return md;
 }
 

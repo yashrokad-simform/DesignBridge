@@ -227,12 +227,16 @@ function transformRadioFigmaMd(raw: string, vals: InputValues): string {
   }
 
   // ── Tile corner radius ─────────────────────────────────
+  // `radius-xl` refers exclusively to the tile throughout this doc
+  // (the radio button itself uses `radius-full`), so a global swap is safe.
   const rr = RB_FIGMA_RADIUS[cornerRadius] ?? 'radius-xl';
   if (rr !== 'radius-xl') {
-    md = md.replace(/(Tile corner radius[^|]*\| )`radius-xl`/g, `$1\`${rr}\``);
-    md = md.replace(/(Corner Radius: )radius-xl(?=.*(?:Tile|tile))/g, `$1${rr}`);
-    md = md.replace(/(Bind corner radius all 4 corners → )`radius-xl`/g, `$1\`${rr}\``);
-    md = md.replace(/(Tile frame \| Corner radius[^|]*\| )`radius-xl`/g, `$1\`${rr}\``);
+    // Update the resolved px value in the radius table row before the global swap.
+    md = md.replace(
+      /(Tile corner radius \(all 4\) \| `radius-xl` \| )12px/,
+      `$1${cornerRadius}`,
+    );
+    md = md.replace(/radius-xl/g, rr);
   }
 
   // ── Show Caption default ───────────────────────────────

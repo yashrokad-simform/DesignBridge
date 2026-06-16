@@ -26,13 +26,25 @@ A four-component table system covering column headers, data row cells (7 content
 | Sub-component | Configuration |
 |---|---|
 | Checkbox | Label=false (disable label property on every instance — never show label text) |
+<!-- IF_ACTION -->
 | Button (icon actions) | Size=Small · Type=Icon Secondary |
 | Button (text actions) | Size=Small · Type=Bordered |
+<!-- /ACTION -->
+<!-- IF_STATUS -->
 | Badge (status) | Type=Filled · Color=Primary |
+<!-- /STATUS -->
+<!-- IF_EDIT_CELL -->
 | Input Field (edit cell) | State=Enabled · Show Label=false · Show Hint=false · Show Prefix=false · Show Suffix=false |
+<!-- /EDIT_CELL -->
+<!-- IF_TOGGLE -->
 | Toggle |  · State=Active |
+<!-- /TOGGLE -->
+<!-- IF_TOOLTIP -->
 | Tooltip | Info Icon Tooltip · Direction=bottom-right |
+<!-- /TOOLTIP -->
+<!-- IF_DEFAULT -->
 | Avatar | Avatar Image · radius-full |
+<!-- /DEFAULT -->
 
 ---
 
@@ -118,13 +130,17 @@ _base Table header cell            [COMPONENT · FIXED(131px) × HUG · Horizont
 | Property | Type | Options |
 |---|---|---|
 | `Type` | VARIANT | `Two line` · `Edit Cell` · `Action` · `Status` · `Tooltip` · `Default` · `Toggle` |
+<!-- IF_ACTION -->
 | `Edit#8113:0` | BOOLEAN | `true` | Edit icon button |
 | `Button 1#8113:10` | BOOLEAN | `true` | First action button |
 | `Button 2#8113:20` | BOOLEAN | `true` | Second action button |
 | `Delete#8113:30` | BOOLEAN | `true` | Delete icon button |
 | `More#8113:40` | BOOLEAN | `true` | More icon button |
+<!-- /ACTION -->
+<!-- IF_DEFAULT -->
 | `Avatar#8113:50` | BOOLEAN | `true` | Avatar image |
 | `Checkbox#8113:57` | BOOLEAN | `true` | Checkbox |
+<!-- /DEFAULT -->
 
 ### Common Properties (all 7 variants)
 
@@ -140,6 +156,7 @@ _base Table header cell            [COMPONENT · FIXED(131px) × HUG · Horizont
 
 ### Structure Per Type
 
+<!-- IF_TWO_LINE -->
 #### `Type=Two line`
 
 ```
@@ -153,6 +170,8 @@ Type=Two line                      [Vertical AL · Center main axis]
         Truncation: ENDING · maxLines: 1
 ```
 
+<!-- /TWO_LINE -->
+<!-- IF_STATUS -->
 #### `Type=Status`
 
 ```
@@ -167,6 +186,8 @@ Type=Status                        [Horizontal AL · Center VA]
         └── Badge [INSTANCE · Type=Filled · Color=Primary]
 ```
 
+<!-- /STATUS -->
+<!-- IF_ACTION -->
 #### `Type=Action`
 
 ```
@@ -184,6 +205,8 @@ Type=Action                        [Horizontal AL · Center VA]
   (All use existing Button component — do not recreate)
 ```
 
+<!-- /ACTION -->
+<!-- IF_EDIT_CELL -->
 #### `Type=Edit Cell`
 
 ```
@@ -197,6 +220,8 @@ Type=Edit Cell                     [Horizontal AL · Center VA]
         (Use existing Input Field component — do not recreate)
 ```
 
+<!-- /EDIT_CELL -->
+<!-- IF_TOOLTIP -->
 #### `Type=Tooltip`
 
 ```
@@ -212,6 +237,8 @@ Type=Tooltip                       [Horizontal AL · Center VA]
         (Use existing Tooltip component — do not recreate)
 ```
 
+<!-- /TOOLTIP -->
+<!-- IF_TOGGLE -->
 #### `Type=Toggle`
 
 ```
@@ -222,6 +249,8 @@ Type=Toggle                        [Horizontal AL · Center VA]
         (Use existing Toggle component — do not recreate)
 ```
 
+<!-- /TOGGLE -->
+<!-- IF_DEFAULT -->
 #### `Type=Default`
 
 ```
@@ -239,6 +268,7 @@ Type=Default                       [Horizontal AL · Center VA]
               Truncation: ENDING · maxLines: 2
 ```
 
+<!-- /DEFAULT -->
 ### Variable Attachment — `_base Table cell`
 
 | Target | Property | Variable |
@@ -248,8 +278,12 @@ Type=Default                       [Horizontal AL · Center VA]
 | All variants | Padding L/R | `spacing-4xl` |
 | All variants | Padding T/B | `spacing-none` |
 | All variants gap | Gap | `spacing-md` (replace external variable) |
+<!-- IF_TWO_LINE -->
 | Two line gap | Inner gap | `spacing-xxs` (replace external variable) |
+<!-- /TWO_LINE -->
+<!-- IF_STATUS -->
 | Status `Frame 164584` | Gap | `spacing-xs` |
+<!-- /STATUS -->
 | Primary `Text` | Text Style | `Body sm/Medium` |
 | Primary `Text` | Fill | `Text/text-primary` |
 | Secondary `Text` | Text Style | `Label sm/Medium` |
@@ -372,6 +406,7 @@ Pagination                         [COMPONENT · FIXED(1280px) × HUG · Horizon
   │     └── 340                    [TEXT · HUG × HUG]
   │           Style: Body sm/Semi Bold · Fill: Text/text-primary
   │           Content: "340" (row count — dynamic)
+<!-- IF_ROWS_PER_PAGE -->
   │
   ├── No. Rows                     [FRAME · HUG × HUG · Horizontal AL · Center VA · gap spacing-md]
   │     ├── Text                   [HUG × HUG · Body sm/Medium · Text/text-primary · "No. of Rows"]
@@ -383,6 +418,7 @@ Pagination                         [COMPONENT · FIXED(1280px) × HUG · Horizon
   │           Shadow: DROP_SHADOW · offset(0,1) · radius 2 · rgba(6%,9%,15%,5%)
   │           ├── Text "10"        [FILL × HUG · Body sm/Medium · Text/text-primary]
   │           └── Icon             [INSTANCE · 20px · chevron/dropdown icon]
+<!-- /IF_ROWS_PER_PAGE -->
   │
   └── Pagination numbers           [FRAME · HUG × HUG · Horizontal AL · gap spacing-md]
         ├── _base Pagination       [Property 1=Previous]
@@ -410,6 +446,7 @@ Pagination                         [COMPONENT · FIXED(1280px) × HUG · Horizon
 | "Total Rows:" | Fill | `Text/text-primary` |
 | Row count ("340") | Text Style | `Body sm/Semi Bold` |
 | Row count ("340") | Fill | `Text/text-primary` |
+<!-- IF_ROWS_PER_PAGE -->
 | `No. Rows` | Gap | `spacing-md` |
 | "No. of Rows" | Text Style | `Body sm/Medium` |
 | "No. of Rows" | Fill | `Text/text-primary` |
@@ -420,6 +457,7 @@ Pagination                         [COMPONENT · FIXED(1280px) × HUG · Horizon
 | `Input` | Corner radius | `radius-md` (replace external variable) |
 | Input "10" text | Text Style | `Body sm/Medium` |
 | Input "10" text | Fill | `Text/text-primary` |
+<!-- /IF_ROWS_PER_PAGE -->
 | `Pagination numbers` | Gap | `spacing-md` |
 
 ---
@@ -436,7 +474,9 @@ All text styles confirmed from Figma style IDs:
 | Pagination `Number` | `4:288` | `Body sm/Medium` | 14px | 500 |
 | Pagination row count | `2008:51662` | `Body sm/Semi Bold` | 14px | 600 |
 | Pagination "Total Rows:" | `4:288` | `Body sm/Medium` | 14px | 500 |
+<!-- IF_ROWS_PER_PAGE -->
 | Pagination "No. of Rows" | `4:288` | `Body sm/Medium` | 14px | 500 |
+<!-- /IF_ROWS_PER_PAGE -->
 
 ---
 
@@ -463,6 +503,7 @@ All text styles confirmed from Figma style IDs:
 3. Inside `Table header`, add a `Text` layer: style `Label sm/Medium` · fill `Text/text-secondary` · HUG × HUG.
 4. Inside `Title`, add an **Icon component** instance (Size=14px) as the sort indicator. Override VECTOR stroke → `Icon/icon-primary`. Link visibility to `Sort` Boolean.
 
+<!-- IF_TWO_LINE -->
 ### Step 2 — Build `_base Table cell` — `Type=Two line`
 
 1. Create a **Frame**. Name it `Type=Two line`. **Vertical AL · FIXED(340) × FIXED(60px) · Center main axis**.
@@ -472,14 +513,18 @@ All text styles confirmed from Figma style IDs:
 5. Add secondary `Text` layer: style `Label sm/Medium` · fill `Text/text-secondary` · FILL × HUG · truncation ENDING · maxLines=1.
 6. Convert to **Component**.
 
+<!-- /TWO_LINE -->
 ### Step 3 — Build Remaining `_base Table cell` Variants
 
+<!-- IF_STATUS -->
 #### `Type=Status`
 1. Create FIXED(340) × FIXED(60px) frame, Horizontal AL, Center VA, same fill/stroke/padding.
 2. Bind gap → `spacing-md`.
 3. Add `Frame 164584` (HUG × FIXED(28px) · Horizontal AL · Center · gap spacing-xs).
 4. Inside, place **Badge component** instances (Type=Filled, Color=Primary). Default: 4 visible badges.
 
+<!-- /STATUS -->
+<!-- IF_ACTION -->
 #### `Type=Action`
 1. Same base frame, Horizontal AL, Center VA, gap `spacing-md`.
 2. Place 5 **Button component** instances:
@@ -489,25 +534,34 @@ All text styles confirmed from Figma style IDs:
    - Delete: Size=Small · Type=Icon Secondary · Icon > 16px > trash · link visibility to `Delete` Boolean
    - More: Size=Small · Type=Icon Secondary · Icon > 16px > dots-vertical · link visibility to `More` Boolean
 
+<!-- /ACTION -->
+<!-- IF_EDIT_CELL -->
 #### `Type=Edit Cell`
 1. Same base frame, Horizontal AL, Center VA.
 2. Place **Input Field component** instance (State=Enabled · Show Label=false · Show Hint=false · Show Prefix=false · Show Suffix=false · no icons on either side). Set layoutGrow=1.
 
+<!-- /EDIT_CELL -->
+<!-- IF_TOOLTIP -->
 #### `Type=Tooltip`
 1. Same base frame, Horizontal AL, Center VA, gap `spacing-md`.
 2. Add `Text` frame (FILL × FIXED(44px) · Horizontal AL · Center VA · layoutGrow=1). Inside: `Text` layer Body sm/Medium · Text/text-primary · truncation ENDING · maxLines=2.
 3. Place **Info Icon Tooltip** component instance (Direction=bottom-right · Tooltip=false by default). Set trigger icon to Icon > 20px > info.
 
+<!-- /TOOLTIP -->
+<!-- IF_TOGGLE -->
 #### `Type=Toggle`
 1. Same base frame, Horizontal AL, Center VA, gap `spacing-md`.
 2. Place **`_base Toggle Switch`** component instance (State=Active).
 
+<!-- /TOGGLE -->
+<!-- IF_DEFAULT -->
 #### `Type=Default`
 1. Same base frame, Horizontal AL, Center VA, gap `spacing-md`.
 2. Place **Checkbox** component (Label=false · Checked=Enabled). Link visibility to `Checkbox` Boolean.
 3. Place **Avatar Image** component (36×36px, radius-full). Link visibility to `Avatar` Boolean.
 4. Add `Text` frame (FILL × FIXED(44px) · Horizontal AL · Center VA · layoutGrow=1). Inside: `Text` layer Body sm/Medium · Text/text-primary · truncation ENDING · maxLines=2.
 
+<!-- /DEFAULT -->
 ### Step 4 — Combine into `_base Table cell` Component Set
 
 1. Select all 7 type variants. Combine into **Component Set**. Name it `_base Table cell`.
@@ -560,6 +614,7 @@ Properties panel → **"Expose properties from Nested instances"** on all varian
 2. Add "Total Rows:" TEXT: style `Body sm/Medium` · fill `Text/text-primary`.
 3. Add "340" TEXT: style `Body sm/Semi Bold` · fill `Text/text-primary`.
 
+<!-- IF_ROWS_PER_PAGE -->
 #### No. Rows (row size picker)
 1. Frame (HUG × HUG · Horizontal AL · Center VA · gap spacing-md).
 2. Add "No. of Rows" TEXT: style `Body sm/Medium` · fill `Text/text-primary`.
@@ -571,6 +626,7 @@ Properties panel → **"Expose properties from Nested instances"** on all varian
    - Add "10" TEXT: style `Body sm/Medium` · fill `Text/text-primary` · FILL × HUG · layoutGrow=1.
    - Add Icon component (Size=20px · Icon > 20px > chevron-down — always use chevron-down; do not substitute).
 
+<!-- /IF_ROWS_PER_PAGE -->
 #### Pagination numbers
 1. Frame (HUG × HUG · Horizontal AL · gap spacing-md).
 2. Place 9 `_base Pagination` instances in this exact order:
@@ -584,11 +640,19 @@ Properties panel → **"Expose properties from Nested instances"** on all varian
 - **`_base Table header cell` is a single COMPONENT** — no variants, no `Property 1` variant property.
 - **Checkbox Label must always be disabled** — set `Label=false` on every Checkbox instance throughout the system. Never show label text next to a checkbox in any table context.
 - **Border is bottom-only on all table row cells and the Pagination bar** — apply `Border/border-primary · 1px` to the bottom side only. Never apply stroke to all four sides.
+<!-- IF_ACTION -->
 - **Action variant icon assignments are fixed** — always override the inner icon on each button instance as follows: Edit button → `Icon > 16px > edit`; Delete button → `Icon > 16px > trash`; More button → `Icon > 16px > dots-vertical`. Do not use any other icons for these buttons.
+<!-- /ACTION -->
+<!-- IF_EDIT_CELL -->
 - **Edit Cell Input must have no label, no hint text, and no prefix/suffix icons** — set `Show Label=false`, `Show Hint=false`, `Show Prefix=false`, `Show Suffix=false`. Plain text input only.
+<!-- /EDIT_CELL -->
+<!-- IF_TOOLTIP -->
 - **Info Icon Tooltip trigger icon is fixed** — always use `Icon > 20px > info`. Do not substitute with any other icon.
+<!-- /TOOLTIP -->
 - **Pagination Previous/Next icons are fixed** — Previous must use `Icon > 20px > chevron-left`; Next must use `Icon > 20px > chevron-right`. Do not use arrow or other directional icons.
+<!-- IF_ROWS_PER_PAGE -->
 - **Pagination Input dropdown icon is fixed** — always use `Icon > 20px > chevron-down`. Do not substitute.
+<!-- /IF_ROWS_PER_PAGE -->
 - **Pagination stroke is `1px inside`** — strokeAlign = INSIDE, same as all other components in the system.
 - **"Total Rows:" and "340" fill = `Text/text-primary`** — never hardcoded #000000.
 - **`Page` variant dots fill = `Icon/icon-primary`** — 3 ellipses, each 3.6×3.6px.
@@ -608,11 +672,15 @@ Multiple frames use external library variable IDs for gap and corner radius. Whe
 | Original use | Local replacement |
 |---|---|
 | `_base Table cell` gap | `spacing-md` (8px) |
+<!-- IF_TWO_LINE -->
 | `_base Table cell` Two line gap | `spacing-xxs` (2px) |
+<!-- /TWO_LINE -->
 | `_base Table header cell` gap | `spacing-md` (8px) |
 | `_base Pagination` Content corner radius | `radius-md` (8px) |
+<!-- IF_ROWS_PER_PAGE -->
 | `Pagination` No. Rows gap | `spacing-md` (8px) |
 | `Pagination` Input corner radius | `radius-md` (8px) |
+<!-- /IF_ROWS_PER_PAGE -->
 
 ---
 
@@ -631,8 +699,7 @@ Multiple frames use external library variable IDs for gap and corner radius. Whe
 │    [ actual _base Table header cell COMPONENT ]               │
 │                                                               │
 │  ▌ _base Table cell — 7 Types                                │
-│    Two line · Edit Cell · Action · Status · Tooltip           │
-│    Default · Toggle                                           │
+│    {{TYPE_LIST}}
 │    [ actual _base Table cell COMPONENT_SET ]                  │
 │                                                               │
 │  ▌ _base Pagination — 6 Variants                             │
@@ -640,7 +707,7 @@ Multiple frames use external library variable IDs for gap and corner radius. Whe
 │    [ actual _base Pagination COMPONENT_SET ]                  │
 │                                                               │
 │  ▌ Pagination — Full Bar                                     │
-│    1280px · Total Rows · No. of Rows input · Page numbers     │
+│    1280px · Total Rows · {{PAGINATION_EXTRAS}}Page numbers    │
 │    [ actual Pagination COMPONENT ]                            │
 │                                                               │
 └──────────────────────────────────────────────────────────────┘

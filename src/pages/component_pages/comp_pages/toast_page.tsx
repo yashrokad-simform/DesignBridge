@@ -32,18 +32,6 @@ const INPUT_CONFIG: InputConfig[] = [
       { value: 'full', label: 'Full' },
     ],
   },
-  { key: 'div1', label: 'Variants', type: 'divider' },
-  {
-    key: 'variants',
-    label: '',
-    type: 'togglelist',
-    options: [
-      { value: 'success',  label: 'Success' },
-      { value: 'warning',  label: 'Warning' },
-      { value: 'critical', label: 'Critical' },
-      { value: 'info',     label: 'Info' },
-    ],
-  },
 ];
 
 const DEFAULT_VALUES: InputValues = {

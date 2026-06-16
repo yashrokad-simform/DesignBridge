@@ -236,13 +236,28 @@ function transformFigmaMarkdown(raw: string, vals: InputValues): string {
   const renderStandard = (vals.showStandard as boolean) || !(vals.showCapsule as boolean);
   const renderCapsule  = (vals.showCapsule  as boolean) || !(vals.showStandard as boolean);
 
-  // 1. Strip entire Standard / Capsule / Count blocks when toggled off
+  // 1. Strip entire Standard / Capsule / Count blocks when toggled off.
+  //    The count badge is a Standard-only feature, so it also goes when
+  //    Standard is hidden (Capsule tabs have no count badge).
   if (!renderStandard) md = stripSections(md, STD_S, STD_E);
   if (!renderCapsule)  md = stripSections(md, CAPS_S, CAPS_E);
-  if (!showCount)      md = stripSections(md, COUNT_S, COUNT_E);
+  if (!showCount || !renderStandard) md = stripSections(md, COUNT_S, COUNT_E);
 
-  // Rename layer Text+Count → Text when badge is hidden
-  if (!showCount)      md = md.replace(/Text\+Count/g, 'Text');
+  // 1a. Fix mixed lines that name both systems (title + System Name row)
+  if (!renderStandard) {
+    md = md.replace(/^# Tabs & Capsule Tabs$/m, '# Capsule Tabs');
+    md = md.replace(/(\| System Name \| )Tabs & Capsule Tabs( \|)/, '$1Capsule Tabs$2');
+  } else if (!renderCapsule) {
+    md = md.replace(/^# Tabs & Capsule Tabs$/m, '# Tabs');
+    md = md.replace(/(\| System Name \| )Tabs & Capsule Tabs( \|)/, '$1Tabs$2');
+  }
+
+  // Rename layer Text+Count → Text when badge is hidden, and fix the tree
+  // connector so `Tab 1` reads as the last child once `Count` is removed.
+  if (!showCount) {
+    md = md.replace(/Text\+Count/g, 'Text');
+    md = md.replace(/├── Tab 1/g, '└── Tab 1');
+  }
 
   // 2. Replace text styles + font specs globally within remaining Standard blocks
   if (renderStandard) {

@@ -259,7 +259,10 @@ function transformFigmaMarkdown(raw: string, vals: InputValues): string {
   // Variable attachment table
   md = md.replace(/(`Step` variant frame \| Gap \| )`spacing-(?:xxs|xs|sm|md)`/g,
     `$1\`${gapEntry.var}\``);
-  // Fallback: any remaining spacing-xs tied to 2px (the known wrong default in the prompt)
+  // Code-block line: "Gap:           spacing-xs (4px)" — no backticks, Gap comes before
+  md = md.replace(/(Gap:\s+)spacing-(?:xxs|xs|sm|md) \((?:2|4|6|8)px\)/g,
+    `$1${gapEntry.var} (${gapEntry.px})`);
+  // Fallback: any remaining bare spacing token references
   md = md.replace(/spacing-xs \(2px\)/g, `${gapEntry.var} (${gapEntry.px})`);
 
   return md;

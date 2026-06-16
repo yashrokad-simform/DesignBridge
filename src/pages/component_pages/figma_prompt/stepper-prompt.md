@@ -146,7 +146,9 @@ State=Completed, Size=Regular      [COMPONENT · 24×24px · Horizontal AL · Ce
 | `Size` | VARIANT | `Regular` | Switches between Regular and Large sizing |
 | `State` | VARIANT | `Incomplete` | Incomplete · Current · Completed |
 | `Show Connecter#411:80` | BOOLEAN | `true` | Shows/hides the vertical connector line below the icon |
+<!-- IF_CAPTION -->
 | `Show Caption#8173:0` | BOOLEAN | `true` | Shows/hides the `Supporting text` caption |
+<!-- /IF_CAPTION -->
 
 ### Sizes
 
@@ -216,12 +218,15 @@ _base Step                         [COMPONENT · Horizontal AL · FIXED(344px) �
 | `Current` | `Text/text-brand_secondary` (orange) | `Body sm/Semi Bold` | `Body md/Semi Bold` |
 | `Completed` | `Text/text-success` (green) | `Body sm/Medium` | `Body md/Medium` |
 
+<!-- IF_CAPTION -->
 **Caption (`Supporting text` layer):**
 
 | Size | Style | Fill |
 |---|---|---|
 | Regular | `Label sm/Medium` | `Text/text-secondary` |
 | Large | `Body sm/Medium` | `Text/text-secondary` |
+
+<!-- /IF_CAPTION -->
 
 ### Variable Attachment — `_base Step`
 
@@ -246,9 +251,11 @@ _base Step                         [COMPONENT · Horizontal AL · FIXED(344px) �
 | `Text` (Regular — Current) | Text Style | `Body sm/Semi Bold` |
 | `Text` (Large — Incomplete/Completed) | Text Style | `Body md/Medium` |
 | `Text` (Large — Current) | Text Style | `Body md/Semi Bold` |
+<!-- IF_CAPTION -->
 | `Supporting text` (Regular) | Text Style | `Label sm/Medium` |
 | `Supporting text` (Large) | Text Style | `Body sm/Medium` |
 | `Supporting text` | Fill | `Text/text-secondary` |
+<!-- /IF_CAPTION -->
 
 ---
 
@@ -294,8 +301,10 @@ Stepper                            [COMPONENT_SET]
 | `Text` (Regular — Current) | `Body sm/Semi Bold` | 14px · Semi Bold 600 | Regular active step |
 | `Text` (Large — Incomplete/Completed) | `Body md/Medium` | 16px · Medium 500 | Large inactive/done steps |
 | `Text` (Large — Current) | `Body md/Semi Bold` | 16px · Semi Bold 600 | Large active step |
+<!-- IF_CAPTION -->
 | `Supporting text` (Regular) | `Label sm/Medium` | 12px · Medium 500 | Regular caption |
 | `Supporting text` (Large) | `Body sm/Medium` | 14px · Medium 500 | Large caption |
+<!-- /IF_CAPTION -->
 
 > Apply text styles directly. Do not bind individual font variables.
 
@@ -305,6 +314,7 @@ Stepper                            [COMPONENT_SET]
 
 ### Step 1 — Build `_base Step Icon` — `State=Incomplete`
 
+<!-- IF_REGULAR -->
 **Size=Regular:**
 1. Create a **Frame**. Name it `State=Incomplete, Size=Regular`.
 2. **Horizontal AL · 24×24px FIXED · Center both axes**.
@@ -313,13 +323,17 @@ Stepper                            [COMPONENT_SET]
 5. Add an **ELLIPSE** inside. Name it `Dot`. Size: **8×8px FIXED**.
 6. Bind `Dot` fill → `Background/bg-brand_light`. No stroke.
 7. Convert to **Component**.
+<!-- /IF_REGULAR -->
 
+<!-- IF_LARGE -->
 **Size=Large:**
 Duplicate and change:
 - Frame size → 32×32px. `Dot` size → 12×12px. All other variables the same.
+<!-- /IF_LARGE -->
 
 ### Step 2 — Build `_base Step Icon` — `State=Current`
 
+<!-- IF_REGULAR -->
 **Size=Regular:**
 1. Duplicate `State=Incomplete, Size=Regular`. Rename to `State=Current, Size=Regular`.
 2. Change frame fill → `Background/bg-brand_secondary_light`.
@@ -331,12 +345,16 @@ Duplicate and change:
    - Set the SVG fill or stroke color to match `Border/border-secondary` (orange).
 
 > The loading indicator is a standalone SVG shape. Paste it as a flattened vector directly into the frame. It should visually look like a partial circle arc indicating active progress.
+<!-- /IF_REGULAR -->
 
+<!-- IF_LARGE -->
 **Size=Large:**
 Duplicate and change frame to 32×32px, loading SVG to 16×16px.
+<!-- /IF_LARGE -->
 
 ### Step 3 — Build `_base Step Icon` — `State=Completed`
 
+<!-- IF_REGULAR -->
 **Size=Regular:**
 1. Duplicate `State=Incomplete, Size=Regular`. Rename to `State=Completed, Size=Regular`.
 2. Change frame fill → `Status/success-bg`.
@@ -345,9 +363,12 @@ Duplicate and change frame to 32×32px, loading SVG to 16×16px.
 5. Place an **Icon component** instance inside. Set `Size` → `16px`. Set icon swap → `check` (`Arrow/linear/Check`).
 6. Enter `Icon [INSTANCE] → 16px [COMPONENT] → check [COMPONENT] → Icon [VECTOR]`.
 7. Override the VECTOR **stroke** → `Status/text-white`. Do NOT touch the fill.
+<!-- /IF_REGULAR -->
 
+<!-- IF_LARGE -->
 **Size=Large:**
 Duplicate and change frame to 32×32px, Icon size property → `20px`.
+<!-- /IF_LARGE -->
 
 ### Step 4 — Combine `_base Step Icon` Component Set
 
@@ -360,6 +381,7 @@ Duplicate and change frame to 32×32px, Icon size property → `20px`.
 
 Properties panel → **"Expose properties from Nested instances"** on all 6 variants.
 
+<!-- IF_REGULAR -->
 ### Step 6 — Build `_base Step` — `Size=Regular, State=Incomplete`
 
 1. Create a **Frame**. Name it `Size=Regular, State=Incomplete`.
@@ -382,9 +404,11 @@ Properties panel → **"Expose properties from Nested instances"** on all 6 vari
 2. **Vertical AL · FILL × HUG · layoutGrow=1**.
 3. Bind paddingTop → `spacing-xxs`. Bind paddingBottom → `spacing-4xl`. Bind gap → `spacing-xs`.
 4. Add `Text` TEXT layer: content "Your details" · style `Body sm/Medium` · fill `Text/text-primary` · FILL × HUG.
+<!-- IF_CAPTION -->
 5. Add `Supporting text` TEXT layer: content "Please provide your name and email" · style `Label sm/Medium` (Regular) · fill `Text/text-secondary` · FILL × HUG.
 6. Create **Boolean property**: `Show Caption` (default: `true`). Link to `Supporting text` visibility.
    - Set `Supporting text` to **absolute position** inside `Text and supporting text` so it takes up no space when hidden.
+<!-- /IF_CAPTION -->
 
 ### Step 7 — Build Remaining `_base Step` Regular Variants
 
@@ -399,7 +423,9 @@ Properties panel → **"Expose properties from Nested instances"** on all 6 vari
 2. On `_base Step Icon` instance: change `State` → `Completed`.
 3. On `Connector` RECTANGLE: change fill → `Border/border-success`.
 4. On `Text`: change fill → `Text/text-success`. Text style stays `Body sm/Medium`.
+<!-- /IF_REGULAR -->
 
+<!-- IF_LARGE -->
 ### Step 8 — Build `_base Step` Large Variants
 
 Duplicate each Regular variant and apply:
@@ -408,14 +434,19 @@ Duplicate each Regular variant and apply:
 - `Connector` RECTANGLE height → **64px**.
 - `Text and supporting text` paddingTop → `spacing-xs`. paddingBottom → `spacing-5xl`. gap → `spacing-xxs`.
 - `Text` style: `Body md/Medium` (Incomplete/Completed) · `Body md/Semi Bold` (Current).
+<!-- IF_CAPTION -->
 - `Supporting text` style: `Body sm/Medium`.
+<!-- /IF_CAPTION -->
+<!-- /IF_LARGE -->
 
 ### Step 9 — Combine `_base Step` Component Set
 
 1. Select all 6 variants. Combine into **Component Set**. Name it `_base Step`.
 2. Properties: `Size` → `Regular`, `Large`. `State` → `Incomplete`, `Current`, `Completed`.
 3. Boolean `Show Connecter` (default: `true`).
+<!-- IF_CAPTION -->
 4. Boolean `Show Caption` (default: `true`).
+<!-- /IF_CAPTION -->
 
 ### Step 10 — Expose Nested Instance Properties
 
@@ -425,6 +456,7 @@ Properties panel → **"Expose properties from Nested instances"** on all 6 vari
 
 ### Step 11 — Build `Stepper` Variants
 
+<!-- IF_REGULAR -->
 **`Size=Regular`:**
 1. Create a **Frame**. Name it `Size=Regular`. **Vertical AL · HUG × HUG**.
 2. Bind gap → `spacing-md`.
@@ -432,9 +464,12 @@ Properties panel → **"Expose properties from Nested instances"** on all 6 vari
    - Steps 1–4: `Show Connecter = true`
    - Step 5: `Show Connecter = false` ← no connector below last step
 4. Convert to **Component**.
+<!-- /IF_REGULAR -->
 
+<!-- IF_LARGE -->
 **`Size=Large`:**
 Duplicate. Change all `_base Step` instances to Size=Large.
+<!-- /IF_LARGE -->
 
 ### Step 12 — Combine `Stepper` Component Set
 
@@ -462,7 +497,9 @@ Properties panel → **"Expose properties from Nested instances"** on both Stepp
 - **`Text` fill colors:** Incomplete = `Text/text-primary` · Current = `Text/text-brand_secondary` · Completed = `Text/text-success`.
 - **Last step must have `Show Connecter=false`** in the Stepper. Steps 1–4 must have `Show Connecter=true`.
 - **`Connector` FRAME must use absolute position** — set it to absolute position inside `Connector wrap` so toggling `Show Connecter` off leaves zero residual space.
+<!-- IF_CAPTION -->
 - **`Supporting text` must use absolute position** — set it to absolute position inside `Text and supporting text` so toggling `Show Caption` off leaves zero residual space.
+<!-- /IF_CAPTION -->
 - **Text style only — no individual font variable bindings.**
 - **Expose nested properties** on all levels.
 - **`spacing-4xl`** for Regular `Text and supporting text` paddingBottom. **`spacing-5xl`** for Large.

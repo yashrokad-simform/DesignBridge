@@ -8,9 +8,7 @@ import toggleMd from '../md_files/toggleButton-instruction.md?raw';
 import toggleFigmaMd from '../figma_prompt/toggle-prompt.md?raw';
 
 const INPUT_CONFIG: InputConfig[] = [
-  { key: 'div0', label: 'Options', type: 'divider' },
-  { key: 'showCaption', label: 'Caption (Tile)', type: 'toggle' },
-  { key: 'div1', label: 'Appearance', type: 'divider' },
+  { key: 'div0', label: 'Appearance', type: 'divider' },
   {
     key: 'textSize',
     label: 'Text Size',

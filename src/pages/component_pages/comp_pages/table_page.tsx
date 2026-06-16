@@ -359,58 +359,76 @@ function resolveTokens(_vals: InputValues): Record<string, string> {
   return {};
 }
 
-const TYPE_MAP: Record<string, { marker: string; label: string }> = {
-  row_twoLine:  { marker: 'TWO_LINE',  label: 'Two line'  },
-  row_status:   { marker: 'STATUS',    label: 'Status'    },
-  row_toggle:   { marker: 'TOGGLE',    label: 'Toggle'    },
-  row_tooltip:  { marker: 'TOOLTIP',   label: 'Tooltip'   },
-  row_action:   { marker: 'ACTION',    label: 'Action'    },
-  row_editCell: { marker: 'EDIT_CELL', label: 'Edit Cell' },
-  row_default:  { marker: 'DEFAULT',   label: 'Default'   },
-};
+// Canonical type order — matches the `Type` variant options cell in the prompt.
+const TYPE_ORDER: { key: string; marker: string; label: string }[] = [
+  { key: 'row_twoLine',  marker: 'TWO_LINE',  label: 'Two line'  },
+  { key: 'row_editCell', marker: 'EDIT_CELL', label: 'Edit Cell' },
+  { key: 'row_action',   marker: 'ACTION',    label: 'Action'    },
+  { key: 'row_status',   marker: 'STATUS',    label: 'Status'    },
+  { key: 'row_tooltip',  marker: 'TOOLTIP',   label: 'Tooltip'   },
+  { key: 'row_default',  marker: 'DEFAULT',   label: 'Default'   },
+  { key: 'row_toggle',   marker: 'TOGGLE',    label: 'Toggle'    },
+];
 
 function transformFigmaMarkdown(raw: string, vals: InputValues): string {
   let md = raw;
 
-  const disabled = Object.entries(TYPE_MAP).filter(([key]) => vals[key] === false);
-  const enabledCount = Object.keys(TYPE_MAP).length - disabled.length;
+  const enabled = TYPE_ORDER.filter(t => vals[t.key] !== false);
+  const enabledLabels = enabled.map(t => t.label);
+  const enabledCount = enabled.length;
+  const showRowsPerPage = vals.showRowsPerPage as boolean;
 
-  // Strip/unwrap type marker blocks
-  for (const [, { marker }] of Object.entries(TYPE_MAP)) {
-    const isDisabled = vals[ROW_VARIANT_TOGGLES.find(r => TYPE_MAP[r.key]?.marker === marker)?.key ?? ''] === false;
-    if (isDisabled) {
-      md = md.replace(new RegExp(`<!-- IF_${marker} -->\\n[\\s\\S]*?<!-- \\/${marker} -->\\n`, 'g'), '');
+  // 1. Strip (disabled) or unwrap (enabled) each type's marker blocks.
+  //    Markers are HTML comments, so this never collides with prose that
+  //    happens to reuse a label word (e.g. Pagination's `Default` state).
+  for (const { key, marker } of TYPE_ORDER) {
+    if (vals[key] === false) {
+      md = md.replace(new RegExp(`<!-- IF_${marker} -->\\n[\\s\\S]*?<!-- /${marker} -->\\n`, 'g'), '');
     } else {
       md = md.replace(new RegExp(`<!-- IF_${marker} -->\\n`, 'g'), '');
-      md = md.replace(new RegExp(`<!-- \\/${marker} -->\\n`, 'g'), '');
+      md = md.replace(new RegExp(`<!-- /${marker} -->\\n`, 'g'), '');
     }
   }
 
-  // Remove disabled type labels from the Type variant options cell
-  for (const [, { label }] of disabled) {
-    md = md.replace(new RegExp(`\`${label}\` · `, 'g'), '');
-    md = md.replace(new RegExp(` · \`${label}\``, 'g'), '');
-    md = md.replace(new RegExp(`\`${label}\`, `, 'g'), '');
-    md = md.replace(new RegExp(`, \`${label}\``, 'g'), '');
-    md = md.replace(new RegExp(`\`${label}\``, 'g'), '');
+  // 2. Rebuild the inline type lists from the enabled set (scoped — no global
+  //    label removal, so the Pagination `Default` state is never touched).
+  const tick = (arr: string[]) => arr.map(l => `\`${l}\``);
+  // Variant Properties — `Type` options cell
+  md = md.replace(
+    /(\| `Type` \| VARIANT \| )[^\n]*?( \|)/,
+    `$1${tick(enabledLabels).join(' · ')}$2`,
+  );
+  // Step 4 — "Add property `Type` → …"
+  md = md.replace(
+    /(Add property `Type` → )[^.\n]*\./,
+    `$1${tick(enabledLabels).join(', ')}.`,
+  );
+  // Arrangement diagram placeholder
+  md = md.replace('{{TYPE_LIST}}', enabledLabels.join(' · '));
+
+  // Mid-sentence "Two line" mention in the Mandatory Rules / Flags prose.
+  if (vals.row_twoLine === false) {
+    md = md.replace(/, `spacing-xxs` for Two line inner gap/g, '');
   }
 
-  // Update variant count
+  // 3. Update the "7 type(s)/variants" counters.
   if (enabledCount !== 7) {
-    md = md.replace(/\b7 type variants\b/g, `${enabledCount} type variant${enabledCount === 1 ? '' : 's'}`);
-    md = md.replace(/\b7\b(\s+(?:type )?variants?)/g, `${enabledCount}$1`);
-    md = md.replace(/Select all 7 type variants/g, `Select all ${enabledCount} type variant${enabledCount === 1 ? '' : 's'}`);
+    const tv = `${enabledCount} type variant${enabledCount === 1 ? '' : 's'}`;
+    md = md.replace(/7 type variants/g, tv);
+    md = md.replace(/\(7 types\)/g, `(${enabledCount} types)`);
+    md = md.replace(/— 7 Types/g, `— ${enabledCount} Types`);
   }
 
-  // Rows per page
-  const showRowsPerPage = vals.showRowsPerPage as boolean;
+  // 4. Rows per page — strip its marker blocks + arrangement placeholder.
   if (!showRowsPerPage) {
     md = md.replace(/<!-- IF_ROWS_PER_PAGE -->\n[\s\S]*?<!-- \/IF_ROWS_PER_PAGE -->\n/g, '');
-    // Remove the No. Rows frame from within the Pagination code block (lines starting with │ that mention No. Rows / Input)
-    md = md.replace(/^[ \t]*│[ \t]*├── No\. Rows[^\n]*\n([ \t]*│[^\n]*\n)*/gm, '');
   } else {
     md = md.replace(/<!-- IF_ROWS_PER_PAGE -->\n/g, '').replace(/<!-- \/IF_ROWS_PER_PAGE -->\n/g, '');
   }
+  md = md.replace('{{PAGINATION_EXTRAS}}', showRowsPerPage ? 'No. of Rows input · ' : '');
+
+  // 5. Tidy excess blank lines left by stripped blocks.
+  md = md.replace(/\n{3,}/g, '\n\n').trim();
 
   return md;
 }

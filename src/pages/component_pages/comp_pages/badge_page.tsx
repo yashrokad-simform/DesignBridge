@@ -250,6 +250,20 @@ function transformBadgeMd(raw: string, vals: InputValues): string {
   return md;
 }
 
+/* ── Spacing token lookup (mirrors spacing_radius.md) ───── */
+const SPACING_PX_TO_VAR: Record<number, string> = {
+  0: 'spacing-none', 2: 'spacing-xxs',  4: 'spacing-xs',  6: 'spacing-sm',
+  8: 'spacing-md',  10: 'spacing-lg',  12: 'spacing-xl',  14: 'spacing-2xl',
+  16: 'spacing-3xl', 20: 'spacing-4xl', 24: 'spacing-5xl', 32: 'spacing-6xl',
+  40: 'spacing-7xl', 48: 'spacing-8xl', 64: 'spacing-9xl', 80: 'spacing-10xl',
+  96: 'spacing-11xl', 128: 'spacing-12xl',
+};
+/** Returns `spacing-xx (Npx)` if px matches a token, otherwise `Npx`. */
+function spacingLabel(px: number): string {
+  const v = SPACING_PX_TO_VAR[px];
+  return v ? `${v} (${px}px)` : `${px}px`;
+}
+
 /* ── Figma maps ─────────────────────────────────────────── */
 const BADGE_FIGMA_RADIUS: Record<string, { var: string; px: string; desc: string }> = {
   '4px':  { var: 'radius-xs',   px: '4px',   desc: '4px' },
@@ -271,6 +285,7 @@ function transformBadgeFigmaMd(raw: string, vals: InputValues): string {
   const borderRadius = vals.borderRadius as string;
   const paddingX    = vals.paddingX     as string;
   const dotPrefix   = vals.dotPrefix    as boolean;
+  const height      = vals.height       as number;
 
   const selectedVariants: string[] = [];
   if (vals.filled)   selectedVariants.push('filled');
@@ -298,11 +313,44 @@ function transformBadgeFigmaMd(raw: string, vals: InputValues): string {
 
   // ── 3. Padding variable ───────────────────────────────────
   const pad = BADGE_FIGMA_PADDING[paddingX] ?? BADGE_FIGMA_PADDING['px-2'];
+  const padLeftRightPx = parseInt(pad.px);
+
+  // Always update the code-block structure line to use spacing variable names
+  // where they match a token, otherwise fall back to raw px (per spacing_radius.md)
+  md = md.replace(
+    /Padding:\s+4px top\/bottom · \d+px left\/right/,
+    `Padding:         ${spacingLabel(4)} top/bottom · ${spacingLabel(padLeftRightPx)} left/right`,
+  );
+  md = md.replace(
+    /Gap:\s+6px/,
+    `Gap:             ${spacingLabel(6)}`,
+  );
+
   if (paddingX !== 'px-2') {
-    md = md.replace(/`spacing-md` \| 8px(?=.*Left|.*Right|.*Padding)/g, `\`${pad.var}\` | ${pad.px}`);
-    md = md.replace(/Padding Left\/Right \| `spacing-md`/g, `Padding Left/Right | \`${pad.var}\``);
-    md = md.replace(/Padding Left \| `spacing-md`/g,  `Padding Left | \`${pad.var}\``);
-    md = md.replace(/Padding Right \| `spacing-md`/g, `Padding Right | \`${pad.var}\``);
+    // Attached Variables table — individual rows (variable + value columns)
+    md = md.replace(
+      /\| Padding Left \| `spacing-md` \| 8px \|/,
+      `| Padding Left | \`${pad.var}\` | ${pad.px} |`,
+    );
+    md = md.replace(
+      /\| Padding Right \| `spacing-md` \| 8px \|/,
+      `| Padding Right | \`${pad.var}\` | ${pad.px} |`,
+    );
+    // "What never changes" table
+    md = md.replace(
+      /\| Padding Left\/Right \| `spacing-md` \|/,
+      `| Padding Left/Right | \`${pad.var}\` |`,
+    );
+    // Step 1 spacing variables list
+    md = md.replace(
+      /- Padding Left\/Right → `spacing-md`/,
+      `- Padding Left/Right → \`${pad.var}\``,
+    );
+    // Step 6 variable attachment table
+    md = md.replace(
+      /\| `_base Badge` \(frame\) \| Padding Left\/Right \| `spacing-md` \|/,
+      `| \`_base Badge\` (frame) | Padding Left/Right | \`${pad.var}\` |`,
+    );
   }
 
   // ── 4. Show Dot default ───────────────────────────────────
@@ -311,7 +359,50 @@ function transformBadgeFigmaMd(raw: string, vals: InputValues): string {
     `$1\`${dotPrefix}\``,
   );
 
-  // ── 5. Remove disabled variant type sections ──────────────
+  // ── 5. Height → derives Padding Top/Bottom ───────────────
+  // Height is achieved via vertical padding on _base Badge (sizing stays HUG).
+  // Formula: padTB = (targetHeight - 16px line-height) / 2
+  if (height > 0) {
+    const INNER_H = 16; // Label sm line-height
+    const padTBPx = (height - INNER_H) / 2;
+    if (padTBPx > 0) {
+      const padTBVar   = SPACING_PX_TO_VAR[padTBPx];
+      const padTBLabel = padTBVar ? `\`${padTBVar}\`` : '—';
+      const padTBCode  = padTBVar ? `${padTBVar} (${padTBPx}px)` : `${padTBPx}px`;
+
+      // Code-block: replace top/bottom segment (already set by step 3)
+      md = md.replace(
+        /(Padding:\s+)[^\s·]+(?:\s+\([^)]+\))?\s+top\/bottom/,
+        `$1${padTBCode} top/bottom`,
+      );
+      // Attached Variables table rows
+      md = md.replace(
+        /\| Padding Top \| `spacing-xs` \| 4px \|/,
+        `| Padding Top | ${padTBLabel} | ${padTBPx}px |`,
+      );
+      md = md.replace(
+        /\| Padding Bottom \| `spacing-xs` \| 4px \|/,
+        `| Padding Bottom | ${padTBLabel} | ${padTBPx}px |`,
+      );
+      // "What never changes" table
+      md = md.replace(
+        /\| Padding Top\/Bottom \| `spacing-xs` \|/,
+        `| Padding Top/Bottom | ${padTBLabel} |`,
+      );
+      // Step 1 spacing variables list
+      md = md.replace(
+        /- Padding Top\/Bottom → `spacing-xs`/,
+        `- Padding Top/Bottom → ${padTBLabel}`,
+      );
+      // Step 6 variable attachment table
+      md = md.replace(
+        /\| `_base Badge` \(frame\) \| Padding Top\/Bottom \| `spacing-xs` \|/,
+        `| \`_base Badge\` (frame) | Padding Top/Bottom | ${padTBLabel} |`,
+      );
+    }
+  }
+
+  // ── 6. Remove disabled variant type sections ──────────────
   const VARIANT_MAP: Array<{ key: string; header: string }> = [
     { key: 'filled',   header: '### Colors — Filled Type' },
     { key: 'bordered', header: '### Colors — Bordered Type' },
