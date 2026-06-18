@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Analytics } from "@vercel/analytics/react";
 import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
 
 import { routes } from "./routes";
@@ -12,6 +13,7 @@ function App() {
     <ErrorBoundary>
       <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
         <RouterProvider router={router} />
+        <Analytics />
       </ThemeProvider>
     </ErrorBoundary>
   );
