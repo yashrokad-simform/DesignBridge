@@ -33,6 +33,7 @@
     "@tiptap/extension-placeholder": "^3.23.6",
     "@tiptap/extension-text": "^3.23.6",
     "@tiptap/react": "^3.23.6",
+    "@vercel/speed-insights": "^2.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "culori": "^4.0.2",
